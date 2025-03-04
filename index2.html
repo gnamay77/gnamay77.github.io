@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet WMS Map (Pantalla Completa)</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script type="text/javascript" src="modelamiento.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        #departamentos, #distritos {
+            position: absolute;
+            bottom: 10px;
+            z-index: 1000;
+            background-color: white;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        #departamentos {
+            left: 30%;
+            transform: translateX(-50%);
+        }
+        #distritos {
+            left: 70%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <select id="departamentos">
+        <option value="">Selecciona un departamento</option>
+        <option value="PIURA">PIURA</option>
+        <option value="ANCASH">ANCASH</option>
+        <option value="LIMA">LIMA</option>
+        <option value="MOQUEGUA">MOQUEGUA</option>
+        <option value="TACNA">TACNA</option>
+    </select>
+    <select id="distritos">
+        <option value="">Selecciona un distrito</option>
+    </select>
+
+    <script>
+        var map = L.map('map').setView([-10, -75], 6);
+
+        L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
+            attribution: 'Google Maps'
+        }).addTo(map);
+
+        var wmsLayer = L.tileLayer.wms("https://maps.inei.gob.pe/geoserver/T10Limites/ig_departamento/wms", {
+            layers: 'T10Limites:ig_departamento',
+            format: 'image/png',
+            transparent: true,
+            version: '1.1.0',
+            attribution: "INEI"
+        }).addTo(map);
+
+	L.geoJson(modelamiento).addTo(map);
+
+        L.control.scale().addTo(map);
+
+        var baseMaps = {
+            "Google Maps": L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
+            attribution: 'Google Maps'
+        })
+        };
+
+        var overlayMaps = {
+            "Departamentos INEI": wmsLayer
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+        // Datos de los puntos de estudio
+        var puntosEstudio = [
+            { departamento: "PIURA", quebrada: "Quebradas Vichayito y Carrillo", distrito: "LOS ORGANOS", longitud: -81.1112, latitud: -4.1526 },
+            { departamento: "PIURA", quebrada: "Qda. Cabo Blanco", distrito: "MANCORA", longitud: -81.028, latitud: -4.1038 },
+            { departamento: "ANCASH", quebrada: "Qda. Rio Seco", distrito: "COISHCO", longitud: -78.6156, latitud: -9.0212 },
+            { departamento: "LIMA", quebrada: "Qda. Quirio", distrito: "CHOSICA", longitud: -76.7035, latitud: -11.9333 },
+            { departamento: "LIMA", quebrada: "Qda. Pedregal", distrito: "CHOSICA", longitud: -76.7148, latitud: -11.9372 },
+            { departamento: "LIMA", quebrada: "Qda. Cashahuacra", distrito: "CHOSICA", longitud: -76.6709, latitud: -11.9085 },
+            { departamento: "LIMA", quebrada: "Qda. California", distrito: "CHOSICA", longitud: -76.7235, latitud: -11.9575 },
+            { departamento: "LIMA", quebrada: "Qda. Huascaran", distrito: "CHACLACAYO", longitud: -76.7798, latitud: -11.9812 },
+            { departamento: "LIMA", quebrada: "Qda. Huaycoloro", distrito: "CHOSICA", longitud: -76.9324, latitud: -12.0074 },
+            { departamento: "MOQUEGUA", quebrada: "Qda. Zaparo", distrito: "ILO", longitud: -71.3387, latitud: -17.6 },
+            { departamento: "PIURA", quebrada: "Qda. El Ingenio", distrito: "BUENOS AIRES", longitud: -79.9439, latitud: -5.2095 },
+            { departamento: "PIURA", quebrada: "Qda. Limon", distrito: "CANCHAQUE", longitud: -79.6066, latitud: -5.3753 },
+            { departamento: "TACNA", quebrada: "Qda. El Diablo", distrito: "ALTO DE LA ALIANZA", longitud: -70.2647, latitud: -17.9976 }
+        ];
+
+        // Evento para el menú de departamentos
+        document.getElementById('departamentos').addEventListener('change', function() {
+            var departamentoSeleccionado = this.value;
+            var distritosFiltrados = puntosEstudio.filter(function(punto) {
+                return punto.departamento === departamentoSeleccionado;
+            });
+
+            var distritosSelect = document.getElementById('distritos');
+            distritosSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+
+            distritosFiltrados.forEach(function(punto) {
+                var option = document.createElement('option');
+                option.value = punto.longitud + ',' + punto.latitud;
+                option.textContent = punto.distrito;
+                distritosSelect.appendChild(option);
+            });
+
+            if (departamentoSeleccionado) {
+                var departamentoCentral = puntosEstudio.filter(function(punto){
+                    return punto.departamento === departamentoSeleccionado;
+                });
+                var sumLong = 0;
+                var sumLat = 0;
+                departamentoCentral.forEach(function(punto){
+                    sumLong += punto.longitud;
+                    sumLat += punto.latitud;
+                });
+                var promLong = sumLong / departamentoCentral.length;
+                var promLat = sumLat / departamentoCentral.length;
+                map.setView([promLat, promLong], 8);
+            }
+        });
+
+        // Evento para el menú de distritos
+        document.getElementById('distritos').addEventListener('change', function() {
+            var coordenadas = this.value.split(',');
+            if (coordenadas.length === 2) {
+                map.setView([parseFloat(coordenadas[1]), parseFloat(coordenadas[0])], 12); // Ajusta el zoom según sea necesario
+            }
+        });
+    </script>
+</body>
+</html>
