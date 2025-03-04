@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Visor de Flujos - GOEDINAMICA / IGP</title>
+    <title>Leaflet WMS Map (Pantalla Completa)</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -18,27 +18,27 @@
         }
         #departamentos, #distritos {
             position: absolute;
-            bottom: 10px;
+            bottom: 40px;
             z-index: 1000;
             background-color: white;
             padding: 8px 12px;
-            border: 2px solid #943300;
-            border-radius: 5px;
-            font-size: 14px;
+            border: 3px solid #943300;
+            border-radius: 10px;
+            font-size: 13px;
             color: #333;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
         #departamentos {
-            left: 30%;
+            left: 28%;
             transform: translateX(-50%);
         }
         #distritos {
-            left: 70%;
+            left: 78%;
             transform: translateX(-50%);
         }
         #departamentos:focus, #distritos:focus {
             outline: none;
-            border-color: #6a2400;
+            border-color: #943300;
         }
         .leaflet-popup-content-wrapper {
             background-color: white;
@@ -108,6 +108,15 @@
 
         // GeoJSON con popups
         L.geoJson(modelamiento, {
+            style: function (feature) {
+        return {
+            fillColor: '#8B4513', // Marrón tierra
+            fillOpacity: 0.75,
+            color: '#543210', // Borde marrón más oscuro
+            weight: 1, // Grosor del borde
+            smoothFactor: 0.5 // Bordes suavizados
+        };
+    },
     onEachFeature: function (feature, layer) {
         if (feature.properties) {
             var imageUrl = feature.properties.imagenUrl;
@@ -173,7 +182,7 @@
         document.getElementById('distritos').addEventListener('change', function() {
             var coordenadas = this.value.split(',');
             if (coordenadas.length === 2) {
-                map.setView([parseFloat(coordenadas[1]), parseFloat(coordenadas[0])], 12);
+                map.setView([parseFloat(coordenadas[1]), parseFloat(coordenadas[0])], 14);
             }
         });
     </script>
