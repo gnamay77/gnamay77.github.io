@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lodo Visor - Geodinamica</title>
+    <title>Leaflet WMS Map (Pantalla Completa)</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -123,7 +123,7 @@
             layer.bindPopup("<b>Nombre:</b> " + feature.properties.nombre + "<br>" +
                             "<b>Descripción:</b> " + feature.properties.desc + "<br>" +
                             "<b>Video:</b> <a href='" + feature.properties.video + "' target='_blank'>Ver Video</a><br>" +
-                            "<a href='" + imageUrl + "' target='_blank'><img src='" + imageUrl + "' style='width:300px;'></a>"); // Imagen como hipervínculo
+                            "<a href='" + imageUrl + "' target='_blank'><img src='" + imageUrl + "' style='width:330px;'></a>"); // Imagen como hipervínculo
         }
     }
 }).addTo(map);
