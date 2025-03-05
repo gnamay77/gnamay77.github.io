@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LodoVisor - Geodinamica Map </title>
+    <title>VISOR GEODINAMICA</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -16,7 +16,7 @@
             width: 100%;
             height: 100%;
         }
-        #departamentos, #distritos {
+        #departamentos, #quebradas {
             position: absolute;
             bottom: 40px;
             z-index: 1000;
@@ -32,11 +32,11 @@
             left: 28%;
             transform: translateX(-50%);
         }
-        #distritos {
+        #quebradas {
             left: 78%;
             transform: translateX(-50%);
         }
-        #departamentos:focus, #distritos:focus {
+        #departamentos:focus, #quebradas:focus {
             outline: none;
             border-color: #943300;
         }
@@ -69,8 +69,8 @@
         <option value="MOQUEGUA">MOQUEGUA</option>
         <option value="TACNA">TACNA</option>
     </select>
-    <select id="distritos">
-        <option value="">Selecciona un distrito</option>
+    <select id="quebradas">
+        <option value="">Selecciona una quebrada</option>
     </select>
 
     <script>
@@ -93,8 +93,9 @@
         var baseMaps = {
             "Google Satellite": L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { attribution: 'Google Satellite' }),
             "Google Maps": L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', { attribution: 'Google Maps' }),
+            "Google Hybrid": L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {attribution: 'Google Hybrid'}),
             "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }),
-            "Bing Aerial": L.tileLayer('https://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1', { attribution: 'Bing Maps' }),
+            //"Bing Maps": L.tileLayer('http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1', { attribution: 'Bing Maps' }),
             "Esri World Imagery": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri World Imagery' })
         };
 
@@ -148,18 +149,18 @@
         // Evento para el menú de departamentos
         document.getElementById('departamentos').addEventListener('change', function() {
             var departamentoSeleccionado = this.value;
-            var distritosFiltrados = puntosEstudio.filter(function(punto) {
+            var quebradasFiltrados = puntosEstudio.filter(function(punto) {
                 return punto.departamento === departamentoSeleccionado;
             });
 
-            var distritosSelect = document.getElementById('distritos');
-            distritosSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            var quebradasSelect = document.getElementById('quebradas');
+            quebradasSelect.innerHTML = '<option value="">Selecciona una quebrada</option>';
 
-            distritosFiltrados.forEach(function(punto) {
+            quebradasFiltrados.forEach(function(punto) {
                 var option = document.createElement('option');
                 option.value = punto.longitud + ',' + punto.latitud;
-                option.textContent = punto.distrito;
-                distritosSelect.appendChild(option);
+                option.textContent = punto.quebrada;
+                quebradasSelect.appendChild(option);
             });
 
             if (departamentoSeleccionado) {
@@ -178,8 +179,8 @@
             }
         });
 
-        // Evento para el menú de distritos
-        document.getElementById('distritos').addEventListener('change', function() {
+        // Evento para el menú de Quebradas
+        document.getElementById('quebradas').addEventListener('change', function() {
             var coordenadas = this.value.split(',');
             if (coordenadas.length === 2) {
                 map.setView([parseFloat(coordenadas[1]), parseFloat(coordenadas[0])], 14);
