@@ -1,67 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title>VISOR GEODINAMICA</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script type="text/javascript" src="modelamiento.js"></script>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-        }
-        #departamentos, #quebradas {
-            position: absolute;
-            bottom: 40px;
-            z-index: 1000;
-            background-color: white;
-            padding: 8px 12px;
-            border: 3px solid #943300;
-            border-radius: 10px;
-            font-size: 13px;
-            color: #333;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        #departamentos {
-            left: 28%;
-            transform: translateX(-50%);
-        }
-        #quebradas {
-            left: 78%;
-            transform: translateX(-50%);
-        }
-        #departamentos:focus, #quebradas:focus {
-            outline: none;
-            border-color: #943300;
-        }
-        .leaflet-popup-content-wrapper {
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .leaflet-popup-content {
-            font-size: 14px;
-            color: #333;
-        }
-        .leaflet-popup-content a {
-            color: #943300;
-            text-decoration: none;
-        }
-        .leaflet-popup-content a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <script src="modelamiento.js" defer></script>
+    <script src="main.js" defer></script>
 </head>
 <body>
     <div id="map"></div>
-    <select id="departamentos">
+    <select id="departamentos" aria-label="Selecciona un departamento">
         <option value="">Selecciona un departamento</option>
         <option value="PIURA">PIURA</option>
         <option value="ANCASH">ANCASH</option>
@@ -69,123 +20,10 @@
         <option value="MOQUEGUA">MOQUEGUA</option>
         <option value="TACNA">TACNA</option>
     </select>
-    <select id="quebradas">
+    <select id="quebradas" aria-label="Selecciona una quebrada">
         <option value="">Selecciona una quebrada</option>
     </select>
-
-    <script>
-        var map = L.map('map').setView([-10, -75], 6);
-
-        L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-            attribution: 'Google Satellite'
-        }).addTo(map);
-
-        var wmsLayer = L.tileLayer.wms("https://maps.inei.gob.pe/geoserver/T10Limites/ig_departamento/wms", {
-            layers: 'T10Limites:ig_departamento',
-            format: 'image/png',
-            transparent: true,
-            version: '1.1.0',
-            attribution: "INEI"
-        }).addTo(map);
-
-        L.control.scale().addTo(map);
-
-        var baseMaps = {
-            "Google Satellite": L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', { attribution: 'Google Satellite' }),
-            "Google Maps": L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', { attribution: 'Google Maps' }),
-            "Google Hybrid": L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {attribution: 'Google Hybrid'}),
-            "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }),
-            //"Bing Maps": L.tileLayer('http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1', { attribution: 'Bing Maps' }),
-            "Esri World Imagery": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri World Imagery' })
-        };
-
-        //baseMaps["Google Satellite"].addTo(map);
-
-        var overlayMaps = {
-            "Departamentos INEI": wmsLayer
-        };
-
-        L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-        // GeoJSON con popups
-        L.geoJson(modelamiento, {
-            style: function (feature) {
-        return {
-            fillColor: '#8B4513', // Marrón tierra
-            fillOpacity: 0.75,
-            color: '#543210', // Borde marrón más oscuro
-            weight: 1, // Grosor del borde
-            smoothFactor: 0.5 // Bordes suavizados
-        };
-    },
-    onEachFeature: function (feature, layer) {
-        if (feature.properties) {
-            var imageUrl = feature.properties.imagenUrl;
-            layer.bindPopup("<b>Nombre:</b> " + feature.properties.nombre + "<br>" +
-                            "<b>Descripción:</b> " + feature.properties.desc + "<br>" +
-                            "<b>Video:</b> <a href='" + feature.properties.video + "' target='_blank'>Ver Video</a><br>" +
-                            "<a href='" + imageUrl + "' target='_blank'><img src='" + imageUrl + "' style='width:330px;'></a>"); // Imagen como hipervínculo
-        }
-    }
-}).addTo(map);
-
-        // Datos de los puntos de estudio
-        var puntosEstudio = [
-            { departamento: "PIURA", quebrada: "Quebradas Vichayito y Carrillo", distrito: "LOS ORGANOS", longitud: -81.1112, latitud: -4.1526 },
-            { departamento: "PIURA", quebrada: "Qda. Cabo Blanco", distrito: "MANCORA", longitud: -81.028, latitud: -4.1038 },
-            { departamento: "ANCASH", quebrada: "Qda. Rio Seco", distrito: "COISHCO", longitud: -78.6156, latitud: -9.0212 },
-            { departamento: "LIMA", quebrada: "Qda. Quirio", distrito: "CHOSICA", longitud: -76.7035, latitud: -11.9333 },
-            { departamento: "LIMA", quebrada: "Qda. Pedregal", distrito: "CHOSICA", longitud: -76.7148, latitud: -11.9372 },
-            { departamento: "LIMA", quebrada: "Qda. Cashahuacra", distrito: "CHOSICA", longitud: -76.6709, latitud: -11.9085 },
-            { departamento: "LIMA", quebrada: "Qda. California", distrito: "CHOSICA", longitud: -76.7235, latitud: -11.9575 },
-            { departamento: "LIMA", quebrada: "Qda. Huascaran", distrito: "CHACLACAYO", longitud: -76.7798, latitud: -11.9812 },
-            { departamento: "LIMA", quebrada: "Qda. Huaycoloro", distrito: "CHOSICA", longitud: -76.9324, latitud: -12.0074 },
-            { departamento: "MOQUEGUA", quebrada: "Qda. Zaparo", distrito: "ILO", longitud: -71.3387, latitud: -17.6 },
-            { departamento: "PIURA", quebrada: "Qda. El Ingenio", distrito: "BUENOS AIRES", longitud: -79.9439, latitud: -5.2095 },
-            { departamento: "PIURA", quebrada: "Qda. Limon", distrito: "CANCHAQUE", longitud: -79.6066, latitud: -5.3753 },
-            { departamento: "TACNA", quebrada: "Qda. El Diablo", distrito: "ALTO DE LA ALIANZA", longitud: -70.2647, latitud: -17.9976 }
-        ];
-
-        // Evento para el menú de departamentos
-        document.getElementById('departamentos').addEventListener('change', function() {
-            var departamentoSeleccionado = this.value;
-            var quebradasFiltrados = puntosEstudio.filter(function(punto) {
-                return punto.departamento === departamentoSeleccionado;
-            });
-
-            var quebradasSelect = document.getElementById('quebradas');
-            quebradasSelect.innerHTML = '<option value="">Selecciona una quebrada</option>';
-
-            quebradasFiltrados.forEach(function(punto) {
-                var option = document.createElement('option');
-                option.value = punto.longitud + ',' + punto.latitud;
-                option.textContent = punto.quebrada;
-                quebradasSelect.appendChild(option);
-            });
-
-            if (departamentoSeleccionado) {
-                var departamentoCentral = puntosEstudio.filter(function(punto){
-                    return punto.departamento === departamentoSeleccionado;
-                });
-                var sumLong = 0;
-                var sumLat = 0;
-                departamentoCentral.forEach(function(punto){
-                    sumLong += punto.longitud;
-                    sumLat += punto.latitud;
-                });
-                var promLong = sumLong / departamentoCentral.length;
-                var promLat = sumLat / departamentoCentral.length;
-                map.setView([promLat, promLong], 8);
-            }
-        });
-
-        // Evento para el menú de Quebradas
-        document.getElementById('quebradas').addEventListener('change', function() {
-            var coordenadas = this.value.split(',');
-            if (coordenadas.length === 2) {
-                map.setView([parseFloat(coordenadas[1]), parseFloat(coordenadas[0])], 14);
-            }
-        });
-    </script>
+    <button id="resetView">Restablecer vista</button>
+    <div id="loading">Cargando mapa...</div>
 </body>
 </html>
