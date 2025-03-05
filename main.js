@@ -62,7 +62,7 @@ L.geoJson(modelamiento, {
 
 // Datos de los puntos de estudio
 const puntosEstudio = [
-    { departamento: "PIURA", quebrada: "Quebradas Vichayito y Carrillo", distrito: "LOS ORGANOS", longitud: -81.1112, latitud: -4.1526 },
+    { departamento: "PIURA", quebrada: "Qda. Vichayito/Carrillo", distrito: "LOS ORGANOS", longitud: -81.1112, latitud: -4.1526 },
     { departamento: "PIURA", quebrada: "Qda. Cabo Blanco", distrito: "MANCORA", longitud: -81.028, latitud: -4.1038 },
     { departamento: "ANCASH", quebrada: "Qda. Rio Seco", distrito: "COISHCO", longitud: -78.6156, latitud: -9.0212 },
     { departamento: "LIMA", quebrada: "Qda. Quirio", distrito: "CHOSICA", longitud: -76.7035, latitud: -11.9333 },
