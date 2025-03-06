@@ -3,6 +3,7 @@ html, body {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Fondo claro para contrastar con los azules */
 }
 
 #map {
@@ -16,10 +17,10 @@ html, body {
     z-index: 1000;
     background-color: white;
     padding: 8px 12px;
-    border: 2px solid #943300;
+    border: 2px solid #0094FF; /* Borde azul claro */
     border-radius: 8px;
     font-size: 14px;
-    color: #333;
+    color: #0000AD; /* Texto azul oscuro */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
@@ -39,20 +40,20 @@ html, body {
     top: 10px;
     left: 3%;
     z-index: 1000;
-    background-color: white;
+    background-color: #0094FF; /* Fondo azul claro */
     padding: 8px 12px;
-    border: 2px solid #943300;
+    border: 2px solid #0000FF; /* Borde azul medio */
     border-radius: 8px;
     font-size: 14px;
-    color: #333;
+    color: white; /* Texto blanco para contrastar */
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 #resetView:hover {
-    background-color: #943300;
-    color: white;
+    background-color: #0000FF; /* Fondo azul medio al hacer hover */
+    border-color: #0000AD; /* Borde azul oscuro al hacer hover */
 }
 
 #loading {
@@ -61,7 +62,7 @@ html, body {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 18px;
-    color: #333;
+    color: #0000AD; /* Texto azul oscuro */
     z-index: 1000;
 }
 
