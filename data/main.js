@@ -86,30 +86,36 @@ async function inicializarMapa() {
     // Control de capas
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-    // GeoJSON con popups
-    L.geoJson(modelamiento, {
-        style: function (feature) {
-            return {
-                fillColor: '#8B4513', // Color de relleno marrón tierra
-                fillOpacity: 0.75,    // Opacidad del relleno
-                color: '#543210',     // Color del borde
-                weight: 1,            // Grosor del borde
-                smoothFactor: 0.5     // Suavizado de bordes
-            };
-        },
-        onEachFeature: function (feature, layer) {
-            if (feature.properties) {
-                const imageUrl = feature.properties.imagenUrl;
-                // Configuración del popup con información
-                layer.bindPopup(`
-                    <b>Nombre:</b> ${feature.properties.nombre}<br>
-                    <b>Descripción:</b> ${feature.properties.desc}<br>
-                    <b>Video:</b> <a href="${feature.properties.video}" target="_blank">Ver Video</a><br>
-                    <a href="${imageUrl}" target="_blank"><img src="${imageUrl}" style="width:330px;"></a>
-                `);
-            }
+// GeoJSON con popups
+L.geoJson(modelamiento, {
+    style: function (feature) {
+        return {
+            fillColor: '#8B4513', // Color de relleno marrón tierra
+            fillOpacity: 0.75,    // Opacidad del relleno
+            color: '#543210',     // Color del borde
+            weight: 1,            // Grosor del borde
+            smoothFactor: 0.5     // Suavizado de bordes
+        };
+    },
+    onEachFeature: function (feature, layer) {
+        if (feature.properties) {
+            const videoUrl = feature.properties.video; // URL de inserción de YouTube
+            const imageUrl = feature.properties.imagenUrl;
+
+            // Crear el contenido del popup con el video de YouTube
+            const contenidoPopup = `
+                <b>Nombre:</b> ${feature.properties.nombre}<br>
+                <b>Descripción:</b> ${feature.properties.desc}<br>
+                <b>Video:</b><br>
+                <iframe width="300" height="200" src="${videoUrl}?autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
+                <a href="${imageUrl}" target="_blank"><img src="${imageUrl}" style="width:300px;"></a>
+            `;
+
+            // Asignar el contenido al popup
+            layer.bindPopup(contenidoPopup);
         }
-    }).addTo(map);
+    }
+}).addTo(map);
 
     // Evento para el menú de departamentos
     document.getElementById('departamentos').addEventListener('change', function() {
