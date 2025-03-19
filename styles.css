@@ -1,0 +1,194 @@
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+}
+
+.ventana-flotante {
+    position: absolute;
+    top: 12%;
+    left: 20px;
+    width: 300px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    z-index: 1000;
+}
+
+.seccion {
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #1D2DFF;
+}
+
+h2 {
+    font-size: 11pt;
+    font-weight: lighter;
+    margin-bottom: 10px;
+    color: #1D2DFF;
+    display: flex;
+    align-items: center;
+}
+
+.icono {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size: 10pt;
+    color: #333;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size: 10pt;
+    color: #333;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 10pt;
+    background-color: #f9f9f9;
+}
+
+.contenido-desplegable {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 10pt;
+    color: #555;
+}
+
+.negrita {
+    font-weight: bold;
+}
+
+#leyenda {
+    font-size: 9pt;
+    color: #555;
+}
+
+/* Estilo para el tooltip del atributo NOMBRE */
+.cuenca-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: #1D2DFF;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #1D2DFF;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Asegurar que el tooltip no interfiera con la ventana flotante */
+.leaflet-tooltip {
+    z-index: 500;
+}
+
+
+.label-style {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000; /* Color del texto */
+    background: rgba(255, 255, 255, 1); /* Sin fondo */
+    border: none; /* Sin borde */
+    padding: 0; /* Sin padding */
+    text-shadow: 
+        -2px -2px 0 #fff,  
+        2px -2px 0 #fff,
+        -2px 2px 0 #fff,
+        2px 2px 0 #fff; /* Buffer de 2px alrededor del texto */
+}
+
+/* Estilo para los elementos de capa (etiqueta + barra de transparencia) */
+.capa-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+/* Estilo para las etiquetas de las capas */
+.capa-item label {
+    display: flex;
+    align-items: center;
+    font-size: 10pt;
+    color: #333;
+    margin-right: 10px; /* Espacio entre la etiqueta y la barra */
+    width: 120px; /* Ancho fijo para las etiquetas */
+    flex: none; /* Evita que la etiqueta crezca o se reduzca */
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+/* Estilo para las barras de transparencia */
+.capa-item input[type="range"] {
+    width: 80px; /* Ancho fijo para las barras */
+    margin: 0;
+    -webkit-appearance: none; /* Eliminar el estilo por defecto en navegadores WebKit */
+    appearance: none;
+    background: transparent;
+    flex: none; /* Evita que la barra crezca o se reduzca */
+}
+
+/* Estilo para el "track" de la barra de transparencia */
+.capa-item input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px;
+    background: #ccc;
+    border-radius: 2px;
+}
+
+.capa-item input[type="range"]::-moz-range-track {
+    height: 3px;
+    background: #ccc;
+    border-radius: 2px;
+}
+
+/* Estilo para el "thumb" de la barra de transparencia */
+.capa-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #1D2DFF;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -3.5px; /* Centrar verticalmente */
+}
+
+.capa-item input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #1D2DFF;
+    border-radius: 50%;
+    cursor: pointer;
+}
