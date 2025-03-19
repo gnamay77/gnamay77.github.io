@@ -6,6 +6,66 @@ L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
     attribution: 'Google Maps'
 }).addTo(map);
 
+        // Función para mostrar/ocultar etiquetas según el nivel de zoom
+        function updateLabels() {
+            var currentZoom = map.getZoom();
+            if (currentZoom >= 9 && currentZoom <= 12) {
+                // Mostrar etiquetas
+                cuencasLayer.eachLayer(function(layer) {
+                    if (layer.feature.properties && layer.feature.properties.NOMBRE) {
+                        layer.bindTooltip(layer.feature.properties.NOMBRE, {
+                            permanent: true,
+                            direction: 'center',
+                            className: 'label-style' // Aplicar el estilo personalizado
+                        }).openTooltip();
+                    }
+                });
+            } else {
+                // Ocultar etiquetas
+                cuencasLayer.eachLayer(function(layer) {
+                    layer.unbindTooltip();
+                });
+            }
+        }
+
+        // Añadir la capa de cuencas desde el archivo cuencas.js
+        var cuencasLayer = L.geoJSON(cuencas, {
+            style: function(feature) {
+                return {
+                    color: '#1D2DFF',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.25
+                };
+            },
+            onEachFeature: function(feature, layer) {
+                if (feature.properties && feature.properties.NOMBRE) {
+                    layer.bindPopup(feature.properties.NOMBRE);
+                }
+            }
+        });
+
+        // Controlar la visibilidad de la capa según el nivel de zoom
+        map.on('zoomend', function() {
+            var currentZoom = map.getZoom();
+            if (currentZoom >= 6 && currentZoom <= 12) {
+                if (!map.hasLayer(cuencasLayer)) {
+                    map.addLayer(cuencasLayer);
+                }
+                updateLabels(); // Actualizar etiquetas al cambiar el zoom
+            } else {
+                if (map.hasLayer(cuencasLayer)) {
+                    map.removeLayer(cuencasLayer);
+                }
+            }
+        });
+
+        // Añadir la capa inicialmente si el zoom está entre 6 y 12
+        if (map.getZoom() >= 6 && map.getZoom() <= 12) {
+            map.addLayer(cuencasLayer);
+            updateLabels(); // Mostrar etiquetas si el zoom inicial está entre 9 y 12
+        }
+
 // Objetos para almacenar capas y leyendas
 let layers = {};
 let legends = {};
