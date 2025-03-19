@@ -1,9 +1,9 @@
 // Configuración inicial del mapa (centrado en Perú)
-var map = L.map('map').setView([-9.19, -75.01], 5);
+var map = L.map('map').setView([-9.19, -75.01], 6);
 
 // Capa base de OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
+L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
+    attribution: 'Google Maps'
 }).addTo(map);
 
 // Objetos para almacenar capas y leyendas
@@ -66,8 +66,14 @@ async function loadGeoTIFF(url, layerName, legendTitle) {
         const max = georaster.maxs[0];
         const scale = chroma.scale(["blue", "cyan", "green", "yellow", "red"]).domain([min, max]);
 
+        // Aplicar suavizado a los datos raster
+        const smoothedRaster = suavizarRaster(georaster.values[0]);
+
         layers[layerName] = new GeoRasterLayer({
-            georaster: georaster,
+            georaster: {
+                ...georaster,
+                values: [smoothedRaster] // Usar los datos suavizados
+            },
             opacity: 0.7,
             resolution: 256,
             pixelValuesToColorFn: value => (value === null || value <= 0) ? null : scale(value).hex()
@@ -92,6 +98,26 @@ async function loadGeoTIFF(url, layerName, legendTitle) {
         console.error("Error:", error);
         alert("No se pudo cargar el archivo GeoTIFF. Inténtalo de nuevo más tarde.");
     }
+}
+
+// Función para suavizar los datos raster (interpolación básica)
+function suavizarRaster(data) {
+    const width = data.length;
+    const height = data[0].length;
+    const smoothedData = new Array(width).fill().map(() => new Array(height).fill(0));
+
+    for (let x = 1; x < width - 1; x++) {
+        for (let y = 1; y < height - 1; y++) {
+            // Promedio de los valores circundantes
+            smoothedData[x][y] = (
+                data[x - 1][y - 1] + data[x - 1][y] + data[x - 1][y + 1] +
+                data[x][y - 1] + data[x][y] + data[x][y + 1] +
+                data[x + 1][y - 1] + data[x + 1][y] + data[x + 1][y + 1]
+            ) / 9;
+        }
+    }
+
+    return smoothedData;
 }
 
 // Función para cargar los archivos de una localidad
