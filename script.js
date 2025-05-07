@@ -14,6 +14,94 @@ let subbasinLayer = null;
 let topoLayer = null;
 let cuencasLayer = null;
 
+// Función para cargar datos
+async function cargarDatos() {
+    mostrarLoader(true);
+    try {
+        const response = await fetch("data.json");
+        if (!response.ok) throw new Error("Error al cargar los datos");
+        datos = await response.json();
+        generarMenuCuencas();
+        cargarCapasBase();
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarNotificacion("No se pudieron cargar los datos. Inténtalo de nuevo más tarde.");
+    } finally {
+        mostrarLoader(false);
+    }
+}
+
+// Función para acercar a la cuenca seleccionada
+function zoomACuenca(cuencaNombre) {
+    if (!cuencasLayer || !cuencasLayer.getBounds) return;
+
+    // Buscar la cuenca específica por nombre
+    let boundsEspecificos = null;
+    cuencasLayer.eachLayer(function(layer) {
+        if (layer.feature.properties.NOMBRE === cuencaNombre) {
+            boundsEspecificos = layer.getBounds();
+        }
+    });
+
+    // Si encontramos la cuenca, hacemos zoom
+    if (boundsEspecificos) {
+        map.fitBounds(boundsEspecificos.pad(0.5)); // Ajuste con padding
+    } else {
+        // Si no la encontramos, zoom al bounds general de todas las cuencas
+        map.fitBounds(cuencasLayer.getBounds().pad(0.5));
+    }
+}
+
+// Modificar la función cargarLocalidades para incluir el zoom
+function cargarLocalidades() {
+    const cuencaSelect = document.getElementById("cuenca");
+    const cuencaSeleccionada = cuencaSelect.value;
+    
+    // Hacer zoom a la cuenca seleccionada
+    if (cuencaSeleccionada) {
+        zoomACuenca(cuencaSeleccionada);
+    }
+
+    const localidadSelect = document.getElementById("localidad");
+    const escenarioSelect = document.getElementById("escenario");
+    
+    localidadSelect.innerHTML = '<option value="">Seleccione una localidad</option>';
+    escenarioSelect.innerHTML = '<option value="">Seleccione un escenario</option>';
+    escenarioSelect.disabled = true;
+    localidadSelect.disabled = !cuencaSeleccionada;
+
+    if (cuencaSeleccionada) {
+        for (const localidad in datos[cuencaSeleccionada]) {
+            localidadSelect.innerHTML += `<option value="${localidad}">${localidad}</option>`;
+        }
+    }
+}
+
+// Modificar el event listener de localidad para incluir el zoom
+document.getElementById("localidad").addEventListener("change", async function() {
+    const cuenca = document.getElementById("cuenca").value;
+    const localidad = this.value;
+    
+    if (cuenca && localidad) {
+        // Hacer zoom a la localidad seleccionada
+        const coords = datos[cuenca][localidad];
+        if (coords.lat && coords.lng) {
+            map.setView([coords.lat, coords.lng], 14); // Nivel de zoom 14 para localidad
+        }
+        
+        await cargarSubbasin(cuenca, localidad);
+        await cargarTopografia(cuenca, localidad);
+        
+        const escenarioSelect = document.getElementById("escenario");
+        escenarioSelect.innerHTML = '<option value="">Seleccione un escenario</option>';
+        escenarioSelect.disabled = false;
+        
+        datos[cuenca][localidad].escenarios.forEach(esc => {
+            escenarioSelect.innerHTML += `<option value="${esc}">${esc}</option>`;
+        });
+    }
+});
+
 // Función para mostrar notificaciones
 function mostrarNotificacion(mensaje, tipo = 'error') {
     const notification = document.createElement('div');
