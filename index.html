@@ -9,18 +9,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Mapa -->
     <div id="map"></div>
 
-    <!-- Ventana Flotante -->
     <div class="ventana-flotante">
-        <!-- Sección 1: Título y Descripción -->
         <div class="seccion">
             <h1>Panel de Control del Mapa</h1>
-            <p>Selecciona una cuenca y una localidad para cargar los datos.</p>
+            <p>Selecciona una cuenca, localidad y escenario para cargar los datos.</p>
         </div>
 
-        <!-- Sección 2: Selección de Ubicación -->
         <div class="seccion">
             <h2>
                 <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -29,7 +25,7 @@
                 Selección de Ubicación
             </h2>
             <label for="cuenca">Cuenca:</label>
-            <select id="cuenca" onchange="cargarLocalidades()">
+            <select id="cuenca">
                 <option value="">Seleccione una cuenca</option>
             </select>
 
@@ -37,37 +33,59 @@
             <select id="localidad" disabled>
                 <option value="">Seleccione una localidad</option>
             </select>
+
+            <label for="escenario">Escenario:</label>
+            <select id="escenario" disabled>
+                <option value="">Seleccione un escenario</option>
+            </select>
         </div>
 
-    <!-- Sección 3: Selección de Capas -->
-    <div class="seccion">
-        <h2>
-            <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                <path d="M12 2L2 9l10 7 10-7-10-7zm0 3.3L17.74 9 12 12.7 6.26 9 12 5.3zM2 14l10 7 10-7-1.5-1-8.5 5.7-8.5-5.7L2 14z" fill="#1D2DFF"/>
-            </svg>
-            Seleccionar Capas
-        </h2>
-
-        <!-- Alturas Máximas -->
-        <div class="capa-item">
-            <label>
-                <input type="checkbox" id="alturas" onchange="toggleCapa('depth')">
-                <span id="alturas-texto">Alturas Máximas</span>
-            </label>
-            <input type="range" id="transparencia-alturas" min="0" max="1" step="0.1" value="0.7" onchange="cambiarTransparencia('depth', this.value)">
+        <div class="seccion">
+            <h2>
+                <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" fill="#1D2DFF"/>
+                </svg>
+                Capas Base
+            </h2>
+            <div class="capa-item">
+                <label>
+                    <input type="checkbox" checked id="toggle-subbasin">
+                    <span>Subcuenca</span>
+                </label>
+                <input type="range" id="transparencia-subbasin" min="0" max="1" step="0.1" value="1">
+            </div>
+            <div class="capa-item">
+                <label>
+                    <input type="checkbox" checked id="toggle-topo">
+                    <span>Topografía</span>
+                </label>
+                <input type="range" id="transparencia-topo" min="0" max="1" step="0.1" value="0.7">
+            </div>
         </div>
 
-        <!-- Velocidades Máximas -->
-        <div class="capa-item">
-            <label>
-                <input type="checkbox" id="velocidades" onchange="toggleCapa('velocity')">
-                <span id="velocidades-texto">Velocidades Máximas</span>
-            </label>
-            <input type="range" id="transparencia-velocidades" min="0" max="1" step="0.1" value="0.7" onchange="cambiarTransparencia('velocity', this.value)">
+        <div class="seccion">
+            <h2>
+                <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 2L2 9l10 7 10-7-10-7zm0 3.3L17.74 9 12 12.7 6.26 9 12 5.3zM2 14l10 7 10-7-1.5-1-8.5 5.7-8.5-5.7L2 14z" fill="#1D2DFF"/>
+                </svg>
+                Capas de Escenario
+            </h2>
+            <div class="capa-item">
+                <label>
+                    <input type="checkbox" id="alturas" onchange="toggleCapa('depth')">
+                    <span>Alturas Máximas</span>
+                </label>
+                <input type="range" id="transparencia-alturas" min="0" max="1" step="0.1" value="0.7">
+            </div>
+            <div class="capa-item">
+                <label>
+                    <input type="checkbox" id="velocidades" onchange="toggleCapa('velocity')">
+                    <span>Velocidades Máximas</span>
+                </label>
+                <input type="range" id="transparencia-velocidades" min="0" max="1" step="0.1" value="0.7">
+            </div>
         </div>
-    </div>
 
-        <!-- Sección 4: Leyenda -->
         <div class="seccion">
             <h2>
                 <svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -75,19 +93,15 @@
                 </svg>
                 Leyenda
             </h2>
-            <div id="leyenda-contenido" class="contenido-desplegable">
-                <div id="leyenda"></div>
-            </div>
+            <div id="leyenda"></div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/geotiff@2.0.7/dist/geotiff.js"></script>
     <script src="https://unpkg.com/georaster"></script>
     <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
     <script src="https://unpkg.com/chroma-js@2.1.0/chroma.min.js"></script>
-    <script src="cuencas.js"></script> <!-- Archivo de cuencas (ya lo tienes) -->
     <script src="script.js"></script>
 </body>
 </html>

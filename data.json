@@ -1,10 +1,26 @@
 {
     "cuenca1": {
-        "localidad1": { "lat": -11.96, "lng": -76.72 },
-        "localidad2": { "lat": -11.98, "lng": -76.78 }
+        "localidad1": {
+            "lat": -11.96,
+            "lng": -76.72,
+            "escenarios": ["Escenario_1", "Escenario_2"]
+        },
+        "localidad2": {
+            "lat": -11.98,
+            "lng": -76.78,
+            "escenarios": ["Escenario_1", "Escenario_2", "Escenario_3"]
+        }
     },
     "cuenca2": {
-        "localidad3": { "lat": -16.30, "lng": -71.65 },
-        "localidad4": { "lat": -12.50, "lng": -76.77 }
+        "localidad3": {
+            "lat": -16.30,
+            "lng": -71.65,
+            "escenarios": ["Escenario_1"]
+        },
+        "localidad4": {
+            "lat": -12.50,
+            "lng": -76.77,
+            "escenarios": ["Escenario_1", "Escenario_2"]
+        }
     }
 }

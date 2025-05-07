@@ -21,6 +21,8 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     padding: 20px;
     z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .seccion {
@@ -49,24 +51,11 @@ h2 {
     margin-right: 10px;
 }
 
-p {
-    display: flex;
-    align-items: center;
-    margin-bottom: 3px;
-    font-size: 10pt;
-    color: #333;
-}
-
 label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 3px;
+    display: block;
+    margin-bottom: 5px;
     font-size: 10pt;
     color: #333;
-}
-
-input[type="checkbox"] {
-    margin-right: 10px;
 }
 
 select {
@@ -79,58 +68,6 @@ select {
     background-color: #f9f9f9;
 }
 
-.contenido-desplegable {
-    margin-top: 10px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    font-size: 10pt;
-    color: #555;
-}
-
-.negrita {
-    font-weight: bold;
-}
-
-#leyenda {
-    font-size: 9pt;
-    color: #555;
-}
-
-/* Estilo para el tooltip del atributo NOMBRE */
-.cuenca-label {
-    font-size: 10px;
-    font-weight: bold;
-    color: #1D2DFF;
-    background-color: rgba(255, 255, 255, 1);
-    padding: 2px 5px;
-    border-radius: 3px;
-    border: 1px solid #1D2DFF;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Asegurar que el tooltip no interfiera con la ventana flotante */
-.leaflet-tooltip {
-    z-index: 500;
-}
-
-
-.label-style {
-    font-size: 12px;
-    font-weight: bold;
-    color: #000; /* Color del texto */
-    background: rgba(255, 255, 255, 1); /* Sin fondo */
-    border: none; /* Sin borde */
-    padding: 0; /* Sin padding */
-    text-shadow: 
-        -2px -2px 0 #fff,  
-        2px -2px 0 #fff,
-        -2px 2px 0 #fff,
-        2px 2px 0 #fff; /* Buffer de 2px alrededor del texto */
-}
-
-/* Estilo para los elementos de capa (etiqueta + barra de transparencia) */
 .capa-item {
     display: flex;
     align-items: center;
@@ -138,42 +75,29 @@ select {
     margin-bottom: 10px;
 }
 
-/* Estilo para las etiquetas de las capas */
 .capa-item label {
     display: flex;
     align-items: center;
     font-size: 10pt;
     color: #333;
-    margin-right: 10px; /* Espacio entre la etiqueta y la barra */
-    width: 120px; /* Ancho fijo para las etiquetas */
-    flex: none; /* Evita que la etiqueta crezca o se reduzca */
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    margin-right: 10px;
+    width: 200px;
 }
 
-/* Estilo para las barras de transparencia */
 .capa-item input[type="range"] {
-    width: 80px; /* Ancho fijo para las barras */
+    width: 80px;
     margin: 0;
-    -webkit-appearance: none; /* Eliminar el estilo por defecto en navegadores WebKit */
+    -webkit-appearance: none;
     appearance: none;
     background: transparent;
-    flex: none; /* Evita que la barra crezca o se reduzca */
 }
 
-/* Estilo para el "track" de la barra de transparencia */
 .capa-item input[type="range"]::-webkit-slider-runnable-track {
     height: 3px;
     background: #ccc;
     border-radius: 2px;
 }
 
-.capa-item input[type="range"]::-moz-range-track {
-    height: 3px;
-    background: #ccc;
-    border-radius: 2px;
-}
-
-/* Estilo para el "thumb" de la barra de transparencia */
 .capa-item input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -182,13 +106,79 @@ select {
     background: #1D2DFF;
     border-radius: 50%;
     cursor: pointer;
-    margin-top: -3.5px; /* Centrar verticalmente */
+    margin-top: -3.5px;
 }
 
-.capa-item input[type="range"]::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    background: #1D2DFF;
+#leyenda {
+    font-size: 9pt;
+    color: #555;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Estilo para el contorno de subcuenca */
+.subcuenca-style {
+    stroke-dasharray: 5, 5;
+}
+
+/* Estilo para etiquetas de cuenca */
+.cuenca-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: #1D2DFF;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #1D2DFF;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.label-style {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    background: rgba(255, 255, 255, 1);
+    border: none;
+    padding: 0;
+    text-shadow: 
+        -1px -1px 0 #fff,  
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff;
+}
+
+/* Estilo para el loader */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #1D2DFF;
     border-radius: 50%;
-    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4444;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1001;
+    display: none;
 }
