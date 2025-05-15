@@ -2,8 +2,8 @@
 var map = L.map('map').setView([-9.19, -75.01], 6);
 
 // Capa base
-L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
-    attribution: 'Google Maps'
+L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+    attribution: 'Google Terrain'
 }).addTo(map);
 
 // Variables globales
@@ -14,42 +14,28 @@ let subbasinLayer = null;
 let topoLayer = null;
 let cuencasLayer = null;
 
-// Función para cargar datos
-async function cargarDatos() {
-    mostrarLoader(true);
-    try {
-        const response = await fetch("data.json");
-        if (!response.ok) throw new Error("Error al cargar los datos");
-        datos = await response.json();
-        generarMenuCuencas();
-        cargarCapasBase();
-    } catch (error) {
-        console.error("Error:", error);
-        mostrarNotificacion("No se pudieron cargar los datos. Inténtalo de nuevo más tarde.");
-    } finally {
-        mostrarLoader(false);
-    }
-}
 
 // Función para acercar a la cuenca seleccionada
 function zoomACuenca(cuencaNombre) {
-    if (!cuencasLayer || !cuencasLayer.getBounds) return;
-
-    // Buscar la cuenca específica por nombre
     let boundsEspecificos = null;
-    cuencasLayer.eachLayer(function(layer) {
+    cuencasLayer.eachLayer(layer => {
         if (layer.feature.properties.NOMBRE === cuencaNombre) {
             boundsEspecificos = layer.getBounds();
         }
     });
 
-    // Si encontramos la cuenca, hacemos zoom
-    if (boundsEspecificos) {
-        map.fitBounds(boundsEspecificos.pad(0.5)); // Ajuste con padding
-    } else {
-        // Si no la encontramos, zoom al bounds general de todas las cuencas
-        map.fitBounds(cuencasLayer.getBounds().pad(0.5));
+    if (!boundsEspecificos) {
+        mostrarNotificacion("Cuenca no encontrada");
+        return;
     }
+
+    const padding = map.getZoom() > 10 ? 0.1 : 0.5; // Padding adaptable
+    map.fitBounds(boundsEspecificos.pad(padding));
+    // En la función zoomACuenca():
+    cuencasLayer.eachLayer(layer => {
+    console.log("Nombre en cuencas.js:", layer.feature.properties.NOMBRE);
+});
+console.log("Nombre seleccionado:", cuencaNombre);
 }
 
 // Modificar la función cargarLocalidades para incluir el zoom
@@ -131,35 +117,47 @@ function mostrarLoader(mostrar) {
 async function cargarDatos() {
     mostrarLoader(true);
     try {
+        // --- Funcionalidad original --- 
         const response = await fetch("data.json");
-        if (!response.ok) throw new Error("Error al cargar los datos");
+        if (!response.ok) throw new Error("Error al cargar los datos"); 
         datos = await response.json();
         generarMenuCuencas();
-        
-        // Añadir capa de cuencas
+
+        // Añadir capa de cuencas (original)
         if (cuencasLayer) map.removeLayer(cuencasLayer);
         cuencasLayer = L.geoJSON(cuencas, {
-            style: function(feature) {
-                return {
-                    color: '#1D2DFF',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.25
-                };
-            },
-            onEachFeature: function(feature, layer) {
-                if (feature.properties && feature.properties.NOMBRE) {
-                    layer.bindPopup(feature.properties.NOMBRE);
-                }
-            }
-        });
-        
-        // Controlar visibilidad según zoom
-        actualizarVisibilidadCapas();
-        
+    style: function(feature) {
+        return {
+            color: '#1D2DFF',   // Color del borde
+            weight: 1,          // Grosor de la línea
+            opacity: 1,         // Opacidad del borde
+            fillOpacity: 0.25  // Opacidad del relleno
+        };
+    },
+    onEachFeature: function(feature, layer) {
+        if (feature.properties.NOMBRE) {
+            layer.bindPopup(feature.properties.NOMBRE); // Popup con el nombre
+        }
+    }
+});
+
+        actualizarVisibilidadCapas(); 
+
+        // --- Mejoras añadidas ---
+        // 1. Validación de estructura de datos
+        if (!datos || Object.keys(datos).length === 0) {
+            throw new Error("Archivo data.json vacío o corrupto");
+        }
+
+        // 2. Validación de cuencas.js
+        if (typeof cuencas === 'undefined' || !cuencas.features) {
+            throw new Error("Capas geoespaciales no cargadas (¿cuencas.js?)");
+        }
+
     } catch (error) {
-        console.error("Error:", error);
-        mostrarNotificacion("No se pudieron cargar los datos. Inténtalo de nuevo más tarde.");
+        // --- Mejora en manejo de errores ---
+        console.error("Error crítico:", error);
+        mostrarNotificacion(`Error: ${error.message}`); // Mensaje específico
     } finally {
         mostrarLoader(false);
     }
@@ -240,7 +238,7 @@ function cargarLocalidades() {
 async function cargarSubbasin(cuenca, localidad) {
     mostrarLoader(true);
     try {
-        const response = await fetch(`data/${cuenca}/${localidad}/subbasin.js`);
+        const response = await fetch(`data/${cuenca}/${localidad}/subbasin.json`);
         if (!response.ok) throw new Error("Archivo de subcuenca no encontrado");
         const subbasinData = await response.json();
         
@@ -283,10 +281,16 @@ async function cargarTopografia(cuenca, localidad) {
             georaster: georaster,
             opacity: 0.7,
             resolution: 128,
-            pixelValuesToColorFn: value => {
-                return value === null ? null : 
-                    chroma.scale(['#f7fbff', '#4292c6', '#08306b'])(value/1000).hex();
-            }
+        pixelValuesToColorFn: value => {
+            if (value === null || value < 0 || isNaN(value)) return null;
+            
+            const minValue = georaster.mins[0]; // Obtiene el valor MÍNIMO del raster
+            const maxValue = georaster.maxs[0];
+            const normalized = (value - minValue) / (maxValue - minValue); // Escala 0-1
+            
+           // return chroma.scale(['#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#581845'])(normalized).hex();
+            return chroma.scale(['#DAF7A6', '#FFC300', '#FF5733', '#C70039', '#900C3F', '#581845'])(normalized).hex();
+        }
         });
         
         // Mostrar por defecto si el checkbox está activado
