@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editor Geoespacial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --main-color: #1D2DFF;
+            --padding-sm: 8px;
+            --padding-md: 12px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .main-container {
+            border: 2px solid var(--main-color);
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+        }
+
+        h1, h3 {
+            color: var(--main-color);
+            margin: 10px 0;
+            word-break: break-word;
+        }
+
+        h1 { font-size: 1.8em; }
+        h3 { font-size: 1.3em; }
+
+        hr {
+            border: 1px solid var(--main-color);
+            margin: 15px 0;
+        }
+
+        .widget-group {
+            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: var(--padding-md);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            white-space: nowrap;
+            flex: 1 1 auto;
+        }
+
+        .btn-success { background-color: #28a745; }
+        .btn-warning { background-color: #ffc107; color: black; }
+        .btn-info { background-color: #17a2b8; }
+        .btn-danger { background-color: #dc3545; }
+
+        #jsonOutput {
+            white-space: pre-wrap;
+            padding: var(--padding-md);
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        .hidden { display: none; }
+
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+            .main-container { padding: 25px; }
+            .widget-group { flex-wrap: nowrap; }
+            input, select { width: auto; flex: 1; }
+            button { width: auto; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5em; }
+            h3 { font-size: 1.1em; }
+            body { font-size: 14px; }
+            
+            input, select, button {
+                padding: var(--padding-sm);
+                font-size: 0.9em;
+            }
+            
+            .widget-group { gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>🌍 Editor Geoespacial</h1>
+        
+        <div class="widget-group">
+            <input type="file" id="fileUpload" accept=".json" class="hidden">
+            <button onclick="document.getElementById('fileUpload').click()" class="btn-success">🔼 Cargar JSON</button>
+            <button onclick="saveData()" class="btn-success">💾 Guardar JSON</button>
+        </div>
+
+        <hr>
+        
+        <h3>🏞 Crear Nueva Cuenca</h3>
+        <div class="widget-group">
+            <input type="text" id="newCuenca" placeholder="Nombre de nueva cuenca">
+            <button onclick="addCuenca()" class="btn-warning">➕ Crear Cuenca</button>
+        </div>
+
+        <hr>
+        
+        <h3>🏡 Agregar Localidad</h3>
+        <div class="widget-group">
+            <select id="cuencaDropdown"></select>
+        </div>
+        <div class="widget-group">
+            <input type="text" id="localidad" placeholder="Nombre de localidad">
+        </div>
+        <div class="widget-group">
+            <input type="number" id="lat" placeholder="Latitud (-90 a 90)" step="any">
+            <input type="number" id="lng" placeholder="Longitud (-180 a 180)" step="any">
+        </div>
+        <div class="widget-group">
+            <input type="text" id="escenarios" placeholder="Escenarios (separar por comas)" style="width: 300px;">
+            <button onclick="addLocalidad()" class="btn-info">📍 Agregar Localidad</button>
+        </div>
+
+        <hr>
+        
+        <h3>🗑️ Eliminar Datos</h3>
+        <div class="widget-group">
+            <select id="deleteCuencaDropdown"></select>
+            <button onclick="deleteCuenca()" class="btn-danger">🗑️ Eliminar Cuenca</button>
+        </div>
+        <div class="widget-group">
+            <select id="deleteLocalidadDropdown"></select>
+            <button onclick="deleteLocalidad()" class="btn-danger">🗑️ Eliminar Localidad</button>
+        </div>
+
+        <pre id="jsonOutput"></pre>
+    </div>
+
+    <script>
+        let data = {};
+
+        // Actualizar la interfaz
+        function updateUI() {
+            document.getElementById('jsonOutput').textContent = 
+                "🎯 Estructura actual del JSON:\n" + 
+                JSON.stringify(data, null, 2);
+            
+            updateDropdowns();
+        }
+
+        // Actualizar los dropdowns
+        function updateDropdowns() {
+            const cuencas = Object.keys(data);
+            
+            // Actualizar dropdowns de cuencas
+            updateOptions('cuencaDropdown', cuencas);
+            updateOptions('deleteCuencaDropdown', cuencas);
+            
+            // Actualizar dropdown de localidades
+            const cuencaSeleccionada = document.getElementById('deleteCuencaDropdown').value;
+            const localidades = cuencaSeleccionada ? Object.keys(data[cuencaSeleccionada]) : [];
+            updateOptions('deleteLocalidadDropdown', localidades);
+        }
+
+        function updateOptions(selectId, options) {
+            const select = document.getElementById(selectId);
+            select.innerHTML = options.map(opt => `<option>${opt}</option>`).join('');
+        }
+
+        // Manejar carga de archivo
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const newData = JSON.parse(e.target.result);
+                    
+                    // Validar estructura
+                    if (typeof newData !== 'object') throw new Error("El JSON debe tener un objeto principal");
+                    
+                    // Fusionar datos
+                    Object.keys(newData).forEach(cuenca => {
+                        data[cuenca] = data[cuenca] ? {...data[cuenca], ...newData[cuenca]} : newData[cuenca];
+                    });
+                    
+                    updateUI();
+                    alert("✅ Datos cargados y fusionados exitosamente!");
+                } catch (error) {
+                    alert(`❌ ERROR: ${error.message}`);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Funciones para agregar datos
+        function addCuenca() {
+            const nombre = document.getElementById('newCuenca').value.trim();
+            try {
+                if (!nombre) throw new Error("Nombre de cuenca requerido");
+                if (data[nombre]) throw new Error("¡La cuenca ya existe!");
+                
+                data[nombre] = {};
+                document.getElementById('newCuenca').value = '';
+                updateUI();
+                alert(`✅ Cuenca '${nombre}' creada`);
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+
+        function addLocalidad() {
+            try {
+                const cuenca = document.getElementById('cuencaDropdown').value;
+                const nombre = document.getElementById('localidad').value.trim();
+                const lat = parseFloat(document.getElementById('lat').value);
+                const lng = parseFloat(document.getElementById('lng').value);
+                const escenarios = document.getElementById('escenarios').value.split(',').map(e => e.trim()).filter(e => e);
+
+                if (!cuenca) throw new Error("Selecciona una cuenca");
+                if (!nombre) throw new Error("Nombre de localidad requerido");
+                if (isNaN(lat) || isNaN(lng)) throw new Error("Coordenadas inválidas");
+                if (!escenarios.length) throw new Error("Debe incluir al menos un escenario");
+
+                data[cuenca][nombre] = {
+                    lat: parseFloat(lat.toFixed(6)),
+                    lng: parseFloat(lng.toFixed(6)),
+                    escenarios: escenarios
+                };
+
+                // Limpiar campos
+                document.getElementById('localidad').value = '';
+                document.getElementById('lat').value = '';
+                document.getElementById('lng').value = '';
+                document.getElementById('escenarios').value = '';
+                
+                updateUI();
+                alert(`✅ Localidad '${nombre}' agregada a '${cuenca}'`);
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Funciones para eliminar datos
+        function deleteCuenca() {
+            const cuenca = document.getElementById('deleteCuencaDropdown').value;
+            if (cuenca && confirm(`¿Eliminar la cuenca '${cuenca}'?`)) {
+                delete data[cuenca];
+                updateUI();
+                alert(`✅ Cuenca '${cuenca}' eliminada`);
+            }
+        }
+
+        function deleteLocalidad() {
+            const cuenca = document.getElementById('deleteCuencaDropdown').value;
+            const localidad = document.getElementById('deleteLocalidadDropdown').value;
+            if (cuenca && localidad && confirm(`¿Eliminar la localidad '${localidad}' de '${cuenca}'?`)) {
+                delete data[cuenca][localidad];
+                if (Object.keys(data[cuenca]).length === 0) delete data[cuenca];
+                updateUI();
+                alert(`✅ Localidad '${localidad}' eliminada`);
+            }
+        }
+
+        // Guardar datos
+        function saveData() {
+            if (!Object.keys(data).length) return alert("❌ No hay datos para guardar");
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Inicializar
+        updateUI();
+    </script>
+</body>
+</html>
