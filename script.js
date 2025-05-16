@@ -13,7 +13,37 @@ let datos = {};
 let subbasinLayer = null;
 let topoLayer = null;
 let cuencasLayer = null;
+let puntosLayer = null;
 
+// Función para cargar puntos desde data.json
+function cargarPuntos() {
+    if (puntosLayer) {
+        map.removeLayer(puntosLayer);
+    }
+
+    puntosLayer = L.layerGroup().addTo(map);
+
+    for (const cuenca in datos) {
+        for (const localidad in datos[cuenca]) {
+            const info = datos[cuenca][localidad];
+            if (info.lat && info.lng) {
+                const marker = L.marker([info.lat, info.lng], {
+                    icon: L.divIcon({
+                        html: `<div style="background: #1D2DFF; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">${localidad.charAt(0)}</div>`,
+                        className: 'punto-localidad'
+                    })
+                }).bindPopup(`
+                    <b>${localidad}</b><br>
+                    Cuenca: ${cuenca}<br>
+                    Lat: ${info.lat.toFixed(4)}, Lng: ${info.lng.toFixed(4)}<br>
+                    Escenarios: ${info.escenarios.join(', ')}
+                `);
+                
+                marker.addTo(puntosLayer);
+            }
+        }
+    }
+}
 
 // Función para acercar a la cuenca seleccionada
 function zoomACuenca(cuencaNombre) {
@@ -122,6 +152,7 @@ async function cargarDatos() {
         if (!response.ok) throw new Error("Error al cargar los datos"); 
         datos = await response.json();
         generarMenuCuencas();
+        cargarPuntos();
 
         // Añadir capa de cuencas (original)
         if (cuencasLayer) map.removeLayer(cuencasLayer);
@@ -469,6 +500,7 @@ function cambiarTransparencia(layerName, opacity) {
 
 // Escuchar cambios de zoom
 map.on('zoomend', actualizarVisibilidadCapas);
+
 
 // Inicializar
 cargarDatos();
