@@ -110,7 +110,7 @@
         <h1>🌍 Editor Geoespacial</h1>
         
         <div class="widget-group">
-            <input type="file" id="fileUpload" accept=".json" class="hidden">
+            <input type="file" id="fileUpload" accept=".json,.csv" class="hidden">
             <button onclick="document.getElementById('fileUpload').click()" class="btn-success">🔼 Cargar JSON</button>
             <button onclick="saveData()" class="btn-success">💾 Guardar JSON</button>
         </div>
@@ -187,7 +187,7 @@
             select.innerHTML = options.map(opt => `<option>${opt}</option>`).join('');
         }
 
-        // Manejar carga de archivo
+        // Modificar la función de carga de archivos
         document.getElementById('fileUpload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -195,24 +195,62 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const newData = JSON.parse(e.target.result);
-                    
-                    // Validar estructura
-                    if (typeof newData !== 'object') throw new Error("El JSON debe tener un objeto principal");
-                    
-                    // Fusionar datos
-                    Object.keys(newData).forEach(cuenca => {
-                        data[cuenca] = data[cuenca] ? {...data[cuenca], ...newData[cuenca]} : newData[cuenca];
-                    });
-                    
+                    if (file.name.endsWith('.json')) {
+                        // Procesamiento JSON existente
+                    } 
+                    else if (file.name.endsWith('.csv')) {
+                        processCSV(e.target.result);
+                    }
                     updateUI();
-                    alert("✅ Datos cargados y fusionados exitosamente!");
                 } catch (error) {
                     alert(`❌ ERROR: ${error.message}`);
                 }
             };
             reader.readAsText(file);
         });
+
+        // Nueva función para procesar CSV
+        function processCSV(csvData) {
+            const lines = csvData.split('\n');
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            
+            // Validar encabezados
+            const requiredHeaders = ['cuenca', 'localidad', 'lat', 'lng'];
+            requiredHeaders.forEach(h => {
+                if (!headers.includes(h)) throw new Error(`Falta columna requerida: ${h}`);
+            });
+
+            // Procesar filas
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim());
+                if (values.length < 4) continue;
+
+                const row = {
+                    cuenca: values[headers.indexOf('cuenca')],
+                    localidad: values[headers.indexOf('localidad')],
+                    lat: parseFloat(values[headers.indexOf('lat')]),
+                    lng: parseFloat(values[headers.indexOf('lng')]),
+                    escenarios: headers.includes('escenarios') ? 
+                            values[headers.indexOf('escenarios')].split(';').map(e => e.trim()) : 
+                            ["Escenario 1", "Escenario 2"]
+                };
+
+                // Validar coordenadas
+                if (isNaN(row.lat) || isNaN(row.lng)) {
+                    throw new Error(`Coordenadas inválidas en línea ${i + 1}`);
+                }
+
+                // Agregar a estructura de datos
+                if (!data[row.cuenca]) data[row.cuenca] = {};
+                data[row.cuenca][row.localidad] = {
+                    lat: row.lat,
+                    lng: row.lng,
+                    escenarios: row.escenarios.filter(e => e) // Eliminar vacíos
+                };
+            }
+            
+            alert("✅ CSV procesado exitosamente!");
+        }
 
         // Funciones para agregar datos
         function addCuenca() {
