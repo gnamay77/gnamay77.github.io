@@ -1,28 +1,195 @@
 {
-  "Cuenca Piura": {
-    "Quebrada Buenos Aires": {
-      "lat": 0.0,
-      "lng": 0.0,
+  "Intercuenca 13931": {
+    "Carrillo": {
+      "lat": -4.1579,
+      "lng": -81.1098,
       "escenarios": [
-        "Periodo de retorno (20 años)",
-        "CV (0)"
+        "Escenario 1",
+        "Escenario 2"
       ]
     },
-    "El gallo": {
-      "lat": 0.0,
-      "lng": 0.0,
+    "Vichayito": {
+      "lat": -4.1539,
+      "lng": -81.1062,
       "escenarios": [
-        "Lluvias Intensas"
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Cabo Blanco": {
+      "lat": -4.1093,
+      "lng": -81.057,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
       ]
     }
   },
-  "Cuenca Rímac": {
-    "Quebrada California": {
-      "lat": -11.96,
-      "lng": -76.72,
+  "Intercuenca 1391": {
+    "Yale": {
+      "lat": -4.5728,
+      "lng": -81.2681,
       "escenarios": [
-        "Escenario_1",
-        "Escenario_2"
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Intercuenca 1375999": {
+    "La Cantera": {
+      "lat": -9.0264,
+      "lng": -78.6161,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Intercuenca 1375533": {
+    "Malanche": {
+      "lat": -12.3336,
+      "lng": -76.8193,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Intercuenca 13173": {
+    "Zaparo": {
+      "lat": -17.6031,
+      "lng": -71.3331,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Cuenca Rimac": {
+    "California": {
+      "lat": -11.962,
+      "lng": -76.7171,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Huascaan": {
+      "lat": -11.9846,
+      "lng": -76.7797,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Quirio": {
+      "lat": -11.9346,
+      "lng": -76.7162,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Pedregal": {
+      "lat": -11.9315,
+      "lng": -76.7031,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Cashahuacra": {
+      "lat": -11.9081,
+      "lng": -76.6713,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Huaycoloro": {
+      "lat": -11.9991,
+      "lng": -76.9163,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Cuenca Piura": {
+    "El Ingenio": {
+      "lat": -5.2095,
+      "lng": -79.9433,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Limon": {
+      "lat": -5.3753,
+      "lng": -79.6046,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Cuenca Ica": {
+    "La Yesera": {
+      "lat": -13.9344,
+      "lng": -75.6636,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Cansas": {
+      "lat": -14.0336,
+      "lng": -75.6837,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Parcona 1": {
+      "lat": -14.05,
+      "lng": -75.6904,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Parcona 2": {
+      "lat": -14.0529,
+      "lng": -75.6846,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    }
+  },
+  "Cuenca Grande": {
+    "Rio Grande": {
+      "lat": -14.519,
+      "lng": -75.198,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Quebrada CAjuca": {
+      "lat": -14.8391,
+      "lng": -74.9248,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ]
+    },
+    "Vista Alegre": {
+      "lat": -14.85,
+      "lng": -74.9392,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
       ]
     }
   }
