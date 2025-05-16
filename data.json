@@ -1,6 +1,6 @@
 {
   "Intercuenca 13931": {
-    "Carrillo": {
+    "Quebrada Carrillo": {
       "lat": -4.1579,
       "lng": -81.1098,
       "escenarios": [
@@ -8,7 +8,7 @@
         "Escenario 2"
       ]
     },
-    "Vichayito": {
+    "Quebrada Vichayito": {
       "lat": -4.1539,
       "lng": -81.1062,
       "escenarios": [
@@ -16,7 +16,7 @@
         "Escenario 2"
       ]
     },
-    "Cabo Blanco": {
+    "Quebrada Cabo Blanco": {
       "lat": -4.1093,
       "lng": -81.057,
       "escenarios": [
@@ -26,7 +26,7 @@
     }
   },
   "Intercuenca 1391": {
-    "Yale": {
+    "Quebrada Yale": {
       "lat": -4.5728,
       "lng": -81.2681,
       "escenarios": [
@@ -36,7 +36,7 @@
     }
   },
   "Intercuenca 1375999": {
-    "La Cantera": {
+    "Quebrada La Cantera": {
       "lat": -9.0264,
       "lng": -78.6161,
       "escenarios": [
@@ -46,7 +46,7 @@
     }
   },
   "Intercuenca 1375533": {
-    "Malanche": {
+    "Quebrada Malanche": {
       "lat": -12.3336,
       "lng": -76.8193,
       "escenarios": [
@@ -56,7 +56,7 @@
     }
   },
   "Intercuenca 13173": {
-    "Zaparo": {
+    "Quebrada Zaparo": {
       "lat": -17.6031,
       "lng": -71.3331,
       "escenarios": [
@@ -66,7 +66,7 @@
     }
   },
   "Cuenca Rimac": {
-    "California": {
+    "Quebrada California": {
       "lat": -11.962,
       "lng": -76.7171,
       "escenarios": [
@@ -74,7 +74,7 @@
         "Escenario 2"
       ]
     },
-    "Huascaan": {
+    "Quebrada Huascaan": {
       "lat": -11.9846,
       "lng": -76.7797,
       "escenarios": [
@@ -82,7 +82,7 @@
         "Escenario 2"
       ]
     },
-    "Quirio": {
+    "Quebrada Quirio": {
       "lat": -11.9346,
       "lng": -76.7162,
       "escenarios": [
@@ -90,7 +90,7 @@
         "Escenario 2"
       ]
     },
-    "Pedregal": {
+    "Quebrada Pedregal": {
       "lat": -11.9315,
       "lng": -76.7031,
       "escenarios": [
@@ -98,7 +98,7 @@
         "Escenario 2"
       ]
     },
-    "Cashahuacra": {
+    "Quebrada Cashahuacra": {
       "lat": -11.9081,
       "lng": -76.6713,
       "escenarios": [
@@ -106,7 +106,7 @@
         "Escenario 2"
       ]
     },
-    "Huaycoloro": {
+    "Quebrada Huaycoloro": {
       "lat": -11.9991,
       "lng": -76.9163,
       "escenarios": [
@@ -116,7 +116,7 @@
     }
   },
   "Cuenca Piura": {
-    "El Ingenio": {
+    "Quebrada El Ingenio": {
       "lat": -5.2095,
       "lng": -79.9433,
       "escenarios": [
@@ -124,7 +124,7 @@
         "Escenario 2"
       ]
     },
-    "Limon": {
+    "Quebrada Limon": {
       "lat": -5.3753,
       "lng": -79.6046,
       "escenarios": [
@@ -134,7 +134,7 @@
     }
   },
   "Cuenca Ica": {
-    "La Yesera": {
+    "Quebrada La Yesera": {
       "lat": -13.9344,
       "lng": -75.6636,
       "escenarios": [
@@ -142,7 +142,7 @@
         "Escenario 2"
       ]
     },
-    "Cansas": {
+    "Quebrada Cansas": {
       "lat": -14.0336,
       "lng": -75.6837,
       "escenarios": [
@@ -150,7 +150,7 @@
         "Escenario 2"
       ]
     },
-    "Parcona 1": {
+    "Quebrada Parcona 1": {
       "lat": -14.05,
       "lng": -75.6904,
       "escenarios": [
@@ -158,7 +158,7 @@
         "Escenario 2"
       ]
     },
-    "Parcona 2": {
+    "Quebrada Parcona 2": {
       "lat": -14.0529,
       "lng": -75.6846,
       "escenarios": [
@@ -168,7 +168,7 @@
     }
   },
   "Cuenca Grande": {
-    "Rio Grande": {
+    "Quebrada Rio Grande": {
       "lat": -14.519,
       "lng": -75.198,
       "escenarios": [
@@ -176,7 +176,7 @@
         "Escenario 2"
       ]
     },
-    "Quebrada CAjuca": {
+    "Quebrada Quebrada Cajuca": {
       "lat": -14.8391,
       "lng": -74.9248,
       "escenarios": [
@@ -184,7 +184,7 @@
         "Escenario 2"
       ]
     },
-    "Vista Alegre": {
+    "Quebrada Vista Alegre": {
       "lat": -14.85,
       "lng": -74.9392,
       "escenarios": [
