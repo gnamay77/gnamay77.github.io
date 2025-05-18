@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buscador de PDFs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --main-color: #1D2DFF;
+            --secondary-color: #6c757d;
+            --background: #f8f9fa;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: var(--background);
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 25px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--main-color);
+            margin: 0 0 25px 0;
+            font-size: 1.8em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--main-color);
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: #0b1dc4;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--main-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .main-container {
+                padding: 15px;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>🔍 Buscador de PDFs Web</h1>
+        
+        <div class="input-group">
+            <label for="url">🌐 URL de la página:</label>
+            <input type="text" id="url" placeholder="https://ejemplo.com/pdfs">
+        </div>
+        
+        <div class="input-group">
+            <label for="keywords">🔍 Palabras clave:</label>
+            <input type="text" id="keywords" placeholder="contrato, licitación, acuerdo">
+        </div>
+        
+        <div class="input-group">
+            <label for="max-pdfs">📄 Límite de PDFs:</label>
+            <input type="number" id="max-pdfs" value="10" min="1" max="50">
+        </div>
+        
+        <button onclick="startSearch()">
+            <span>🚀 Iniciar Búsqueda</span>
+        </button>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div id="status">Listo para buscar...</div>
+        
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        async function startSearch() {
+            const url = document.getElementById('url').value.trim();
+            const keywords = document.getElementById('keywords').value.split(',').map(k => k.trim());
+            const maxPdfs = document.getElementById('max-pdfs').value;
+            
+            if (!url || !keywords.length) {
+                showError('Por favor complete todos los campos');
+                return;
+            }
+
+            try {
+                updateStatus('Buscando PDFs...', 10);
+                
+                // Obtener lista de PDFs
+                const pdfLinks = await getPdfLinks(url);
+                if (!pdfLinks.length) {
+                    showError('No se encontraron PDFs en la página');
+                    return;
+                }
+
+                // Limitar PDFs a analizar
+                const pdfsToProcess = pdfLinks.slice(0, maxPdfs);
+                updateStatus(`Analizando ${pdfsToProcess.length} PDFs...`, 30);
+
+                // Procesar PDFs en paralelo
+                const results = await processPdfs(pdfsToProcess, keywords);
+                
+                // Mostrar resultados
+                displayResults(results);
+                updateStatus('Búsqueda completada', 100);
+
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+            }
+        }
+
+        async function getPdfLinks(url) {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                
+                return Array.from(doc.querySelectorAll('a[href$=".pdf"]'))
+                    .map(link => new URL(link.href, url).href);
+                    
+            } catch (error) {
+                throw new Error('Error al obtener la página');
+            }
+        }
+
+        async function processPdfs(pdfUrls, keywords) {
+            const results = {};
+            const total = pdfUrls.length;
+            const progressStep = 60 / total;
+            let currentProgress = 30;
+
+            for (const [index, pdfUrl] of pdfUrls.entries()) {
+                try {
+                    updateStatus(`Procesando PDF ${index + 1}/${total}`, currentProgress);
+                    const text = await extractPdfText(pdfUrl);
+                    
+                    const matches = keywords.reduce((acc, keyword) => {
+                        const regex = new RegExp(keyword, 'gi');
+                        const count = (text.match(regex) || []).length;
+                        if (count > 0) acc[keyword] = count;
+                        return acc;
+                    }, {});
+
+                    if (Object.keys(matches).length > 0) {
+                        results[pdfUrl] = matches;
+                    }
+
+                    currentProgress += progressStep;
+                    
+                } catch (error) {
+                    console.error(`Error procesando ${pdfUrl}: ${error.message}`);
+                }
+            }
+
+            return results;
+        }
+
+        async function extractPdfText(pdfUrl) {
+            try {
+                const response = await fetch(pdfUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // Usar pdf.js para extraer texto
+                const loadingTask = pdfjsLib.getDocument(arrayBuffer);
+                const pdf = await loadingTask.promise;
+                
+                let text = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    text += content.items.map(item => item.str).join(' ');
+                }
+                
+                return text.toLowerCase();
+                
+            } catch (error) {
+                throw new Error('Error al procesar PDF');
+            }
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (Object.keys(results).length === 0) {
+                resultsDiv.innerHTML = '<div class="result-item">No se encontraron coincidencias</div>';
+                return;
+            }
+
+            for (const [pdf, matches] of Object.entries(results)) {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                
+                const pdfName = pdf.split('/').pop();
+                let html = `<strong>📄 ${pdfName}</strong><br>`;
+                
+                for (const [keyword, count] of Object.entries(matches)) {
+                    html += `<div style="margin: 8px 0; padding-left: 15px;">• ${keyword}: ${count} apariciones</div>`;
+                }
+                
+                resultItem.innerHTML = html;
+                resultsDiv.appendChild(resultItem);
+            }
+        }
+
+        function updateStatus(message, progress) {
+            document.getElementById('status').textContent = message;
+            document.getElementById('progress').style.width = `${progress}%`;
+        }
+
+        function showError(message) {
+            updateStatus(message, 0);
+            document.getElementById('progress').style.backgroundColor = '#dc3545';
+        }
+
+        // Cargar pdf.js desde CDN
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js';
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>
