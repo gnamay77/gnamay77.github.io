@@ -151,34 +151,40 @@
     </div>
 
     <script>
+        function normalizarTexto(texto) {
+            return texto
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+        }
+
         async function startSearch() {
             const url = document.getElementById('url').value.trim();
-            const keywords = document.getElementById('keywords').value.split(',').map(k => k.trim());
+            const keywords = document.getElementById('keywords').value
+                .split(',')
+                .map(k => normalizarTexto(k.trim()))
+                .filter(k => k);
+            
             const maxPdfs = document.getElementById('max-pdfs').value;
             
             if (!url || !keywords.length) {
-                showError('Por favor complete todos los campos');
+                showError('Complete todos los campos');
                 return;
             }
 
             try {
                 updateStatus('Buscando PDFs...', 10);
-                
-                // Obtener lista de PDFs
                 const pdfLinks = await getPdfLinks(url);
+                
                 if (!pdfLinks.length) {
-                    showError('No se encontraron PDFs en la página');
+                    showError('No se encontraron PDFs');
                     return;
                 }
 
-                // Limitar PDFs a analizar
                 const pdfsToProcess = pdfLinks.slice(0, maxPdfs);
                 updateStatus(`Analizando ${pdfsToProcess.length} PDFs...`, 30);
 
-                // Procesar PDFs en paralelo
                 const results = await processPdfs(pdfsToProcess, keywords);
-                
-                // Mostrar resultados
                 displayResults(results);
                 updateStatus('Búsqueda completada', 100);
 
@@ -189,7 +195,11 @@
 
         async function getPdfLinks(url) {
             try {
-                const response = await fetch(url);
+                const proxyUrl = 'https://api.allorigins.win/raw?url=';
+                const response = await fetch(proxyUrl + encodeURIComponent(url));
+                
+                if (!response.ok) throw new Error('Error en la petición');
+                
                 const text = await response.text();
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(text, 'text/html');
@@ -198,7 +208,7 @@
                     .map(link => new URL(link.href, url).href);
                     
             } catch (error) {
-                throw new Error('Error al obtener la página');
+                throw new Error('Error al obtener enlaces: ' + error.message);
             }
         }
 
@@ -212,10 +222,11 @@
                 try {
                     updateStatus(`Procesando PDF ${index + 1}/${total}`, currentProgress);
                     const text = await extractPdfText(pdfUrl);
+                    const textoNormalizado = normalizarTexto(text);
                     
                     const matches = keywords.reduce((acc, keyword) => {
                         const regex = new RegExp(keyword, 'gi');
-                        const count = (text.match(regex) || []).length;
+                        const count = (textoNormalizado.match(regex) || []).length;
                         if (count > 0) acc[keyword] = count;
                         return acc;
                     }, {});
@@ -227,7 +238,7 @@
                     currentProgress += progressStep;
                     
                 } catch (error) {
-                    console.error(`Error procesando ${pdfUrl}: ${error.message}`);
+                    console.error(`Error en ${pdfUrl}: ${error.message}`);
                 }
             }
 
@@ -239,7 +250,6 @@
                 const response = await fetch(pdfUrl);
                 const arrayBuffer = await response.arrayBuffer();
                 
-                // Usar pdf.js para extraer texto
                 const loadingTask = pdfjsLib.getDocument(arrayBuffer);
                 const pdf = await loadingTask.promise;
                 
@@ -250,10 +260,10 @@
                     text += content.items.map(item => item.str).join(' ');
                 }
                 
-                return text.toLowerCase();
+                return text;
                 
             } catch (error) {
-                throw new Error('Error al procesar PDF');
+                throw new Error('Error al leer PDF');
             }
         }
 
@@ -292,7 +302,6 @@
             document.getElementById('progress').style.backgroundColor = '#dc3545';
         }
 
-        // Cargar pdf.js desde CDN
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js';
         document.head.appendChild(script);
