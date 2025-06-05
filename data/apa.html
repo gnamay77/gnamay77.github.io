@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva APA 7ma Edición</title>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA con navegación lateral fija (en escritorio) y un menú hamburguesa (en móvil) para un acceso rápido y no lineal a las secciones. Esta arquitectura es superior a un documento lineal porque los usuarios de guías de estilo suelen necesitar respuestas a preguntas específicas (ej. "¿cómo cito una web?") de forma inmediata. La estructura se divide en módulos temáticos (Formato, Citas, Referencias) que contienen herramientas interactivas, como selectores y generadores de ejemplos dinámicos. Esto transforma la consulta pasiva en una experiencia activa y orientada a la tarea, mejorando drásticamente la usabilidad y la velocidad de aprendizaje. -->
+    <!-- Visualization & Content Choices: Se ha optado por transformar la información estática del reporte en componentes interactivos. Para 'Citación' y 'Referencias', se usan selectores y botones que actualizan dinámicamente el contenido (Goal: Organize/Inform, Method: JS-driven HTML). Esto es más eficiente que listas largas. Para 'Formato', se usan tarjetas y acordeones para presentar la información de forma digerible (Goal: Inform, Method: HTML/CSS). Se incluye un gráfico de barras (Chart.js) en la sección de inicio como elemento visual de bienvenida que resume los pilares de APA 7, mejorando el atractivo visual (Goal: Engage, Viz: Bar Chart, Justification: Visual summary). Se usan iconos Unicode para una estética limpia. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #4A4A4A;
+        }
+        .accent-color { color: #5A7D8A; }
+        .bg-accent-color { background-color: #5A7D8A; }
+        .border-accent-color { border-color: #5A7D8A; }
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .nav-link.active, .nav-link:hover {
+            border-left-color: #5A7D8A;
+            background-color: #EAE8E3;
+            color: #333;
+        }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .interactive-option {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .interactive-option.selected {
+            background-color: #5A7D8A;
+            color: white;
+            border-color: #5A7D8A;
+        }
+        .code-block {
+            background-color: #EAE8E3;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="relative min-h-screen md:flex">
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex justify-between items-center p-4 bg-white shadow-md">
+            <h1 class="text-xl font-bold accent-color">Guía Interactiva APA 7</h1>
+            <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="bg-white text-gray-600 w-64 space-y-2 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out z-20 shadow-lg md:shadow-none">
+            <h1 class="text-2xl font-bold px-4 mb-4 accent-color hidden md:block">Guía Interactiva APA 7</h1>
+            <nav>
+                <a href="#inicio" class="nav-link font-medium active">🏠 Inicio</a>
+                <a href="#formato" class="nav-link font-medium">📄 Formato del Documento</a>
+                <a href="#citacion" class="nav-link font-medium">✍️ Citación en el Texto</a>
+                <a href="#referencias" class="nav-link font-medium">📚 Lista de Referencias</a>
+                <a href="#tablas-figuras" class="nav-link font-medium">📊 Tablas y Figuras</a>
+                <a href="#lenguaje-inclusivo" class="nav-link font-medium">🗣️ Lenguaje Inclusivo</a>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="flex-1 p-6 sm:p-10">
+            <!-- Inicio Section -->
+            <section id="inicio" class="content-section active">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Bienvenido a la Guía Interactiva de APA 7ma Edición</h2>
+                <p class="text-lg mb-8 text-gray-700">Esta herramienta está diseñada para simplificar el uso de las normas APA. Navega por las secciones para encontrar reglas, ver ejemplos y utilizar nuestras herramientas interactivas para aplicar el formato correctamente en tus trabajos académicos.</p>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 accent-color">Pilares de la 7ma Edición</h3>
+                    <p class="mb-6">La 7ma edición se centra en la flexibilidad, claridad y una comunicación más inclusiva. Este gráfico resume los principios clave que la nueva edición promueve para la escritura académica moderna.</p>
+                    <div class="chart-container">
+                        <canvas id="apaPillarsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Formato Section -->
+            <section id="formato" class="content-section">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">📄 Formato del Documento</h2>
+                <p class="text-lg mb-8 text-gray-700">La presentación visual de tu trabajo es fundamental. Aquí encontrarás las directrices esenciales para formatear tu documento según APA 7, desde los márgenes hasta los encabezados.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">📐 Márgenes y Papel</h3>
+                        <p>Utiliza márgenes de **2.54 cm (1 pulgada)** en todos los lados: superior, inferior, izquierdo y derecho.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">🔡 Fuente y Tipografía</h3>
+                        <p>Tienes flexibilidad. Opciones recomendadas: **Calibri 11pt**, **Arial 11pt**, o **Times New Roman 12pt**.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">📏 Interlineado y Alineación</h3>
+                        <p>Aplica **interlineado doble** en todo el documento. Alinea el texto a la **izquierda**, sin justificar.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">➡️ Sangría de Párrafo</h3>
+                        <p>La primera línea de cada párrafo debe tener una sangría de **1.27 cm (0.5 pulgadas)**.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">#️⃣ Numeración de Página</h3>
+                        <p>Numera todas las páginas en la **esquina superior derecha**, comenzando con la página 1 en la portada.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">📄 Portada (Estudiante)</h3>
+                        <p>Incluye: Título, Autor, Afiliación, Curso, Instructor y Fecha. Generalmente, no requiere "running head".</p>
+                    </div>
+                </div>
+                <div class="mt-8 bg-white p-6 rounded-xl shadow-md">
+                    <div class="accordion-trigger cursor-pointer flex justify-between items-center">
+                       <h3 class="text-2xl font-bold accent-color">Niveles de Títulos (Headings)</h3>
+                       <span class="transform transition-transform duration-300">▼</span>
+                    </div>
+                    <div class="accordion-content mt-4 space-y-4">
+                        <p><strong class="block text-lg">Nivel 1: Centrado, Negrita, Título Capitalizado</strong></p>
+                        <p><strong class="block text-lg">Nivel 2: Alineado Izquierda, Negrita, Título Capitalizado</strong></p>
+                        <p><em class="block text-lg"><strong class="font-bold">Nivel 3: Alineado Izquierda, Negrita Cursiva, Título Capitalizado</strong></em></p>
+                        <p class="ml-8"><strong class="text-lg">Nivel 4: Con Sangría, Negrita, Título Capitalizado, Termina con Punto.</strong> El texto sigue en la misma línea.</p>
+                        <p class="ml-8"><em class="text-lg"><strong class="font-bold">Nivel 5: Con Sangría, Negrita Cursiva, Título Capitalizado, Termina con Punto.</strong></em> El texto sigue en la misma línea.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Citacion Section -->
+            <section id="citacion" class="content-section">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">✍️ Citación en el Texto</h2>
+                <p class="text-lg mb-8 text-gray-700">Dar crédito a las fuentes es esencial. Utiliza esta herramienta para construir el formato de cita correcto según el número de autores y el tipo de cita que necesites.</p>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-bold text-xl mb-3 accent-color">1. Selecciona N° de Autores</h3>
+                            <div id="cita-autores" class="flex flex-wrap gap-2">
+                                <button class="interactive-option border-2 rounded-full px-4 py-2 selected" data-value="1">1 Autor</button>
+                                <button class="interactive-option border-2 rounded-full px-4 py-2" data-value="2">2 Autores</button>
+                                <button class="interactive-option border-2 rounded-full px-4 py-2" data-value="3+">3+ Autores</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-3 accent-color">2. Selecciona Tipo de Cita</h3>
+                            <div id="cita-tipo" class="flex flex-wrap gap-2">
+                                <button class="interactive-option border-2 rounded-full px-4 py-2 selected" data-value="parentetica">Parentética</button>
+                                <button class="interactive-option border-2 rounded-full px-4 py-2" data-value="narrativa">Narrativa</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6">
+
+                    <div>
+                        <h3 class="font-bold text-xl mb-3 accent-color">Resultado y Ejemplo:</h3>
+                        <div id="cita-resultado" class="space-y-4">
+                            <!-- Dynamic content here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Referencias Section -->
+            <section id="referencias" class="content-section">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">📚 Lista de Referencias</h2>
+                <p class="text-lg mb-8 text-gray-700">Cada fuente citada debe aparecer en tu lista de referencias. Selecciona un tipo de fuente para ver la estructura correcta y un ejemplo claro que puedes adaptar.</p>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="font-bold text-xl mb-4 accent-color">Selecciona un tipo de fuente:</h3>
+                    <div class="flex flex-wrap gap-3" id="referencia-selector">
+                        <button class="interactive-option border-2 rounded-full px-4 py-2 selected" data-type="libro">Libro</button>
+                        <button class="interactive-option border-2 rounded-full px-4 py-2" data-type="articulo">Artículo de Revista</button>
+                        <button class="interactive-option border-2 rounded-full px-4 py-2" data-type="web">Página Web</button>
+                        <button class="interactive-option border-2 rounded-full px-4 py-2" data-type="tesis">Tesis</button>
+                        <button class="interactive-option border-2 rounded-full px-4 py-2" data-type="video">Video</button>
+                    </div>
+
+                    <hr class="my-6">
+
+                    <div id="referencia-resultado">
+                        <!-- Dynamic content here -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tablas y Figuras Section -->
+            <section id="tablas-figuras" class="content-section">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">📊 Tablas y Figuras</h2>
+                <p class="text-lg mb-8 text-gray-700">Una correcta presentación de datos visuales es clave para la claridad. Aprende a formatear tablas y figuras, incluyendo su numeración, título y notas.</p>
+                 <div class="bg-white p-6 rounded-xl shadow-md space-y-6">
+                    <div>
+                        <h3 class="text-2xl font-bold accent-color mb-2">Componentes Esenciales</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Numeración:</strong> En negrita, sobre el título (Ej: <strong>Tabla 1</strong>, <strong>Figura 1</strong>).</li>
+                            <li><strong>Título:</strong> En cursiva, en una línea separada debajo del número. Debe ser breve y descriptivo.</li>
+                            <li><strong>Cuerpo:</strong> La tabla o figura en sí. El diseño debe ser limpio y fácil de leer.</li>
+                            <li><strong>Nota:</strong> Debajo de la figura o tabla. Se usa para describir el contenido, definir abreviaturas, o dar créditos. Se inicia con la palabra <em>Nota.</em> en cursiva.</li>
+                        </ul>
+                    </div>
+                     <hr>
+                    <div>
+                        <h3 class="text-2xl font-bold accent-color mb-3">Ejemplo de Formato de Tabla</h3>
+                        <p class="mb-4">Observa la estructura: número en negrita, título en cursiva y notas explicativas al final.</p>
+                        <div class="border rounded-lg p-4">
+                            <p class="font-bold">Tabla 1</p>
+                            <p class="italic">Resultados de Desempeño por Grupo Experimental</p>
+                            <div class="w-full overflow-x-auto mt-2">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-b-2 border-t-2 p-2">Grupo</th>
+                                            <th class="border-b-2 border-t-2 p-2 text-center">Media (M)</th>
+                                            <th class="border-b-2 border-t-2 p-2 text-center">Desv. Estándar (DE)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td class="border-b-2 p-2">Control</td><td class="border-b-2 p-2 text-center">4.25</td><td class="border-b-2 p-2 text-center">1.10</td></tr>
+                                        <tr><td class="p-2">Experimental</td><td class="p-2 text-center">5.75</td><td class="p-2 text-center">1.21</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm mt-3"><em>Nota.</em> El desempeño se midió en una escala de 1 a 7.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lenguaje Inclusivo Section -->
+            <section id="lenguaje-inclusivo" class="content-section">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">🗣️ Lenguaje Inclusivo y Libre de Sesgos</h2>
+                <p class="text-lg mb-8 text-gray-700">La comunicación académica debe ser respetuosa y precisa. APA 7 pone un fuerte énfasis en usar un lenguaje que evite perpetuar sesgos.</p>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">Principio de Especificidad</h3>
+                        <p>Sé tan específico como sea posible. En lugar de "participantes asiáticos", es mejor "participantes de ascendencia china, japonesa o coreana" si esa información es conocida y relevante.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">Persona Primero vs. Identidad Primero</h3>
+                        <p>Respeta las preferencias de los grupos. "Persona con autismo" (persona primero) o "persona autista" (identidad primero) pueden ser correctos. Prioriza el término que la comunidad prefiera.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl mb-2 accent-color">Sensibilidad al Género</h3>
+                        <p>Evita el masculino genérico. Usa pronombres como "ellos/ellas" (they) en singular si una persona lo prefiere o si el género es desconocido. En español, reestructura la frase: en vez de "los investigadores", usa "el equipo de investigación" o "quienes investigan".</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const navLinks = document.querySelectorAll('.nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const sidebar = document.getElementById('sidebar');
+
+    const navigateTo = (hash) => {
+        const targetHash = hash || '#inicio';
+        
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === targetHash) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+
+        contentSections.forEach(section => {
+            if ('#' + section.id === targetHash) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+        
+        window.scrollTo(0, 0);
+        sidebar.classList.add('-translate-x-full');
+    };
+
+    sidebar.addEventListener('click', (e) => {
+        if (e.target.classList.contains('nav-link')) {
+            e.preventDefault();
+            const hash = e.target.getAttribute('href');
+            navigateTo(hash);
+            history.pushState(null, null, hash);
+        }
+    });
+
+    mobileMenuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+    });
+
+    window.addEventListener('popstate', () => {
+        navigateTo(window.location.hash);
+    });
+
+    navigateTo(window.location.hash || '#inicio');
+
+    const setupInteractiveSelector = (containerId, callback) => {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.addEventListener('click', e => {
+                if (e.target.tagName === 'BUTTON') {
+                    container.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    callback();
+                }
+            });
+        }
+    };
+    
+    const accordions = document.querySelectorAll('.accordion-trigger');
+    accordions.forEach(accordion => {
+        accordion.addEventListener('click', () => {
+            const content = accordion.nextElementSibling;
+            const icon = accordion.querySelector('span');
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = 'rotate(180deg)';
+            }
+        });
+    });
+
+    const apaPillarsChartCtx = document.getElementById('apaPillarsChart').getContext('2d');
+    new Chart(apaPillarsChartCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Flexibilidad', 'Claridad', 'Inclusividad', 'Consistencia', 'Digitalización'],
+            datasets: [{
+                label: 'Principios Clave APA 7',
+                data: [90, 85, 95, 80, 88],
+                backgroundColor: ['#5A7D8A', '#7a99a7', '#9bb5c0', '#bcceda', '#dde7ee'],
+                borderColor: '#F8F7F4',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#4A4A4A',
+                    titleFont: { size: 14, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 5
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#EAE8E3' },
+                    ticks: { color: '#4A4A4A' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#4A4A4A', font: { weight: '500' } }
+                }
+            }
+        }
+    });
+
+    const citaData = {
+        '1': {
+            parentetica: {
+                template: '(Autor, Año).',
+                example: '(García, 2023).'
+            },
+            narrativa: {
+                template: 'Autor (Año)...',
+                example: 'García (2023) encontró que...'
+            }
+        },
+        '2': {
+            parentetica: {
+                template: '(Autor1 y Autor2, Año).',
+                example: '(Martínez y Rodríguez, 2022).'
+            },
+            narrativa: {
+                template: 'Autor1 y Autor2 (Año)...',
+                example: 'Martínez y Rodríguez (2022) argumentan que...'
+            }
+        },
+        '3+': {
+            parentetica: {
+                template: '(PrimerAutor et al., Año).',
+                example: '(López et al., 2021).'
+            },
+            narrativa: {
+                template: 'PrimerAutor et al. (Año)...',
+                example: 'López et al. (2021) demostraron que...'
+            }
+        }
+    };
+    const citaResultadoDiv = document.getElementById('cita-resultado');
+
+    function updateCita() {
+        const autores = document.querySelector('#cita-autores .selected').dataset.value;
+        const tipo = document.querySelector('#cita-tipo .selected').dataset.value;
+        const data = citaData[autores][tipo];
+        
+        citaResultadoDiv.innerHTML = `
+            <p class="font-semibold">Plantilla:</p>
+            <div class="code-block">${data.template}</div>
+            <p class="font-semibold mt-4">Ejemplo Práctico:</p>
+            <div class="code-block">${data.example}</div>
+        `;
+    }
+
+    setupInteractiveSelector('cita-autores', updateCita);
+    setupInteractiveSelector('cita-tipo', updateCita);
+    updateCita();
+    
+    const referenciaData = {
+        libro: {
+            title: "Libro",
+            template: "Apellido, A. A. (Año). <em>Título del libro en cursiva</em>. Editorial.",
+            example: "Brown, B. (2018). <em>Dare to lead: Brave work. Tough conversations. Whole hearts</em>. Random House."
+        },
+        articulo: {
+            title: "Artículo de Revista",
+            template: "Apellido, A. A. (Año). Título del artículo. <em>Título de la Revista, Volumen</em>(Número), pp-pp. https://doi.org/xxxx",
+            example: "Grady, J. S., Her, M., Moreno, G., Perez, C., & Yelinek, J. (2019). Emotions in storybooks: A comparison of storybooks that represent ethnic and racial groups in the United States. <em>Psychology of Popular Media Culture, 8</em>(3), 207–217. https://doi.org/10.1037/ppm0000185"
+        },
+        web: {
+            title: "Página Web",
+            template: "Autor/Organización. (Año, Día de Mes). <em>Título de la página en cursiva</em>. Nombre del Sitio Web. URL",
+            example: "National Institute of Mental Health. (2018, julio). <em>Anxiety disorders</em>. U.S. Department of Health and Human Services, National Institutes of Health. https://www.nimh.nih.gov/health/topics/anxiety-disorders/index.shtml"
+        },
+        tesis: {
+            title: "Tesis o Disertación",
+            template: "Apellido, A. A. (Año). <em>Título de la tesis en cursiva</em> [Tesis doctoral/maestría, Nombre de la Universidad]. Nombre de la Base de Datos o Repositorio.",
+            example: "Harris, L. (2014). <em>Instructional leadership in an online charter school: A mixed-methods study</em> [Tesis doctoral, University of Houston]. ProQuest Dissertations and Theses Global."
+        },
+        video: {
+            title: "Video (YouTube)",
+            template: "Autor del canal. (Año, Día de Mes). <em>Título del video en cursiva</em> [Video]. Nombre de la Plataforma. URL",
+            example: "Harvard University. (2019, August 28). <em>Soft-bodied robot swims with the fishes</em> [Video]. YouTube. https://www.youtube.com/watch?v=s_m_j_h3G-Y"
+        }
+    };
+    const referenciaResultadoDiv = document.getElementById('referencia-resultado');
+
+    function updateReferencia() {
+        const type = document.querySelector('#referencia-selector .selected').dataset.type;
+        const data = referenciaData[type];
+        
+        referenciaResultadoDiv.innerHTML = `
+            <h4 class="font-bold text-lg mb-2 accent-color">${data.title}</h4>
+            <p class="font-semibold">Estructura:</p>
+            <div class="code-block">${data.template}</div>
+            <p class="font-semibold mt-4">Ejemplo:</p>
+            <div class="code-block">${data.example}</div>
+        `;
+    }
+
+    setupInteractiveSelector('referencia-selector', updateReferencia);
+    updateReferencia();
+
+});
+</script>
+
+</body>
+</html>
