@@ -1,74 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Editor Geoespacial</title>
+    <title>Editor Geoespacial Mejorado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
             --main-color: #1D2DFF;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --danger-color: #dc3545;
             --padding-sm: 8px;
             --padding-md: 12px;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 10px;
             font-size: 16px;
+            background-color: #f5f7fa;
+            color: #333;
         }
 
         .main-container {
             border: 2px solid var(--main-color);
-            padding: 15px;
-            border-radius: 8px;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 850px;
+            margin: 20px auto;
             background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         h1, h3 {
             color: var(--main-color);
-            margin: 10px 0;
+            margin: 15px 0;
             word-break: break-word;
         }
 
-        h1 { font-size: 1.8em; }
-        h3 { font-size: 1.3em; }
-
-        hr {
-            border: 1px solid var(--main-color);
-            margin: 15px 0;
-        }
-
-        .widget-group {
-            margin: 10px 0;
+        h1 { 
+            font-size: 1.8em; 
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h3 { 
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
-        input, select, button {
-            width: 100%;
+        hr {
+            border: 1px solid var(--main-color);
+            margin: 20px 0;
+        }
+
+        .widget-group {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        input, select, button, textarea {
             padding: var(--padding-md);
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             font-size: 1em;
             box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--main-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(29, 45, 255, 0.2);
         }
 
         button {
             background-color: var(--main-color);
             color: white;
             border: none;
-            padding: 12px;
+            padding: 12px 15px;
             white-space: nowrap;
             flex: 1 1 auto;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-success { background-color: #28a745; }
-        .btn-warning { background-color: #ffc107; color: black; }
-        .btn-info { background-color: #17a2b8; }
-        .btn-danger { background-color: #dc3545; }
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success { background-color: var(--success-color); }
+        .btn-warning { background-color: var(--warning-color); color: black; }
+        .btn-info { background-color: var(--info-color); }
+        .btn-danger { background-color: var(--danger-color); }
+        .btn-secondary { background-color: var(--secondary-color); }
 
         #jsonOutput {
             white-space: pre-wrap;
@@ -76,18 +113,93 @@
             background-color: #f8f9fa;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin-top: 15px;
+            margin-top: 20px;
             overflow-x: auto;
             font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
         .hidden { display: none; }
 
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.success {
+            background-color: rgba(40, 167, 69, 0.15);
+            border-left: 4px solid var(--success-color);
+            color: #155724;
+        }
+        
+        .notification.error {
+            background-color: rgba(220, 53, 69, 0.15);
+            border-left: 4px solid var(--danger-color);
+            color: #721c24;
+        }
+
+        .edit-panel {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .edit-panel h4 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background-color: var(--main-color);
+            color: white;
+        }
+
+        .error-details {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
         @media (min-width: 768px) {
             body { padding: 20px; }
-            .main-container { padding: 25px; }
+            .main-container { padding: 30px; }
             .widget-group { flex-wrap: nowrap; }
-            input, select { width: auto; flex: 1; }
+            input, select, textarea { width: auto; flex: 1; }
             button { width: auto; }
         }
 
@@ -96,68 +208,160 @@
             h3 { font-size: 1.1em; }
             body { font-size: 14px; }
             
-            input, select, button {
+            input, select, button, textarea {
                 padding: var(--padding-sm);
                 font-size: 0.9em;
             }
             
             .widget-group { gap: 6px; }
+            .main-container { padding: 15px; }
         }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <h1>🌍 Editor Geoespacial</h1>
+        <h1><span>🌍</span> Editor Geoespacial Mejorado</h1>
         
-        <div class="widget-group">
-            <input type="file" id="fileUpload" accept=".json,.csv" class="hidden">
-            <button onclick="document.getElementById('fileUpload').click()" class="btn-success">🔼 Cargar JSON</button>
-            <button onclick="saveData()" class="btn-success">💾 Guardar JSON</button>
+        <div id="notificationArea"></div>
+        
+        <div class="tab-container">
+            <div class="tab active" onclick="showTab('dataTab')">Gestión de Datos</div>
+            <div class="tab" onclick="showTab('editTab')">Edición</div>
+            <div class="tab" onclick="showTab('importTab')">Importar</div>
+        </div>
+        
+        <div id="dataTab" class="tab-content">
+            <div class="widget-group">
+                <input type="file" id="fileUpload" accept=".json,.csv" class="hidden">
+                <button onclick="document.getElementById('fileUpload').click()" class="btn-success">
+                    <span>🔼</span> Cargar JSON/CSV
+                </button>
+                <button onclick="saveData()" class="btn-success">
+                    <span>💾</span> Guardar JSON
+                </button>
+            </div>
+
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>🏞</span> Crear Nueva Cuenca</h3>
+            </div>
+            <div class="widget-group">
+                <input type="text" id="newCuenca" placeholder="Nombre de nueva cuenca">
+                <button onclick="addCuenca()" class="btn-warning">
+                    <span>➕</span> Crear Cuenca
+                </button>
+            </div>
+
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>🏡</span> Agregar Localidad</h3>
+            </div>
+            <div class="widget-group">
+                <select id="cuencaDropdown"></select>
+            </div>
+            <div class="widget-group">
+                <input type="text" id="localidad" placeholder="Nombre de localidad">
+            </div>
+            <div class="widget-group">
+                <input type="number" id="lat" placeholder="Latitud (-90 a 90)" step="any" min="-90" max="90">
+                <input type="number" id="lng" placeholder="Longitud (-180 a 180)" step="any" min="-180" max="180">
+            </div>
+            <div class="widget-group">
+                <input type="text" id="escenarios" placeholder="Escenarios (separar por comas)">
+                <button onclick="addLocalidad()" class="btn-info">
+                    <span>📍</span> Agregar Localidad
+                </button>
+            </div>
+
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>🗑️</span> Eliminar Datos</h3>
+            </div>
+            <div class="widget-group">
+                <select id="deleteCuencaDropdown"></select>
+                <button onclick="deleteCuenca()" class="btn-danger">
+                    <span>🗑️</span> Eliminar Cuenca
+                </button>
+            </div>
+            <div class="widget-group">
+                <select id="deleteLocalidadDropdown"></select>
+                <button onclick="deleteLocalidad()" class="btn-danger">
+                    <span>🗑️</span> Eliminar Localidad
+                </button>
+            </div>
+        </div>
+        
+        <div id="editTab" class="tab-content hidden">
+            <div class="section-header">
+                <h3><span>✏️</span> Editar Cuenca</h3>
+            </div>
+            <div class="widget-group">
+                <select id="editCuencaDropdown" onchange="loadCuencaForEdit()"></select>
+                <input type="text" id="editCuencaName" placeholder="Nuevo nombre de cuenca">
+                <button onclick="updateCuenca()" class="btn-info">
+                    <span>💾</span> Actualizar Cuenca
+                </button>
+            </div>
+            
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>📍</span> Editar Localidad</h3>
+            </div>
+            <div class="widget-group">
+                <select id="editLocalidadCuencaDropdown" onchange="updateLocalidadesForEdit()"></select>
+                <select id="editLocalidadDropdown" onchange="loadLocalidadForEdit()"></select>
+            </div>
+            <div class="widget-group">
+                <input type="text" id="editLocalidadName" placeholder="Nuevo nombre de localidad">
+            </div>
+            <div class="widget-group">
+                <input type="number" id="editLat" placeholder="Latitud (-90 a 90)" step="any" min="-90" max="90">
+                <input type="number" id="editLng" placeholder="Longitud (-180 a 180)" step="any" min="-180" max="180">
+            </div>
+            <div class="widget-group">
+                <input type="text" id="editEscenarios" placeholder="Escenarios (separar por comas)">
+                <button onclick="updateLocalidad()" class="btn-info">
+                    <span>💾</span> Actualizar Localidad
+                </button>
+            </div>
+        </div>
+        
+        <div id="importTab" class="tab-content hidden">
+            <div class="section-header">
+                <h3><span>📤</span> Importar CSV</h3>
+            </div>
+            <div class="widget-group">
+                <textarea id="csvData" placeholder="Pegue datos CSV aquí o use el botón de carga" rows="8"></textarea>
+            </div>
+            <div class="widget-group">
+                <button onclick="processCSVFromTextarea()" class="btn-info">
+                    <span>🔄</span> Procesar CSV
+                </button>
+                <button onclick="document.getElementById('fileUpload').click()" class="btn-secondary">
+                    <span>📂</span> Cargar Archivo CSV
+                </button>
+            </div>
+            
+            <div id="csvErrors" class="hidden">
+                <h4><span>⚠️</span> Errores en el CSV:</h4>
+                <div id="errorList" class="error-details"></div>
+            </div>
         </div>
 
-        <hr>
-        
-        <h3>🏞 Crear Nueva Cuenca</h3>
-        <div class="widget-group">
-            <input type="text" id="newCuenca" placeholder="Nombre de nueva cuenca">
-            <button onclick="addCuenca()" class="btn-warning">➕ Crear Cuenca</button>
+        <div class="section-header">
+            <h3><span>📋</span> Vista Previa de Datos</h3>
         </div>
-
-        <hr>
-        
-        <h3>🏡 Agregar Localidad</h3>
-        <div class="widget-group">
-            <select id="cuencaDropdown"></select>
-        </div>
-        <div class="widget-group">
-            <input type="text" id="localidad" placeholder="Nombre de localidad">
-        </div>
-        <div class="widget-group">
-            <input type="number" id="lat" placeholder="Latitud (-90 a 90)" step="any">
-            <input type="number" id="lng" placeholder="Longitud (-180 a 180)" step="any">
-        </div>
-        <div class="widget-group">
-            <input type="text" id="escenarios" placeholder="Escenarios (separar por comas)" style="width: 300px;">
-            <button onclick="addLocalidad()" class="btn-info">📍 Agregar Localidad</button>
-        </div>
-
-        <hr>
-        
-        <h3>🗑️ Eliminar Datos</h3>
-        <div class="widget-group">
-            <select id="deleteCuencaDropdown"></select>
-            <button onclick="deleteCuenca()" class="btn-danger">🗑️ Eliminar Cuenca</button>
-        </div>
-        <div class="widget-group">
-            <select id="deleteLocalidadDropdown"></select>
-            <button onclick="deleteLocalidad()" class="btn-danger">🗑️ Eliminar Localidad</button>
-        </div>
-
         <pre id="jsonOutput"></pre>
     </div>
 
     <script>
         let data = {};
+        let currentEditCuenca = null;
+        let currentEditLocalidad = null;
 
         // Actualizar la interfaz
         function updateUI() {
@@ -175,16 +379,85 @@
             // Actualizar dropdowns de cuencas
             updateOptions('cuencaDropdown', cuencas);
             updateOptions('deleteCuencaDropdown', cuencas);
+            updateOptions('editCuencaDropdown', cuencas);
+            updateOptions('editLocalidadCuencaDropdown', cuencas);
             
             // Actualizar dropdown de localidades
             const cuencaSeleccionada = document.getElementById('deleteCuencaDropdown').value;
             const localidades = cuencaSeleccionada ? Object.keys(data[cuencaSeleccionada]) : [];
             updateOptions('deleteLocalidadDropdown', localidades);
+            
+            // Actualizar localidades para edición
+            updateLocalidadesForEdit();
         }
 
         function updateOptions(selectId, options) {
             const select = document.getElementById(selectId);
             select.innerHTML = options.map(opt => `<option>${opt}</option>`).join('');
+            
+            // Si no hay opciones, agregar un placeholder
+            if (options.length === 0) {
+                select.innerHTML = '<option value="" disabled selected>No hay datos</option>';
+            }
+        }
+        
+        // Actualizar localidades para edición (con corrección para una sola localidad)
+        function updateLocalidadesForEdit() {
+            const cuenca = document.getElementById('editLocalidadCuencaDropdown').value;
+            const localidades = cuenca ? Object.keys(data[cuenca]) : [];
+            
+            const select = document.getElementById('editLocalidadDropdown');
+            select.innerHTML = localidades.map(opt => `<option>${opt}</option>`).join('');
+            
+            if (localidades.length === 0) {
+                select.innerHTML = '<option value="" disabled selected>Seleccione una cuenca</option>';
+            } else if (localidades.length === 1) {
+                // Caso especial: solo una localidad - cargarla automáticamente
+                select.value = localidades[0];
+                loadLocalidadForEdit();
+            }
+        }
+        
+        // Cargar datos de localidad para edición
+        function loadLocalidadForEdit() {
+            const cuenca = document.getElementById('editLocalidadCuencaDropdown').value;
+            const localidad = document.getElementById('editLocalidadDropdown').value;
+            
+            if (cuenca && localidad && data[cuenca] && data[cuenca][localidad]) {
+                const locData = data[cuenca][localidad];
+                document.getElementById('editLocalidadName').value = localidad;
+                document.getElementById('editLat').value = locData.lat;
+                document.getElementById('editLng').value = locData.lng;
+                document.getElementById('editEscenarios').value = locData.escenarios.join(', ');
+                
+                currentEditCuenca = cuenca;
+                currentEditLocalidad = localidad;
+            } else {
+                // Limpiar campos si no hay selección válida
+                document.getElementById('editLocalidadName').value = '';
+                document.getElementById('editLat').value = '';
+                document.getElementById('editLng').value = '';
+                document.getElementById('editEscenarios').value = '';
+                
+                currentEditCuenca = null;
+                currentEditLocalidad = null;
+            }
+        }
+
+        // Mostrar notificación
+        function showNotification(message, type = 'success') {
+            const notificationArea = document.getElementById('notificationArea');
+            const icon = type === 'success' ? '✅' : '❌';
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<span>${icon}</span> ${message}`;
+            
+            notificationArea.appendChild(notification);
+            
+            // Eliminar notificación después de 5 segundos
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
         }
 
         // Modificar la función de carga de archivos
@@ -196,22 +469,43 @@
             reader.onload = function(e) {
                 try {
                     if (file.name.endsWith('.json')) {
-                        // Procesamiento JSON existente
+                        data = JSON.parse(e.target.result);
+                        showNotification('✅ JSON cargado exitosamente');
                     } 
                     else if (file.name.endsWith('.csv')) {
                         processCSV(e.target.result);
                     }
                     updateUI();
                 } catch (error) {
-                    alert(`❌ ERROR: ${error.message}`);
+                    showNotification(`❌ ERROR: ${error.message}`, 'error');
                 }
             };
             reader.readAsText(file);
         });
 
-        // Nueva función para procesar CSV
+        // Función para procesar CSV desde textarea
+        function processCSVFromTextarea() {
+            const csvData = document.getElementById('csvData').value;
+            if (!csvData.trim()) {
+                showNotification('❌ No hay datos CSV para procesar', 'error');
+                return;
+            }
+            
+            try {
+                processCSV(csvData);
+                document.getElementById('csvData').value = '';
+            } catch (error) {
+                showNotification(`❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        // Función para procesar CSV con manejo detallado de errores
         function processCSV(csvData) {
-            const lines = csvData.split('\n');
+            const lines = csvData.split('\n').filter(line => line.trim() !== '');
+            if (lines.length < 2) {
+                throw new Error('El archivo CSV debe tener al menos una fila de encabezado y una fila de datos');
+            }
+            
             const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
             
             // Validar encabezados
@@ -219,37 +513,67 @@
             requiredHeaders.forEach(h => {
                 if (!headers.includes(h)) throw new Error(`Falta columna requerida: ${h}`);
             });
-
+            
+            const errors = [];
+            const newData = {...data};
+            
             // Procesar filas
             for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim());
-                if (values.length < 4) continue;
-
-                const row = {
-                    cuenca: values[headers.indexOf('cuenca')],
-                    localidad: values[headers.indexOf('localidad')],
-                    lat: parseFloat(values[headers.indexOf('lat')]),
-                    lng: parseFloat(values[headers.indexOf('lng')]),
-                    escenarios: headers.includes('escenarios') ? 
-                            values[headers.indexOf('escenarios')].split(';').map(e => e.trim()) : 
-                            ["Escenario 1", "Escenario 2"]
-                };
-
-                // Validar coordenadas
-                if (isNaN(row.lat) || isNaN(row.lng)) {
-                    throw new Error(`Coordenadas inválidas en línea ${i + 1}`);
+                const line = lines[i];
+                const values = line.split(',').map(v => v.trim());
+                
+                try {
+                    if (values.length < 4) {
+                        throw new Error('Faltan valores en la fila');
+                    }
+                    
+                    const row = {
+                        cuenca: values[headers.indexOf('cuenca')],
+                        localidad: values[headers.indexOf('localidad')],
+                        lat: parseFloat(values[headers.indexOf('lat')]),
+                        lng: parseFloat(values[headers.indexOf('lng')]),
+                        escenarios: headers.includes('escenarios') ? 
+                                values[headers.indexOf('escenarios')].split(';').map(e => e.trim()) : 
+                                ["Escenario 1", "Escenario 2"]
+                    };
+                    
+                    // Validar coordenadas
+                    if (isNaN(row.lat)) throw new Error('Latitud no es un número válido');
+                    if (isNaN(row.lng)) throw new Error('Longitud no es un número válido');
+                    
+                    if (row.lat < -90 || row.lat > 90) {
+                        throw new Error('Latitud fuera de rango (-90 a 90)');
+                    }
+                    
+                    if (row.lng < -180 || row.lng > 180) {
+                        throw new Error('Longitud fuera de rango (-180 a 180)');
+                    }
+                    
+                    // Agregar a estructura de datos
+                    if (!newData[row.cuenca]) newData[row.cuenca] = {};
+                    newData[row.cuenca][row.localidad] = {
+                        lat: row.lat,
+                        lng: row.lng,
+                        escenarios: row.escenarios.filter(e => e) // Eliminar vacíos
+                    };
+                } catch (error) {
+                    errors.push(`Línea ${i+1}: ${line} - ${error.message}`);
                 }
-
-                // Agregar a estructura de datos
-                if (!data[row.cuenca]) data[row.cuenca] = {};
-                data[row.cuenca][row.localidad] = {
-                    lat: row.lat,
-                    lng: row.lng,
-                    escenarios: row.escenarios.filter(e => e) // Eliminar vacíos
-                };
             }
             
-            alert("✅ CSV procesado exitosamente!");
+            // Mostrar errores si existen
+            if (errors.length > 0) {
+                const errorList = document.getElementById('errorList');
+                errorList.innerHTML = errors.map(e => `<div>${e}</div>`).join('');
+                document.getElementById('csvErrors').classList.remove('hidden');
+                showNotification(`⚠️ CSV procesado con ${errors.length} error(es)`, 'error');
+            } else {
+                document.getElementById('csvErrors').classList.add('hidden');
+                showNotification('✅ CSV procesado exitosamente!');
+            }
+            
+            data = newData;
+            updateUI();
         }
 
         // Funciones para agregar datos
@@ -262,9 +586,9 @@
                 data[nombre] = {};
                 document.getElementById('newCuenca').value = '';
                 updateUI();
-                alert(`✅ Cuenca '${nombre}' creada`);
+                showNotification(`✅ Cuenca '${nombre}' creada`);
             } catch (error) {
-                alert(`❌ Error: ${error.message}`);
+                showNotification(`❌ Error: ${error.message}`, 'error');
             }
         }
 
@@ -279,6 +603,8 @@
                 if (!cuenca) throw new Error("Selecciona una cuenca");
                 if (!nombre) throw new Error("Nombre de localidad requerido");
                 if (isNaN(lat) || isNaN(lng)) throw new Error("Coordenadas inválidas");
+                if (lat < -90 || lat > 90) throw new Error("Latitud debe estar entre -90 y 90");
+                if (lng < -180 || lng > 180) throw new Error("Longitud debe estar entre -180 y 180");
                 if (!escenarios.length) throw new Error("Debe incluir al menos un escenario");
 
                 data[cuenca][nombre] = {
@@ -294,19 +620,19 @@
                 document.getElementById('escenarios').value = '';
                 
                 updateUI();
-                alert(`✅ Localidad '${nombre}' agregada a '${cuenca}'`);
+                showNotification(`✅ Localidad '${nombre}' agregada a '${cuenca}'`);
             } catch (error) {
-                alert(`❌ Error: ${error.message}`);
+                showNotification(`❌ Error: ${error.message}`, 'error');
             }
         }
 
         // Funciones para eliminar datos
         function deleteCuenca() {
             const cuenca = document.getElementById('deleteCuencaDropdown').value;
-            if (cuenca && confirm(`¿Eliminar la cuenca '${cuenca}'?`)) {
+            if (cuenca && confirm(`¿Eliminar la cuenca '${cuenca}' y todas sus localidades?`)) {
                 delete data[cuenca];
                 updateUI();
-                alert(`✅ Cuenca '${cuenca}' eliminada`);
+                showNotification(`✅ Cuenca '${cuenca}' eliminada`);
             }
         }
 
@@ -317,21 +643,155 @@
                 delete data[cuenca][localidad];
                 if (Object.keys(data[cuenca]).length === 0) delete data[cuenca];
                 updateUI();
-                alert(`✅ Localidad '${localidad}' eliminada`);
+                showNotification(`✅ Localidad '${localidad}' eliminada`);
+            }
+        }
+        
+        // Funciones para editar datos
+        function loadCuencaForEdit() {
+            const cuenca = document.getElementById('editCuencaDropdown').value;
+            if (cuenca) {
+                document.getElementById('editCuencaName').value = cuenca;
+                currentEditCuenca = cuenca;
+            }
+        }
+        
+        function updateCuenca() {
+            const oldName = currentEditCuenca;
+            const newName = document.getElementById('editCuencaName').value.trim();
+            
+            if (!oldName || !newName) {
+                showNotification('❌ Seleccione una cuenca y proporcione un nuevo nombre', 'error');
+                return;
+            }
+            
+            if (oldName === newName) {
+                showNotification('❌ El nuevo nombre debe ser diferente al actual', 'error');
+                return;
+            }
+            
+            if (data[newName]) {
+                showNotification('❌ Ya existe una cuenca con ese nombre', 'error');
+                return;
+            }
+            
+            try {
+                // Mover datos a la nueva clave
+                data[newName] = data[oldName];
+                delete data[oldName];
+                
+                updateUI();
+                showNotification(`✅ Cuenca '${oldName}' renombrada a '${newName}'`);
+                
+                // Limpiar campos
+                document.getElementById('editCuencaName').value = '';
+                currentEditCuenca = null;
+            } catch (error) {
+                showNotification(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function updateLocalidad() {
+            const oldName = currentEditLocalidad;
+            const newName = document.getElementById('editLocalidadName').value.trim();
+            const lat = parseFloat(document.getElementById('editLat').value);
+            const lng = parseFloat(document.getElementById('editLng').value);
+            const escenarios = document.getElementById('editEscenarios').value.split(',').map(e => e.trim()).filter(e => e);
+            
+            if (!currentEditCuenca || !oldName) {
+                showNotification('❌ Seleccione una localidad para editar', 'error');
+                return;
+            }
+            
+            try {
+                if (!newName) throw new Error("Nombre de localidad requerido");
+                if (isNaN(lat) || isNaN(lng)) throw new Error("Coordenadas inválidas");
+                if (lat < -90 || lat > 90) throw new Error("Latitud debe estar entre -90 y 90");
+                if (lng < -180 || lng > 180) throw new Error("Longitud debe estar entre -180 y 180");
+                if (!escenarios.length) throw new Error("Debe incluir al menos un escenario");
+                
+                // Si el nombre cambió, necesitamos manejar el cambio
+                if (oldName !== newName) {
+                    // Verificar si el nuevo nombre ya existe
+                    if (data[currentEditCuenca][newName]) {
+                        throw new Error("Ya existe una localidad con ese nombre en esta cuenca");
+                    }
+                    
+                    // Mover los datos al nuevo nombre
+                    data[currentEditCuenca][newName] = {
+                        lat: lat,
+                        lng: lng,
+                        escenarios: escenarios
+                    };
+                    
+                    // Eliminar el nombre antiguo
+                    delete data[currentEditCuenca][oldName];
+                } else {
+                    // Actualizar datos existentes
+                    data[currentEditCuenca][oldName] = {
+                        lat: lat,
+                        lng: lng,
+                        escenarios: escenarios
+                    };
+                }
+                
+                updateUI();
+                showNotification(`✅ Localidad '${oldName}' actualizada`);
+                
+                // Limpiar campos
+                document.getElementById('editLocalidadName').value = '';
+                document.getElementById('editLat').value = '';
+                document.getElementById('editLng').value = '';
+                document.getElementById('editEscenarios').value = '';
+                
+                currentEditCuenca = null;
+                currentEditLocalidad = null;
+            } catch (error) {
+                showNotification(`❌ Error: ${error.message}`, 'error');
             }
         }
 
         // Guardar datos
         function saveData() {
-            if (!Object.keys(data).length) return alert("❌ No hay datos para guardar");
+            if (!Object.keys(data).length) {
+                showNotification('❌ No hay datos para guardar', 'error');
+                return;
+            }
             
             const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'data.json';
+            a.download = 'geo-data.json';
             a.click();
             URL.revokeObjectURL(url);
+            
+            showNotification('✅ Datos guardados como geo-data.json');
+        }
+        
+        // Mostrar/ocultar pestañas
+        function showTab(tabId) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Actualizar estado de las pestañas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activar la pestaña seleccionada
+            const activeTab = Array.from(document.querySelectorAll('.tab')).find(tab => 
+                tab.textContent.includes(tabId.replace('Tab', ''))
+            );
+            
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
         }
 
         // Inicializar
