@@ -2,7 +2,7 @@
 var map = L.map('map').setView([-9.19, -75.01], 6);
 
 // Capa base
-L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     attribution: 'Google Terrain'
 }).addTo(map);
 
@@ -102,7 +102,7 @@ document.getElementById("localidad").addEventListener("change", async function()
         // Hacer zoom a la localidad seleccionada
         const coords = datos[cuenca][localidad];
         if (coords.lat && coords.lng) {
-            map.setView([coords.lat, coords.lng], 14); // Nivel de zoom 14 para localidad
+            map.setView([coords.lat, coords.lng], 17); // Nivel de zoom 17 para localidad
         }
         
         await cargarSubbasin(cuenca, localidad);
@@ -351,12 +351,19 @@ async function cargarEscenario() {
     Object.values(layers).forEach(layer => map.removeLayer(layer));
 
     try {
-        // Cargar nuevas capas
-        const depthFile = `data/${cuenca}/${localidad}/${escenario}/MAXIMUM_DEPTH.tif`;
-        const velocityFile = `data/${cuenca}/${localidad}/${escenario}/MAXIMUM_VELOCITY.tif`;
+        await loadGeoTIFF(
+            `data/${cuenca}/${localidad}/${escenario}/MAXIMUM_DEPTH.tif`,
+            "depth",
+            "Altura de Inundación",
+            "depth"  // ← Tipo de variable
+        );
 
-        await loadGeoTIFF(depthFile, "depth", "Altura de Inundación (m)");
-        await loadGeoTIFF(velocityFile, "velocity", "Velocidad del Flujo (m/s)");
+        await loadGeoTIFF(
+            `data/${cuenca}/${localidad}/${escenario}/MAXIMUM_VELOCITY.tif`,
+            "velocity",
+            "Velocidad del Flujo",
+            "velocity"  // ← Tipo de variable
+        );
 
         // Mostrar primera capa por defecto si está activado el checkbox
         if (document.getElementById('alturas').checked) {
@@ -372,38 +379,109 @@ async function cargarEscenario() {
 }
 
 // Función para cargar GeoTIFF
-async function loadGeoTIFF(url, layerName, legendTitle) {
+async function loadGeoTIFF(url, layerName, legendTitle, variableType) {
     try {
+        // 1. Cargar el raster
         const response = await fetch(url);
         if (!response.ok) throw new Error("Archivo no encontrado");
         const arrayBuffer = await response.arrayBuffer();
         const georaster = await parseGeoraster(arrayBuffer);
 
-        const min = georaster.mins[0];
-        const max = georaster.maxs[0];
-        const scale = chroma.scale(["blue", "cyan", "green", "yellow", "red"]).domain([min, max]);
+        // 2. Intentar cargar metadatos (ranges.json)
+        let metadatos = null;
+        try {
+            const metadataUrl = url.replace(/(MAXIMUM_DEPTH|MAXIMUM_VELOCITY)\.tif$/, 'ranges.json');
+            const metadataResponse = await fetch(metadataUrl);
+            if (metadataResponse.ok) {
+                metadatos = await metadataResponse.json();
+            }
+        } catch (e) {
+            console.warn("No se encontró ranges.json, usando valores automáticos");
+        }
 
+        // 3. Configurar escala de colores
+        let scale, maxRepresentativo;
+        
+        if (metadatos && metadatos[variableType === 'velocity' ? 'MAXIMUM_VELOCITY' : 'MAXIMUM_DEPTH']) {
+            const config = metadatos[variableType === 'velocity' ? 'MAXIMUM_VELOCITY' : 'MAXIMUM_DEPTH'];
+            maxRepresentativo = config.max_representativo;
+            
+            // Configurar escala con tus colores originales
+            if (variableType === 'velocity') {
+                scale = chroma.scale(['#1a9641', '#a6d96a', '#ffffc0', '#fdae61', '#313695'])
+                            .domain([0, maxRepresentativo]);
+            } else {
+                scale = chroma.scale(['#2c7bb6', '#abd9e9', '#ffffbf', '#fdae61', '#d7191c'])
+                            .domain([0, maxRepresentativo]);
+            }
+        } else {
+            // Fallback: cálculo automático (como tenías antes)
+            maxRepresentativo = georaster.maxs[0];
+            if (variableType === 'velocity') {
+                scale = chroma.scale(['#1a9641', '#a6d96a', '#ffffc0', '#fdae61', '#313695'])
+                            .domain([georaster.mins[0], georaster.maxs[0]]);
+            } else {
+                scale = chroma.scale(['#2c7bb6', '#abd9e9', '#ffffbf', '#fdae61', '#d7191c'])
+                            .domain([georaster.mins[0], georaster.maxs[0]]);
+            }
+        }
+
+        // 4. Crear la capa con la escala adaptada
         layers[layerName] = new GeoRasterLayer({
             georaster: georaster,
             opacity: 0.7,
             resolution: 256,
-            pixelValuesToColorFn: value => (value === null || value <= 0) ? null : scale(value).hex()
+            pixelValuesToColorFn: value => {
+                if (value === null || value <= 0) return null;
+                
+                // Manejo de valores extremos
+                if (metadatos && value > maxRepresentativo) {
+                    const config = metadatos[variableType === 'velocity' ? 'MAXIMUM_VELOCITY' : 'MAXIMUM_DEPTH'];
+                    return config.color_extremo;
+                }
+                
+                return scale(value).hex();
+            }
         });
 
-        // Crear leyenda
+        // 5. Crear leyenda mejorada
         const leyenda = document.createElement("div");
-        leyenda.innerHTML = `<h4>${legendTitle}</h4>`;
-        let steps = 5;
-        let range = (max - min) / steps;
+        const unidad = metadatos ? 
+                      metadatos[variableType === 'velocity' ? 'MAXIMUM_VELOCITY' : 'MAXIMUM_DEPTH'].unidad : 
+                      (variableType === 'velocity' ? 'm/s' : 'm');
+        
+        leyenda.innerHTML = `<h4>${legendTitle} (${unidad})</h4>`;
+        
+        // Generar intervalos de leyenda (5 pasos)
+        const steps = 4;
         for (let i = 0; i < steps; i++) {
-            let value = (min + i * range).toFixed(2);
+            const value = (i * maxRepresentativo) / steps;
+            const nextValue = ((i + 1) * maxRepresentativo) / steps;
+            const color = scale(value).hex();
+            
             leyenda.innerHTML += `
                 <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                    <div style="width: 20px; height: 20px; background: ${scale(min + i * range).hex()}; margin-right: 10px;"></div>
-                    ${value} - ${(min + (i + 1) * range).toFixed(2)}
+                    <div style="width: 20px; height: 20px; background: ${color}; margin-right: 10px;"></div>
+                    ${value.toFixed(2)} - ${nextValue.toFixed(2)}
                 </div>`;
         }
+        
+        // Añadir rango extremo si existe
+        if (metadatos) {
+            const config = metadatos[variableType === 'velocity' ? 'MAXIMUM_VELOCITY' : 'MAXIMUM_DEPTH'];
+            leyenda.innerHTML += `
+                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                    <div style="width: 20px; height: 20px; background: ${config.color_extremo}; margin-right: 10px;"></div>
+                    ≥${maxRepresentativo.toFixed(2)}
+                </div>`;
+                
+            if (config.nota) {
+                leyenda.innerHTML += `<div style="font-size: 0.8em; color: #666; margin-top: 5px;">${config.nota}</div>`;
+            }
+        }
+        
         legends[layerName] = leyenda;
+
     } catch (error) {
         console.error("Error cargando GeoTIFF:", error);
         throw error;
