@@ -1,0 +1,420 @@
+{
+  "Cuenca Caplina": {
+    "Quebrada del Diablo": {
+      "lat": -17.9976,
+      "lng": -70.2652,
+      "escenarios": [
+        "Periodo de retorno 10 años",
+        "Periodo de retorno 20 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Chamaya": {
+    "Quebrada Ungulo": {
+      "lat": -5.24,
+      "lng": -79.4463,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Grande": {
+    "Quebrada Rio Grande": {
+      "lat": -14.519,
+      "lng": -75.198,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Cajuca": {
+      "lat": -14.8391,
+      "lng": -74.9248,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "QuebradaVista Alegre": {
+      "lat": -14.85,
+      "lng": -74.9392,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Ica": {
+    "Quebrada La Yesera": {
+      "lat": -13.9344,
+      "lng": -75.6636,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Cansas": {
+      "lat": -14.0336,
+      "lng": -75.6837,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Parcona 1": {
+      "lat": -14.05,
+      "lng": -75.6904,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Parcona 2": {
+      "lat": -14.0529,
+      "lng": -75.6846,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Omas": {
+    "Quebrada Rosa Maria": {
+      "lat": -12.6065,
+      "lng": -76.3463,
+      "escenarios": [
+        "Periodo de retorno 100 años CV 0.00",
+        "Periodo de retorno 100 años CV 0.45"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Piura": {
+    "Quebrada Limon": {
+      "lat": -5.3753,
+      "lng": -79.6046,
+      "escenarios": [
+        "Periodo de retorno 10 años",
+        "Periodo de retorno 20 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Carneros": {
+      "lat": -4.9278,
+      "lng": -80.336,
+      "escenarios": [
+        "Periodo de retorno 25 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada La Pilca": {
+      "lat": -5.2098,
+      "lng": -79.9446,
+      "escenarios": [
+        "Periodo de retorno 10 años",
+        "Periodo de retorno 20 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Rio Seco": {
+      "lat": -5.0292,
+      "lng": -80.1639,
+      "escenarios": [
+        "Periodo de retorno 25 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Quilca": {
+    "Quebrada Pozo Negro": {
+      "lat": -16.4276,
+      "lng": -71.4906,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 10 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Rimac": {
+    "Quebrada California": {
+      "lat": -11.962,
+      "lng": -76.7171,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Huascaran": {
+      "lat": -11.9846,
+      "lng": -76.7797,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Quirio": {
+      "lat": -11.9346,
+      "lng": -76.7162,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Pedregal": {
+      "lat": -11.9315,
+      "lng": -76.7031,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Cashahuacra": {
+      "lat": -11.9081,
+      "lng": -76.6713,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Huaycoloro": {
+      "lat": -11.9991,
+      "lng": -76.9163,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Cuenca Santa": {
+    "Quebrada Huashca": {
+      "lat": -9.0929,
+      "lng": -77.7926,
+      "escenarios": [
+        "Periodo de retorno 50 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Intercuenca 13173": {
+    "Quebrada Zaparo": {
+      "lat": -17.6031,
+      "lng": -71.3331,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Intercuenca 1375533": {
+    "Quebrada Malanche": {
+      "lat": -12.3336,
+      "lng": -76.8193,
+      "escenarios": [
+        "Escenario 1",
+        "Escenario 2"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Intercuenca 1375999": {
+    "Quebrada La Cantera": {
+      "lat": -9.0266,
+      "lng": -78.6169,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Intercuenca 1391": {
+    "Quebrada Yale": {
+      "lat": -4.5728,
+      "lng": -81.2681,
+      "escenarios": [
+        "Periodo de retorno 10 años",
+        "Periodo de retorno 20 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Acholado": {
+      "lat": -4.5919,
+      "lng": -81.2438,
+      "escenarios": [
+        "Periodo de retorno 10 años",
+        "Periodo de retorno 20 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  },
+  "Intercuenca 13931": {
+    "Quebrada Carrillo": {
+      "lat": -4.1579,
+      "lng": -81.1098,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Vichayito": {
+      "lat": -4.1539,
+      "lng": -81.1062,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    },
+    "Quebrada Cabo Blanco": {
+      "lat": -4.1093,
+      "lng": -81.057,
+      "escenarios": [
+        "Periodo de retorno 20 años",
+        "Periodo de retorno 100 años"
+      ],
+      "topo_info": {
+        "min_val": 0,
+        "max_val": 5000,
+        "units": "m s. n. m."
+      }
+    }
+  }
+}
