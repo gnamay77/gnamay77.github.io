@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editor Geoespacial Mejorado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --main-color: #1D2DFF;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --danger-color: #dc3545;
+            --padding-sm: 8px;
+            --padding-md: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .main-container {
+            border: 2px solid var(--main-color);
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 850px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h3 {
+            color: var(--main-color);
+            margin: 15px 0;
+            word-break: break-word;
+        }
+
+        h1 { 
+            font-size: 1.8em; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h3 { 
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        h4 {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+            width: 100%;
+        }
+
+        hr {
+            border: 1px solid var(--main-color);
+            margin: 20px 0;
+        }
+
+        .widget-group {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        input, select, button, textarea {
+            padding: var(--padding-md);
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--main-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(29, 45, 255, 0.2);
+        }
+
+        button {
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            white-space: nowrap;
+            flex: 1 1 auto;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success { background-color: var(--success-color); }
+        .btn-warning { background-color: var(--warning-color); color: black; }
+        .btn-info { background-color: var(--info-color); }
+        .btn-danger { background-color: var(--danger-color); }
+        .btn-secondary { background-color: var(--secondary-color); }
+
+        #jsonOutput {
+            white-space: pre-wrap;
+            padding: var(--padding-md);
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow-x: auto;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .hidden { display: none; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.success {
+            background-color: rgba(40, 167, 69, 0.15);
+            border-left: 4px solid var(--success-color);
+            color: #155724;
+        }
+        
+        .notification.error {
+            background-color: rgba(220, 53, 69, 0.15);
+            border-left: 4px solid var(--danger-color);
+            color: #721c24;
+        }
+        
+        .notification.info {
+            background-color: rgba(23, 162, 184, 0.15);
+            border-left: 4px solid var(--info-color);
+            color: #0c5460;
+        }
+
+        .edit-panel {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .edit-panel h4 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .tab {
+            padding: 8px 15px;
+            background-color: #e9ecef;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background-color: var(--main-color);
+            color: white;
+        }
+
+        .error-details {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+            .main-container { padding: 30px; }
+            .widget-group { flex-wrap: nowrap; }
+            input, select, textarea { width: auto; flex: 1; }
+            button { width: auto; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5em; }
+            h3 { font-size: 1.1em; }
+            body { font-size: 14px; }
+            
+            input, select, button, textarea {
+                padding: var(--padding-sm);
+                font-size: 0.9em;
+            }
+            
+            .widget-group { gap: 6px; }
+            .main-container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1><span>🌍</span> Editor Geoespacial Mejorado</h1>
+        
+        <div id="notificationArea"></div>
+        
+        <div class="tab-container">
+            <div class="tab active" onclick="showTab('dataTab')">Gestión de Datos</div>
+            <div class="tab" onclick="showTab('editTab')">Edición</div>
+            <div class="tab" onclick="showTab('importTab')">Importar</div>
+        </div>
+        
+        <div id="dataTab" class="tab-content">
+            <div class="widget-group">
+                <input type="file" id="fileUpload" accept=".json,.csv" class="hidden">
+                <button onclick="document.getElementById('fileUpload').click()" class="btn-success">
+                    <span>🔼</span> Cargar JSON/CSV
+                </button>
+                <button onclick="saveData()" class="btn-success">
+                    <span>💾</span> Guardar JSON
+                </button>
+            </div>
+
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>🏞️</span> Crear Nueva Cuenca</h3>
+            </div>
+            <div class="widget-group">
+                <input type="text" id="newCuenca" placeholder="Nombre de nueva cuenca">
+                <button onclick="addCuenca()" class="btn-warning">
+                    <span>➕</span> Crear Cuenca
+                </button>
+            </div>
+
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>🏞️</span> Agregar Quebrada</h3>
+            </div>
+            <div class="widget-group">
+                <select id="cuencaDropdown"></select>
+            </div>
+            <div class="widget-group">
+                <input type="text" id="quebradaName" placeholder="Nombre de quebrada">
+            </div>
+             <div class="widget-group">
+                <input type="number" id="lat" placeholder="Latitud (-90 a 90)" step="any" min="-90" max="90">
+                <input type="number" id="lng" placeholder="Longitud (-180 a 180)" step="any" min="-180" max="180">
+            </div>
+            <h4>Información Topográfica</h4>
+            <div class="widget-group">
+                <input type="number" id="min_val" placeholder="Elevación Mínima (m)" step="any">
+                <input type="number" id="max_val" placeholder="Elevación Máxima (m)" step="any">
+                <input type="text" id="units" placeholder="Unidades" value="m s. n. m.">
+            </div>
+            <div class="widget-group">
+                <input type="text" id="escenarios" placeholder="Escenarios (separar por comas)">
+                <button onclick="addQuebrada()" class="btn-info">
+                    <span>📍</span> Agregar Quebrada
+                </button>
+            </div>
+
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>🗑️</span> Eliminar Datos</h3>
+            </div>
+            <div class="widget-group">
+                <select id="deleteCuencaDropdown"></select>
+                <button onclick="deleteCuenca()" class="btn-danger">
+                    <span>🗑️</span> Eliminar Cuenca
+                </button>
+            </div>
+            <div class="widget-group">
+                <select id="deleteQuebradaCuencaDropdown" onchange="updateQuebradasForDelete()"></select>
+                <select id="deleteQuebradaDropdown"></select>
+                <button onclick="deleteQuebrada()" class="btn-danger">
+                    <span>🗑️</span> Eliminar Quebrada
+                </button>
+            </div>
+        </div>
+        
+        <div id="editTab" class="tab-content hidden">
+            <div class="section-header">
+                <h3><span>✏️</span> Editar Cuenca</h3>
+            </div>
+            <div class="widget-group">
+                <select id="editCuencaDropdown" onchange="loadCuencaForEdit()"></select>
+                <input type="text" id="editCuencaName" placeholder="Nuevo nombre de cuenca">
+                <button onclick="updateCuenca()" class="btn-info">
+                    <span>💾</span> Actualizar Cuenca
+                </button>
+            </div>
+            
+            <hr>
+            
+            <div class="section-header">
+                <h3><span>📍</span> Editar Quebrada</h3>
+            </div>
+            <div class="widget-group">
+                <select id="editQuebradaCuencaDropdown" onchange="updateQuebradasForEdit()"></select>
+                <select id="editQuebradaDropdown" onchange="loadQuebradaForEdit()"></select>
+            </div>
+            <div class="widget-group">
+                <input type="text" id="editQuebradaName" placeholder="Nuevo nombre de quebrada">
+            </div>
+            <div class="widget-group">
+                <input type="number" id="editLat" placeholder="Latitud (-90 a 90)" step="any" min="-90" max="90">
+                <input type="number" id="editLng" placeholder="Longitud (-180 a 180)" step="any" min="-180" max="180">
+            </div>
+             <h4>Información Topográfica</h4>
+            <div class="widget-group">
+                <input type="number" id="edit_min_val" placeholder="Elevación Mínima (m)" step="any">
+                <input type="number" id="edit_max_val" placeholder="Elevación Máxima (m)" step="any">
+                <input type="text" id="edit_units" placeholder="Unidades">
+            </div>
+            <div class="widget-group">
+                <input type="text" id="editEscenarios" placeholder="Escenarios (separar por comas)">
+                <button onclick="updateQuebrada()" class="btn-info">
+                    <span>💾</span> Actualizar Quebrada
+                </button>
+            </div>
+        </div>
+        
+        <div id="importTab" class="tab-content hidden">
+            <div class="section-header">
+                <h3><span>📤</span> Importar CSV</h3>
+            </div>
+            <div class="widget-group">
+                <textarea id="csvData" placeholder="Pegue datos CSV aquí o use el botón de carga.&#10;Columnas requeridas: cuenca,quebrada,lat,lng&#10;Columnas opcionales: min_val,max_val,units,escenarios" rows="8"></textarea>
+            </div>
+            <div class="widget-group">
+                <button onclick="processCSVFromTextarea()" class="btn-info">
+                    <span>🔄</span> Procesar CSV
+                </button>
+                <button onclick="document.getElementById('fileUpload').click()" class="btn-secondary">
+                    <span>📂</span> Cargar Archivo CSV
+                </button>
+            </div>
+            
+            <div id="csvErrors" class="hidden">
+                <h4><span>⚠️</span> Errores en el CSV:</h4>
+                <div id="errorList" class="error-details"></div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h3><span>📋</span> Vista Previa de Datos</h3>
+        </div>
+        <pre id="jsonOutput"></pre>
+    </div>
+
+    <script>
+        let data = {};
+        let currentEditCuenca = null;
+        let currentEditQuebrada = null;
+
+        // Update the UI
+        function updateUI() {
+            document.getElementById('jsonOutput').textContent = 
+                "🎯 Estructura actual del JSON:\n" + 
+                JSON.stringify(data, null, 2);
+            
+            updateDropdowns();
+        }
+
+        // Update all dropdown menus
+        function updateDropdowns() {
+            const cuencas = Object.keys(data);
+            
+            // Update basin dropdowns
+            updateOptions('cuencaDropdown', cuencas);
+            updateOptions('deleteCuencaDropdown', cuencas);
+            updateOptions('editCuencaDropdown', cuencas);
+            updateOptions('deleteQuebradaCuencaDropdown', cuencas);
+            updateOptions('editQuebradaCuencaDropdown', cuencas);
+            
+            // Update stream dropdowns
+            updateQuebradasForDelete();
+            updateQuebradasForEdit();
+        }
+
+        // Helper function to populate a select element
+        function updateOptions(selectId, options, placeholder = "No hay datos") {
+            const select = document.getElementById(selectId);
+            const selectedValue = select.value;
+            select.innerHTML = options.map(opt => `<option>${opt}</option>`).join('');
+            
+            if (options.length === 0) {
+                select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
+            } else {
+                // Re-select the value if it still exists
+                if(options.includes(selectedValue)) {
+                    select.value = selectedValue;
+                }
+            }
+        }
+        
+        // Update the stream dropdown for the delete section
+        function updateQuebradasForDelete() {
+            const cuenca = document.getElementById('deleteQuebradaCuencaDropdown').value;
+            const quebradas = cuenca && data[cuenca] ? Object.keys(data[cuenca]) : [];
+            updateOptions('deleteQuebradaDropdown', quebradas, "Seleccione cuenca");
+        }
+
+        // Update the stream dropdown for the edit section
+        function updateQuebradasForEdit() {
+            const cuenca = document.getElementById('editQuebradaCuencaDropdown').value;
+            const quebradas = cuenca && data[cuenca] ? Object.keys(data[cuenca]) : [];
+            updateOptions('editQuebradaDropdown', quebradas, "Seleccione cuenca");
+            
+            if (quebradas.length > 0) {
+                 loadQuebradaForEdit();
+            } else {
+                 clearEditQuebradaForm();
+            }
+        }
+        
+        // Load stream data into the edit form
+        function loadQuebradaForEdit() {
+            const cuenca = document.getElementById('editQuebradaCuencaDropdown').value;
+            const quebrada = document.getElementById('editQuebradaDropdown').value;
+            
+            if (cuenca && quebrada && data[cuenca] && data[cuenca][quebrada]) {
+                const qData = data[cuenca][quebrada];
+                document.getElementById('editQuebradaName').value = quebrada;
+                document.getElementById('editLat').value = qData.lat;
+                document.getElementById('editLng').value = qData.lng;
+                
+                // Load topographic data (with default values if it doesn't exist)
+                const topo = qData.topo_info || { min_val: 0, max_val: 5000, units: "m s. n. m." };
+                document.getElementById('edit_min_val').value = topo.min_val;
+                document.getElementById('edit_max_val').value = topo.max_val;
+                document.getElementById('edit_units').value = topo.units;
+
+                document.getElementById('editEscenarios').value = qData.escenarios.join(', ');
+                
+                currentEditCuenca = cuenca;
+                currentEditQuebrada = quebrada;
+            } else {
+                clearEditQuebradaForm();
+            }
+        }
+        
+        // Clear the stream edit form
+        function clearEditQuebradaForm() {
+            document.getElementById('editQuebradaName').value = '';
+            document.getElementById('editLat').value = '';
+            document.getElementById('editLng').value = '';
+            document.getElementById('edit_min_val').value = '';
+            document.getElementById('edit_max_val').value = '';
+            document.getElementById('edit_units').value = '';
+            document.getElementById('editEscenarios').value = '';
+            currentEditCuenca = null;
+            currentEditQuebrada = null;
+        }
+
+        // Display a notification message
+        function showNotification(message, type = 'success') {
+            const notificationArea = document.getElementById('notificationArea');
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<span>${icons[type]}</span> ${message}`;
+            
+            notificationArea.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        // Handle file uploads with data migration
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    if (file.name.endsWith('.json')) {
+                        let jsonData = JSON.parse(e.target.result);
+                        data = migrateOldData(jsonData); // Migrate data if necessary
+                        showNotification('✅ JSON cargado exitosamente');
+                    } 
+                    else if (file.name.endsWith('.csv')) {
+                        processCSV(e.target.result);
+                    }
+                    updateUI();
+                } catch (error) {
+                    showNotification(`❌ ERROR: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = ''; // Reset file input to allow re-uploading the same file
+        });
+        
+        // Migration function for old data structures
+        function migrateOldData(loadedData) {
+            let migrated = false;
+            for (const cuenca in loadedData) {
+                for (const quebrada in loadedData[cuenca]) {
+                    const qData = loadedData[cuenca][quebrada];
+                    // Check if topo_info is missing
+                    if (!qData.topo_info) {
+                        qData.topo_info = {
+                            min_val: 0,
+                            max_val: 5000,
+                            units: "m s. n. m."
+                        };
+                        migrated = true;
+                    }
+                }
+            }
+            if (migrated) {
+                showNotification('ℹ️ Datos antiguos detectados. Se agregaron campos topográficos por defecto.', 'info');
+            }
+            return loadedData;
+        }
+
+        // Process CSV data from the textarea
+        function processCSVFromTextarea() {
+            const csvData = document.getElementById('csvData').value;
+            if (!csvData.trim()) {
+                showNotification('❌ No hay datos CSV para procesar', 'error');
+                return;
+            }
+            
+            try {
+                processCSV(csvData);
+                document.getElementById('csvData').value = '';
+            } catch (error) {
+                showNotification(`❌ ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        // Process CSV with migration and detailed error handling
+        function processCSV(csvData) {
+            const lines = csvData.split('\n').filter(line => line.trim() !== '');
+            if (lines.length < 2) {
+                throw new Error('El archivo CSV debe tener encabezado y al menos una fila de datos');
+            }
+            
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            
+            const requiredHeaders = ['cuenca', 'quebrada', 'lat', 'lng'];
+            requiredHeaders.forEach(h => {
+                if (!headers.includes(h)) throw new Error(`Falta columna requerida: ${h}`);
+            });
+            
+            const errors = [];
+            const newData = {...data};
+            
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i];
+                const values = line.split(',').map(v => v.trim());
+                
+                try {
+                    if (values.length < requiredHeaders.length) {
+                        throw new Error('Faltan valores en la fila');
+                    }
+                    
+                    const row = {
+                        cuenca: values[headers.indexOf('cuenca')],
+                        quebrada: values[headers.indexOf('quebrada')],
+                        lat: parseFloat(values[headers.indexOf('lat')]),
+                        lng: parseFloat(values[headers.indexOf('lng')]),
+                    };
+                    
+                    if (isNaN(row.lat)) { throw new Error('Latitud no es un número válido'); }
+                    if (isNaN(row.lng)) { throw new Error('Longitud no es un número válido'); }
+                    if (row.lat < -90 || row.lat > 90) { throw new Error('Latitud fuera de rango (-90 a 90)'); }
+                    if (row.lng < -180 || row.lng > 180) { throw new Error('Longitud fuera de rango (-180 a 180)'); }
+
+                    // Process optional fields or use default values (migration)
+                    const min_val = headers.includes('min_val') ? parseFloat(values[headers.indexOf('min_val')]) : 0;
+                    const max_val = headers.includes('max_val') ? parseFloat(values[headers.indexOf('max_val')]) : 5000;
+                    const units = headers.includes('units') ? values[headers.indexOf('units')] : "m s. n. m.";
+                    const scenarios = headers.includes('escenarios') ? 
+                        values[headers.indexOf('escenarios')].split(';').map(e => e.trim()) : 
+                        ["Escenario 1", "Escenario 2"];
+
+                    // Add to data structure
+                    if (!newData[row.cuenca]) newData[row.cuenca] = {};
+                    newData[row.cuenca][row.quebrada] = {
+                        lat: row.lat,
+                        lng: row.lng,
+                        topo_info: {
+                            min_val: isNaN(min_val) ? 0 : min_val,
+                            max_val: isNaN(max_val) ? 5000 : max_val,
+                            units: units
+                        },
+                        escenarios: scenarios.filter(e => e)
+                    };
+                } catch (error) {
+                    errors.push(`Línea ${i+1}: ${line} - ${error.message}`);
+                }
+            }
+            
+            if (errors.length > 0) {
+                document.getElementById('errorList').innerHTML = errors.map(e => `<div>${e}</div>`).join('');
+                document.getElementById('csvErrors').classList.remove('hidden');
+                showNotification(`⚠️ CSV procesado con ${errors.length} error(es)`, 'error');
+            } else {
+                document.getElementById('csvErrors').classList.add('hidden');
+                showNotification('✅ CSV procesado exitosamente!');
+            }
+            
+            data = newData;
+            updateUI();
+        }
+
+        // Functions to add data
+        function addCuenca() {
+            const nombre = document.getElementById('newCuenca').value.trim();
+            try {
+                if (!nombre) throw new Error("Nombre de cuenca requerido");
+                if (data[nombre]) throw new Error("¡La cuenca ya existe!");
+                
+                data[nombre] = {};
+                document.getElementById('newCuenca').value = '';
+                updateUI();
+                showNotification(`✅ Cuenca '${nombre}' creada`);
+            } catch (error) {
+                showNotification(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        function addQuebrada() {
+            try {
+                const cuenca = document.getElementById('cuencaDropdown').value;
+                const nombre = document.getElementById('quebradaName').value.trim();
+                const lat = parseFloat(document.getElementById('lat').value);
+                const lng = parseFloat(document.getElementById('lng').value);
+                const min_val = parseFloat(document.getElementById('min_val').value);
+                const max_val = parseFloat(document.getElementById('max_val').value);
+                const units = document.getElementById('units').value.trim();
+                const escenarios = document.getElementById('escenarios').value.split(',').map(e => e.trim()).filter(e => e);
+
+                if (!cuenca) throw new Error("Selecciona una cuenca");
+                if (!nombre) throw new Error("Nombre de quebrada requerido");
+                if (data[cuenca] && data[cuenca][nombre]) throw new Error("¡La quebrada ya existe en esta cuenca!");
+                if (isNaN(lat) || isNaN(lng)) throw new Error("Coordenadas inválidas");
+                if (lat < -90 || lat > 90) throw new Error("Latitud debe estar entre -90 y 90");
+                if (lng < -180 || lng > 180) throw new Error("Longitud debe estar entre -180 y 180");
+                if (isNaN(min_val) || isNaN(max_val)) throw new Error("Valores topográficos deben ser números");
+                if (!escenarios.length) throw new Error("Debe incluir al menos un escenario");
+
+                data[cuenca][nombre] = {
+                    lat: parseFloat(lat.toFixed(6)),
+                    lng: parseFloat(lng.toFixed(6)),
+                    topo_info: {
+                        min_val: min_val,
+                        max_val: max_val,
+                        units: units || "m s. n. m."
+                    },
+                    escenarios: escenarios
+                };
+
+                // Clear input fields
+                ['quebradaName', 'lat', 'lng', 'min_val', 'max_val', 'escenarios'].forEach(id => document.getElementById(id).value = '');
+                
+                updateUI();
+                showNotification(`✅ Quebrada '${nombre}' agregada a '${cuenca}'`);
+            } catch (error) {
+                showNotification(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Functions to delete data
+        function deleteCuenca() {
+            const cuenca = document.getElementById('deleteCuencaDropdown').value;
+            if (cuenca && confirm(`¿Eliminar la cuenca '${cuenca}' y todas sus quebradas?`)) {
+                delete data[cuenca];
+                updateUI();
+                showNotification(`✅ Cuenca '${cuenca}' eliminada`);
+            }
+        }
+
+        function deleteQuebrada() {
+            const cuenca = document.getElementById('deleteQuebradaCuencaDropdown').value;
+            const quebrada = document.getElementById('deleteQuebradaDropdown').value;
+            if (cuenca && quebrada && confirm(`¿Eliminar la quebrada '${quebrada}' de '${cuenca}'?`)) {
+                delete data[cuenca][quebrada];
+                if (Object.keys(data[cuenca]).length === 0) delete data[cuenca];
+                updateUI();
+                showNotification(`✅ Quebrada '${quebrada}' eliminada`);
+            }
+        }
+        
+        // Functions to edit data
+        function loadCuencaForEdit() {
+            const cuenca = document.getElementById('editCuencaDropdown').value;
+            if (cuenca) {
+                document.getElementById('editCuencaName').value = cuenca;
+                currentEditCuenca = cuenca;
+            }
+        }
+        
+        function updateCuenca() {
+            const oldName = currentEditCuenca;
+            const newName = document.getElementById('editCuencaName').value.trim();
+            
+            if (!oldName || !newName) {
+                showNotification('❌ Seleccione una cuenca y proporcione un nuevo nombre', 'error');
+                return;
+            }
+            if (oldName === newName) return; // No changes
+            if (data[newName]) {
+                showNotification('❌ Ya existe una cuenca con ese nombre', 'error');
+                return;
+            }
+            
+            data[newName] = data[oldName];
+            delete data[oldName];
+            
+            updateUI();
+            showNotification(`✅ Cuenca '${oldName}' renombrada a '${newName}'`);
+            
+            document.getElementById('editCuencaName').value = '';
+            document.getElementById('editCuencaDropdown').value = newName;
+            currentEditCuenca = null;
+        }
+        
+        function updateQuebrada() {
+            const oldName = currentEditQuebrada;
+            const cuenca = currentEditCuenca;
+            
+            if (!cuenca || !oldName) {
+                showNotification('❌ Seleccione una quebrada para editar', 'error');
+                return;
+            }
+            
+            try {
+                const newName = document.getElementById('editQuebradaName').value.trim();
+                const lat = parseFloat(document.getElementById('editLat').value);
+                const lng = parseFloat(document.getElementById('editLng').value);
+                const min_val = parseFloat(document.getElementById('edit_min_val').value);
+                const max_val = parseFloat(document.getElementById('edit_max_val').value);
+                const units = document.getElementById('edit_units').value.trim();
+                const escenarios = document.getElementById('editEscenarios').value.split(',').map(e => e.trim()).filter(e => e);
+
+                if (!newName) throw new Error("Nombre de quebrada requerido");
+                if (isNaN(lat) || isNaN(lng)) throw new Error("Coordenadas inválidas");
+                if (lat < -90 || lat > 90) throw new Error("Latitud debe estar entre -90 y 90");
+                if (lng < -180 || lng > 180) throw new Error("Longitud debe estar entre -180 y 180");
+                if (isNaN(min_val) || isNaN(max_val)) throw new Error("Valores topográficos deben ser números");
+                if (!escenarios.length) throw new Error("Debe incluir al menos un escenario");
+
+                const updatedData = {
+                    lat: parseFloat(lat.toFixed(6)),
+                    lng: parseFloat(lng.toFixed(6)),
+                    topo_info: {
+                        min_val: min_val,
+                        max_val: max_val,
+                        units: units || "m s. n. m."
+                    },
+                    escenarios: escenarios
+                };
+
+                if (oldName !== newName) {
+                    if (data[cuenca][newName]) {
+                        throw new Error("Ya existe una quebrada con ese nombre en esta cuenca");
+                    }
+                    delete data[cuenca][oldName];
+                }
+                
+                data[cuenca][newName] = updatedData;
+                
+                updateUI();
+                showNotification(`✅ Quebrada '${newName}' actualizada`);
+                
+                // Update the dropdown to show the new name
+                document.getElementById('editQuebradaDropdown').value = newName;
+                loadQuebradaForEdit(); // Reload data into the form
+                
+            } catch (error) {
+                showNotification(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Save data to a JSON file
+        function saveData() {
+            if (!Object.keys(data).length) {
+                showNotification('❌ No hay datos para guardar', 'error');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'geo-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('✅ Datos guardados como geo-data.json');
+        }
+        
+        // Show/hide content tabs
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('onclick') === `showTab('${tabId}')`) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize the app
+        updateUI();
+    </script>
+</body>
+</html>
