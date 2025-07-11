@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vota por FLUYE - Lista 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos personalizados y paleta de colores */
+        :root {
+            --azul-oscuro: #0A2540;
+            --azul-claro: #00B5E2;
+            --celeste-detalle: #77DFF8;
+            --blanco: #FFFFFF;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--azul-oscuro);
+            color: var(--blanco);
+        }
+        .bg-azul-oscuro { background-color: var(--azul-oscuro); }
+        .bg-azul-claro { background-color: var(--azul-claro); }
+        .text-azul-claro { color: var(--azul-claro); }
+        .text-celeste-detalle { color: var(--celeste-detalle); }
+        .border-azul-claro { border-color: var(--azul-claro); }
+
+        /* Efecto de gradiente y olas decorativas */
+        .bg-waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2300b5e2' fill-opacity='0.2' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,186.7C960,213,1056,235,1152,218.7C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        
+        /* Estilo para el carrusel */
+        .carousel-item {
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .carousel-item.active {
+            display: block;
+        }
+        .slogan {
+            text-shadow: 0px 2px 10px rgba(0, 181, 226, 0.7);
+        }
+
+        /* Animaciones sutiles */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        .slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        .delay-5 { animation-delay: 1s; }
+    </style>
+</head>
+<body class="bg-azul-oscuro">
+    <div class="relative max-w-md mx-auto min-h-screen bg-azul-oscuro overflow-x-hidden">
+        <div class="bg-waves"></div>
+        <div class="relative z-10 p-6 sm:p-8 space-y-10">
+
+            <!-- 1. Encabezado -->
+            <header class="text-center fade-in">
+                <div class="inline-block bg-azul-claro text-azul-oscuro font-bold px-4 py-1 rounded-full text-sm mb-4">
+                    LISTA 3
+                </div>
+                <h1 class="text-4xl md:text-5xl font-black text-white leading-tight">¿Por qué votar por <span class="text-azul-claro">FLUYE</span>?</h1>
+                <p class="text-celeste-detalle mt-3 text-lg">Conoce nuestra propuesta y súmate al cambio desde la ciencia.</p>
+            </header>
+
+            <!-- 2. Quiénes somos -->
+            <section class="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/20 slide-up">
+                <h2 class="text-2xl font-bold text-azul-claro mb-3">¿Quiénes somos?</h2>
+                <p class="text-white/90 text-base">
+                    FLUYE es un grupo estudiantil de <strong class="font-semibold text-white">Física e Ingeniería Mecánica de Fluidos</strong> que impulsa actividades académicas, propuestas técnicas, representación responsable y visibilidad para la comunidad científica estudiantil de la Facultad de Ciencias Físicas de la UNMSM.
+                </p>
+            </section>
+
+            <!-- 3. Nuestras propuestas -->
+            <section>
+                <h2 class="text-2xl font-bold text-azul-claro text-center mb-6 slide-up delay-1">Nuestras Propuestas</h2>
+                <div class="space-y-4">
+                    <!-- Propuesta 1 -->
+                    <div class="flex items-start bg-white/10 p-4 rounded-xl space-x-4 slide-up delay-1">
+                        <div class="bg-azul-claro p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A2540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white">Actividades y Talleres</h3>
+                            <p class="text-white/80 text-sm">Más actividades académicas aplicadas y talleres extracurriculares.</p>
+                        </div>
+                    </div>
+                    <!-- Propuesta 2 -->
+                    <div class="flex items-start bg-white/10 p-4 rounded-xl space-x-4 slide-up delay-2">
+                        <div class="bg-azul-claro p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A2540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white">Investigación y Prácticas</h3>
+                            <p class="text-white/80 text-sm">Difusión de oportunidades de investigación y pasantías profesionales.</p>
+                        </div>
+                    </div>
+                    <!-- Propuesta 3 -->
+                    <div class="flex items-start bg-white/10 p-4 rounded-xl space-x-4 slide-up delay-3">
+                         <div class="bg-azul-claro p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A2540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white">Representación Activa</h3>
+                            <p class="text-white/80 text-sm">Presencia y voz en los espacios de decisión que te afectan.</p>
+                        </div>
+                    </div>
+                    <!-- Propuesta 4 -->
+                    <div class="flex items-start bg-white/10 p-4 rounded-xl space-x-4 slide-up delay-4">
+                        <div class="bg-azul-claro p-3 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A2540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12.37A6 6 0 0 1 8 7a6 6 0 0 1 6-4.37 6 6 0 0 1 6 4.37 6 6 0 0 1-5.29 6.29L8 22l-6-9.63Z"></path><path d="M16 7.5a2.5 2.5 0 0 1-5 0"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white">Bienestar Estudiantil</h3>
+                            <p class="text-white/80 text-sm">Mejora de espacios comunes: comedores, horarios de microondas, etc.</p>
+                        </div>
+                    </div>
+                    <!-- Propuesta 5 -->
+                    <div class="flex items-start bg-white/10 p-4 rounded-xl space-x-4 slide-up delay-5">
+                        <div class="bg-azul-claro p-3 rounded-lg">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A2540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white">Transparencia</h3>
+                            <p class="text-white/80 text-sm">Información clara sobre trámites y asuntos administrativos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 4. Equipo humano -->
+            <section class="slide-up delay-3">
+                <h2 class="text-2xl font-bold text-azul-claro text-center mb-6">Conoce al Equipo</h2>
+                <div class="bg-white/10 p-6 rounded-2xl relative">
+                    <div id="carousel-container">
+                        <!-- Los candidatos se insertarán aquí -->
+                    </div>
+                    <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full hover:bg-white/40 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 5. Lema -->
+            <section class="text-center py-8 slide-up delay-4">
+                <h3 class="slogan text-3xl font-extrabold text-celeste-detalle italic">
+                    “Representamos con conciencia, fluimos con acción”
+                </h3>
+            </section>
+
+            <!-- 6. Llamado a la acción -->
+            <section class="bg-azul-claro text-azul-oscuro text-center p-6 rounded-2xl slide-up delay-5">
+                <h2 class="text-3xl font-black">¡Este 15 de julio, marca tu voz!</h2>
+                <p class="text-xl font-bold mt-2">Vota por la <span class="bg-azul-oscuro text-white px-2 py-1 rounded">Lista 3 – FLUYE</span></p>
+                <div class="flex justify-center items-center gap-4 mt-4">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10v4h4v-4h-4z"></path><path d="M16 4h-2a2 2 0 1 0-4 0H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path></svg>
+                    <div class="font-bold">
+                        <p>#VotaFluye</p>
+                        <p>#RepresentaciónConCiencia</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Botón interactivo -->
+            <div class="text-center slide-up delay-5">
+                <a href="#" class="inline-block bg-white text-azul-oscuro font-bold py-3 px-8 rounded-full text-lg hover:bg-celeste-detalle transition-all duration-300 transform hover:scale-105">
+                    Únete a nuestro WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Lógica para el carrusel de candidatos ---
+        const candidates = [
+            {
+                name: "Ana García",
+                major: "Física Pura",
+                quote: "Fan de la termodinámica y el choripán.",
+                imageUrl: "https://placehold.co/100x100/00B5E2/0A2540?text=AG"
+            },
+            {
+                name: "Luis Torres",
+                major: "Ing. Mecánica de Fluidos",
+                quote: "Comprometido con la ciencia y el progreso.",
+                imageUrl: "https://placehold.co/100x100/77DFF8/0A2540?text=LT"
+            },
+            {
+                name: "Carla Mendoza",
+                major: "Física Pura",
+                quote: "Por más mujeres en ciencia y una facu más unida.",
+                imageUrl: "https://placehold.co/100x100/0A2540/FFFFFF?text=CM"
+            }
+        ];
+
+        let currentIndex = 0;
+        const container = document.getElementById('carousel-container');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function renderCandidate(index) {
+            const candidate = candidates[index];
+            container.innerHTML = `
+                <div class="carousel-item active text-center" style="animation: fadeIn 0.5s;">
+                    <img src="${candidate.imageUrl}" alt="Foto de ${candidate.name}" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-azul-claro">
+                    <h4 class="text-xl font-bold text-white">${candidate.name}</h4>
+                    <p class="text-celeste-detalle font-semibold">${candidate.major}</p>
+                    <p class="text-white/80 mt-2 italic">"${candidate.quote}"</p>
+                </div>
+            `;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % candidates.length;
+            renderCandidate(currentIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + candidates.length) % candidates.length;
+            renderCandidate(currentIndex);
+        });
+
+        // Inicializar el carrusel
+        renderCandidate(currentIndex);
+    </script>
+</body>
+</html>
