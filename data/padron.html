@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Análisis de Estudiantes</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS (xlsx) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; height: 400px; width: 100%; }
+        .kpi-card { transition: all 0.3s ease; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        canvas { cursor: pointer; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Dashboard de Análisis de Estudiantes</h1>
+            <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">Interactúa con los datos para descubrir tendencias.</p>
+        </header>
+
+        <!-- Paso 1: Subir archivo -->
+        <div id="upload-container" class="max-w-3xl mx-auto">
+             <h2 class="text-2xl font-semibold text-center mb-4">Paso 1: Sube tu archivo</h2>
+            <label for="file-upload" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center p-12 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300">
+                <div class="text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <p class="mt-4 text-sm text-gray-600 dark:text-gray-400"><span class="font-semibold text-blue-600 dark:text-blue-400">Sube un archivo</span> o arrástralo aquí</p>
+                </div>
+                <input id="file-upload" name="file-upload" type="file" class="sr-only" accept=".xlsx, .xls">
+            </label>
+        </div>
+        
+        <!-- Spinner -->
+        <div id="loader-container" class="hidden text-center py-12">
+             <div role="status"><svg aria-hidden="true" class="inline w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0492C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg></div>
+        </div>
+
+        <!-- Paso 2: Mapeo de Columnas -->
+        <div id="mapping-container" class="hidden max-w-3xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-center mb-6">Paso 2: Asigna tus columnas</h2>
+            <div class="space-y-6">
+                <div><label for="map-codigo" class="block text-sm font-bold text-gray-700 dark:text-gray-300">Código del Alumno</label><select id="map-codigo" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700"></select></div>
+                <div><label for="map-tipo" class="block text-sm font-bold text-gray-700 dark:text-gray-300">Tipo (Pregrado/Posgrado)</label><select id="map-tipo" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700"></select></div>
+                <div><label for="map-programa" class="block text-sm font-bold text-gray-700 dark:text-gray-300">Programa Académico</label><select id="map-programa" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700"></select></div>
+                <div><label for="map-tercio" class="block text-sm font-bold text-gray-700 dark:text-gray-300">Tercio Superior (Sí/No)</label><select id="map-tercio" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700"></select></div>
+            </div>
+            <div class="mt-8 text-center"><button id="generate-dashboard-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg">¡Generar Dashboard!</button></div>
+        </div>
+
+        <!-- Paso 3: Dashboard -->
+        <div id="dashboard-container" class="hidden">
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="kpi-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center"><h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">Total de Estudiantes</h4><p id="kpi-total-students" class="text-4xl font-bold text-blue-600 dark:text-blue-400 mt-2">0</p></div>
+                <div class="kpi-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center"><h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">Programas Únicos</h4><p id="kpi-total-programs" class="text-4xl font-bold text-green-600 dark:text-green-400 mt-2">0</p></div>
+                <div class="kpi-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center"><h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">En Tercio Superior</h4><p id="kpi-tercio-pct" class="text-4xl font-bold text-yellow-500 dark:text-yellow-400 mt-2">0%</p></div>
+                <div class="kpi-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center"><h4 class="text-lg font-medium text-gray-500 dark:text-gray-400">Año con más Ingresos</h4><p id="kpi-max-year" class="text-4xl font-bold text-purple-600 dark:text-purple-400 mt-2">N/A</p></div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-8 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4 flex-wrap">
+                    <label for="filter-year" class="font-semibold">Filtrar por Año de Ingreso:</label>
+                    <select id="filter-year" class="rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700"></select>
+                </div>
+                <button id="clear-filters-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Limpiar Todos los Filtros</button>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"><h3 id="tipo-chart-title" class="text-xl font-semibold mb-4 text-center">Alumnos por Tipo</h3><div class="chart-container"><canvas id="tipoChart"></canvas></div></div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"><h3 id="tercio-chart-title" class="text-xl font-semibold mb-4 text-center">Distribución del Tercio Superior</h3><div class="chart-container"><canvas id="tercioChart"></canvas></div></div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8"><h3 id="programa-chart-title" class="text-xl font-semibold mb-4 text-center">Alumnos por Programa Académico</h3><div class="chart-container"><canvas id="programaChart"></canvas></div></div>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8"><h3 id="ingresantes-chart-title" class="text-xl font-semibold mb-4 text-center">Ingresantes por Año</h3><div class="chart-container"><canvas id="ingresantesChart"></canvas></div></div>
+            
+            <div class="text-center mt-8"><button id="reset-button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition-colors">Cargar Otro Archivo</button></div>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const uploadContainer = document.getElementById('upload-container');
+        const fileUpload = document.getElementById('file-upload');
+        const loader = document.getElementById('loader-container');
+        const mappingContainer = document.getElementById('mapping-container');
+        const dashboardContainer = document.getElementById('dashboard-container');
+        const generateDashboardBtn = document.getElementById('generate-dashboard-btn');
+        const clearFiltersBtn = document.getElementById('clear-filters-btn');
+        const resetButton = document.getElementById('reset-button');
+        const yearFilterSelect = document.getElementById('filter-year');
+
+        // --- State Variables ---
+        let rawData = [];
+        let originalHeaders = [];
+        let processedData = [];
+        let chartInstances = {};
+        let columnMap = {};
+        let activeFilters = {
+            programa: null,
+            tipo: null,
+            tercio: null,
+            anio: null,
+        };
+
+        // --- File Handling ---
+        fileUpload.addEventListener('change', handleFile);
+        uploadContainer.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); uploadContainer.classList.add('border-blue-500'); });
+        uploadContainer.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); uploadContainer.classList.remove('border-blue-500'); });
+        uploadContainer.addEventListener('drop', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            uploadContainer.classList.remove('border-blue-500');
+            if (e.dataTransfer.files.length > 0) {
+                fileUpload.files = e.dataTransfer.files;
+                handleFile();
+            }
+        });
+
+        function handleFile() {
+            const file = fileUpload.files[0];
+            if (!file) return;
+            showScreen('loader');
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    if (jsonData.length < 2) throw new Error("El archivo está vacío o no tiene datos.");
+                    originalHeaders = jsonData.shift();
+                    rawData = jsonData;
+                    populateMappingUI();
+                    showScreen('mapping');
+                } catch (error) {
+                    alert(`Error al leer el archivo: ${error.message}`);
+                    resetUI();
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // --- Mapping UI ---
+        function populateMappingUI() {
+            const selectors = {
+                'map-codigo': document.getElementById('map-codigo'),
+                'map-tipo': document.getElementById('map-tipo'),
+                'map-programa': document.getElementById('map-programa'),
+                'map-tercio': document.getElementById('map-tercio')
+            };
+            Object.values(selectors).forEach(select => { select.innerHTML = ''; });
+            originalHeaders.forEach(header => {
+                Object.values(selectors).forEach(select => {
+                    const option = document.createElement('option');
+                    option.value = header;
+                    option.textContent = header;
+                    select.appendChild(option);
+                });
+            });
+            autoSelectColumns(selectors);
+        }
+
+        function autoSelectColumns(selectors) {
+             const mappings = {
+                'map-codigo': ['codigo', 'cód', 'cod'],
+                'map-tipo': ['tipo'],
+                'map-programa': ['programa', 'carrera'],
+                'map-tercio': ['tercio', 'sup']
+            };
+            Object.entries(mappings).forEach(([selectId, keywords]) => {
+                const found = originalHeaders.find(h => keywords.some(k => h.toLowerCase().includes(k)));
+                if (found) selectors[selectId].value = found;
+            });
+        }
+
+        generateDashboardBtn.addEventListener('click', () => {
+            columnMap = {
+                codigo: document.getElementById('map-codigo').value,
+                tipo: document.getElementById('map-tipo').value,
+                programa: document.getElementById('map-programa').value,
+                tercio: document.getElementById('map-tercio').value
+            };
+            if (new Set(Object.values(columnMap)).size !== 4) {
+                alert("Error: Has seleccionado la misma columna para diferentes datos.");
+                return;
+            }
+            showScreen('loader');
+            setTimeout(() => {
+                processInitialData();
+                populateYearFilter();
+                updateDashboard();
+                showScreen('dashboard');
+            }, 200);
+        });
+
+        // --- Data Processing and Filtering ---
+        function processInitialData() {
+            processedData = rawData.map(row => {
+                let obj = {};
+                originalHeaders.forEach((header, i) => { obj[header] = row[i]; });
+                const studentCode = String(obj[columnMap.codigo] || '');
+                if (studentCode.length >= 2) {
+                    const yearDigits = parseInt(studentCode.substring(0, 2), 10);
+                    obj["Año de Ingreso"] = (yearDigits >= 70) ? 1900 + yearDigits : 2000 + yearDigits;
+                } else {
+                    obj["Año de Ingreso"] = "N/A";
+                }
+                return obj;
+            });
+        }
+        
+        function populateYearFilter() {
+            yearFilterSelect.innerHTML = '<option value="">Todos los Años</option>';
+            const years = [...new Set(processedData.map(d => d['Año de Ingreso']))].filter(y => y !== 'N/A').sort((a,b) => b-a);
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearFilterSelect.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
+            let data = [...processedData];
+            if (activeFilters.anio) data = data.filter(d => d['Año de Ingreso'] == activeFilters.anio);
+            if (activeFilters.programa) data = data.filter(d => d[columnMap.programa] === activeFilters.programa);
+            if (activeFilters.tipo) data = data.filter(d => d[columnMap.tipo] === activeFilters.tipo);
+            if (activeFilters.tercio) data = data.filter(d => d[columnMap.tercio] === activeFilters.tercio);
+            return data;
+        }
+        
+        // --- Dashboard Update Logic ---
+        function updateDashboard() {
+            const filteredData = applyFilters();
+            updateKPIs(filteredData);
+            updateAllCharts(filteredData);
+        }
+
+        function updateKPIs(data) {
+            document.getElementById('kpi-total-students').textContent = data.length;
+            document.getElementById('kpi-total-programs').textContent = new Set(data.map(d => d[columnMap.programa])).size;
+            const tercioCount = data.filter(d => String(d[columnMap.tercio]).toLowerCase().startsWith('s')).length;
+            const tercioPct = data.length > 0 ? ((tercioCount / data.length) * 100).toFixed(1) : 0;
+            document.getElementById('kpi-tercio-pct').textContent = `${tercioPct}%`;
+            
+            const yearCounts = countOccurrences(data, 'Año de Ingreso');
+            delete yearCounts['N/A'];
+            const maxYear = Object.keys(yearCounts).length > 0 ? Object.entries(yearCounts).reduce((a, b) => a[1] > b[1] ? a : b)[0] : 'N/A';
+            document.getElementById('kpi-max-year').textContent = maxYear;
+        }
+
+        function updateAllCharts(data) {
+            createChart('tipoChart', 'pie', data, columnMap.tipo, 'Alumnos por Tipo');
+            createChart('tercioChart', 'doughnut', data, columnMap.tercio, 'Distribución del Tercio Superior');
+            createChart('programaChart', 'bar', data, columnMap.programa, 'Alumnos por Programa');
+            createIngresantesChart(data);
+        }
+
+        // --- Chart Creation ---
+        function createChart(canvasId, type, data, key, title) {
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            
+            const counts = countOccurrences(data, key);
+            const chartData = {
+                labels: Object.keys(counts),
+                datasets: [{
+                    data: Object.values(counts),
+                    backgroundColor: type === 'bar' ? 'rgba(153, 102, 255, 0.7)' : ['rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)', 'rgba(75, 192, 192, 0.7)', 'rgba(255, 206, 86, 0.7)'],
+                }]
+            };
+            
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            chartInstances[canvasId] = new Chart(ctx, {
+                type: type,
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: type === 'bar' ? 'y' : 'x',
+                    onClick: (e) => handleChartClick(e, key, chartInstances[canvasId]),
+                    plugins: { legend: { display: type !== 'bar' } }
+                }
+            });
+        }
+
+        function createIngresantesChart(data) {
+            const canvasId = 'ingresantesChart';
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            let yearCounts = countOccurrences(data, 'Año de Ingreso');
+            delete yearCounts['N/A'];
+            const sortedData = Object.entries(yearCounts).sort((a, b) => a[0] - b[0]);
+            
+            const chartData = {
+                labels: sortedData.map(item => item[0]),
+                datasets: [{
+                    label: 'N° de Ingresantes',
+                    data: sortedData.map(item => item[1]),
+                    fill: false,
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    tension: 0.1
+                }]
+            };
+
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            chartInstances[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // --- Event Handlers ---
+        function handleChartClick(event, filterKey, chart) {
+            const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                const label = chart.data.labels[firstPoint.index];
+                
+                if (filterKey === columnMap.programa) activeFilters.programa = activeFilters.programa === label ? null : label;
+                else if (filterKey === columnMap.tipo) activeFilters.tipo = activeFilters.tipo === label ? null : label;
+                else if (filterKey === columnMap.tercio) activeFilters.tercio = activeFilters.tercio === label ? null : label;
+                
+                setTimeout(updateDashboard, 0);
+            }
+        }
+
+        yearFilterSelect.addEventListener('change', (e) => {
+            activeFilters.anio = e.target.value || null;
+            updateDashboard();
+        });
+
+        clearFiltersBtn.addEventListener('click', () => {
+            activeFilters = { programa: null, tipo: null, tercio: null, anio: null };
+            yearFilterSelect.value = '';
+            updateDashboard();
+        });
+
+        resetButton.addEventListener('click', resetUI);
+
+        // --- UI Utilities ---
+        function showScreen(screenName) {
+            ['upload', 'loader', 'mapping', 'dashboard'].forEach(s => {
+                document.getElementById(`${s}-container`).classList.add('hidden');
+            });
+            document.getElementById(`${screenName}-container`).classList.remove('hidden');
+        }
+
+        function resetUI() {
+            fileUpload.value = '';
+            showScreen('upload');
+        }
+
+        function countOccurrences(dataArray, key) {
+            return dataArray.reduce((acc, row) => {
+                const value = row[key] || 'Sin especificar';
+                acc[value] = (acc[value] || 0) + 1;
+                return acc;
+            }, {});
+        }
+    </script>
+</body>
+</html>
