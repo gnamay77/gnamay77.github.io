@@ -81,7 +81,7 @@
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"><h3 id="tercio-chart-title" class="text-xl font-semibold mb-4 text-center">Distribución del Tercio Superior</h3><div class="chart-container"><canvas id="tercioChart"></canvas></div></div>
             </div>
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8"><h3 id="programa-chart-title" class="text-xl font-semibold mb-4 text-center">Alumnos por Programa Académico</h3><div class="chart-container"><canvas id="programaChart"></canvas></div></div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8"><h3 id="ingresantes-chart-title" class="text-xl font-semibold mb-4 text-center">Ingresantes por Año</h3><div class="chart-container"><canvas id="ingresantesChart"></canvas></div></div>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8"><h3 id="ingresantes-chart-title" class="text-xl font-semibold mb-4 text-center">Matriculados por Año</h3><div class="chart-container"><canvas id="ingresantesChart"></canvas></div></div>
             
             <div class="text-center mt-8"><button id="reset-button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition-colors">Cargar Otro Archivo</button></div>
         </div>
@@ -302,7 +302,7 @@
             const chartData = {
                 labels: sortedData.map(item => item[0]),
                 datasets: [{
-                    label: 'N° de Ingresantes',
+                    label: 'N° de Matriculados',
                     data: sortedData.map(item => item[1]),
                     fill: false,
                     borderColor: 'rgba(255, 159, 64, 1)',
