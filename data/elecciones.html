@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados Electorales FCF - FLUYE Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0A2540; /* Base/Fondo Principal: Azul Oscuro Corporativo */
+            color: #FFFFFF; /* Texto y Contraste: Blanco Puro */
+            background-image: radial-gradient(at 0% 0%, #0A2540 0%, #00B5E21a 100%), radial-gradient(at 100% 100%, #0A2540 0%, #77DFF81a 100%); /* Ondas y Gradientes sutiles */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* Adjusted for better fit within glassmorphism cards */
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.1); /* Semi-transparente bg-white/10 */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil border-white/20 */
+            backdrop-filter: blur(10px); /* Efecto de desenfoque */
+            -webkit-backdrop-filter: blur(10px); /* Para compatibilidad con Safari */
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- NEITHER Mermaid JS NOR SVG were used in this output. All charts are rendered on HTML Canvas elements. -->
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#00B5E2]">Resultados de la Elección Estudiantil</h1>
+            <p class="text-lg text-white/80 mt-2 font-semibold">Análisis completo de la jornada electoral.</p>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 text-center">
+            <div class="glass-card border-t-4 border-[#00B5E2] flex flex-col justify-center items-center py-6">
+                <h2 class="text-xl font-bold text-white/80">Participación</h2>
+                <p class="text-6xl font-extrabold text-[#00B5E2] mt-2">77%</p>
+                <p class="text-white/80 mt-2">708 de 920 electores emitieron su voto.</p>
+            </div>
+            <div class="glass-card border-t-4 border-[#00B5E2] flex flex-col justify-center items-center py-6">
+                <h2 class="text-xl font-bold text-white/80">Votos Válidos</h2>
+                <p class="text-6xl font-extrabold text-[#00B5E2] mt-2">632</p>
+                <p class="text-white/80 mt-2">Votos que definieron la elección.</p>
+            </div>
+            <div class="glass-card border-t-4 border-[#00B5E2] flex flex-col justify-center items-center py-6">
+                <h2 class="text-xl font-bold text-white/80">Votos Inválidos</h2>
+                <p class="text-6xl font-extrabold text-[#00B5E2] mt-2">76</p>
+                <p class="text-white/80 mt-2">Sumando blancos y nulos.</p>
+            </div>
+        </section>
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-2 glass-card">
+                <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#00B5E2]">Distribución Final de Votos</h2>
+                <p class="text-white/80 mb-6">FLUYE (Lista 3) se alza con la victoria obteniendo una mayoría absoluta con más de la mitad de los votos válidos. A continuación se muestra cómo se distribuyeron los votos entre las listas competidoras.</p>
+                <div class="chart-container" style="max-width: 450px; height: 350px;">
+                    <canvas id="finalResultsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-card bg-[#00B5E2]/20 text-white flex flex-col justify-center items-center text-center p-8 shadow-xl" style="box-shadow: 0 0 25px rgba(0, 181, 226, 0.5);">
+                 <div class="border-4 border-white/50 rounded-full w-40 h-40 flex items-center justify-center mb-4">
+                    <p class="text-6xl font-extrabold text-[#77DFF8]">53.2%</p>
+                </div>
+                <h2 class="text-3xl font-bold text-[#00B5E2]">¡FLUYE Gana!</h2>
+                <p class="text-lg text-white/80 mt-2">La Lista 3, con 336 votos, fue la clara ganadora, asegurando el liderazgo estudiantil.</p>
+                <p class="mt-4 text-2xl font-bold bg-[#00B5E2]/30 px-4 py-2 rounded-full shadow-lg">🏆 Mayoría Absoluta 🏆</p>
+            </div>
+            
+            <div class="lg:col-span-3 glass-card">
+                <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#00B5E2]">Votación por Lista</h2>
+                <p class="text-white/80 mb-6">Comparación directa del total de votos obtenidos por cada una de las listas. Este gráfico muestra el respaldo que cada propuesta recibió por parte del electorado.</p>
+                <div class="chart-container" style="max-width: 800px; height: 400px;">
+                    <canvas id="votesPerListChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 glass-card">
+                <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#00B5E2]">Resultados por Mesa Electoral</h2>
+                <p class="text-white/80 mb-6">Análisis detallado del comportamiento electoral en cada una de las tres mesas. Se puede observar la consistencia y las variaciones en el apoyo a cada lista a través de las diferentes mesas de votación.</p>
+                <div class="chart-container" style="max-width: 800px; height: 400px;">
+                    <canvas id="votesPerMesaChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 glass-card">
+                <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#00B5E2]">Análisis de Votos Inválidos</h2>
+                <p class="text-white/80 mb-6">De los 76 votos inválidos, la mayoría fueron nulos. Este desglose ayuda a entender mejor el comportamiento de los votantes que no optaron por ninguna lista.</p>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="chart-container" style="max-width: 350px;">
+                        <canvas id="invalidVotesChart"></canvas>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <div class="flex items-center justify-center md:justify-start mb-4">
+                            <span class="w-4 h-4 rounded-full bg-[#FF4F4F] mr-3"></span>
+                            <div>
+                                <p class="font-bold text-2xl">49 Votos Nulos</p>
+                                <p class="text-white/80">64.5% del total de inválidos</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center md:justify-start">
+                            <span class="w-4 h-4 rounded-full bg-[#FFD700] mr-3"></span>
+                            <div>
+                                <p class="font-bold text-2xl">27 Votos Blancos</p>
+                                <p class="text-white/80">35.5% del total de inválidos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapLabel = (label) => {
+                if (label.length > 16) {
+                    const words = label.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+                    words.forEach(word => {
+                        if ((currentLine + word).length > 16) {
+                            lines.push(currentLine.trim());
+                            currentLine = '';
+                        }
+                        currentLine += word + ' ';
+                    });
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+                return label;
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+            
+            const sharedChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: 'Poppins',
+                                weight: '500'
+                            },
+                            color: '#FFFFFF', /* Leyenda en blanco */
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: '#0A2540', /* Fondo de tooltip oscuro */
+                        titleFont: { size: 16, weight: 'bold', family: 'Poppins' },
+                        bodyFont: { size: 14, family: 'Poppins' },
+                        titleColor: '#00B5E2', /* Título de tooltip en acento primario */
+                        bodyColor: '#FFFFFF', /* Cuerpo de tooltip en blanco */
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            color: '#FFFFFF', /* Eje Y ticks en blanco */
+                            font: { family: 'Poppins' }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)', /* Líneas de grid sutiles */
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#FFFFFF', /* Eje X ticks en blanco */
+                            font: { family: 'Poppins' }
+                        },
+                        grid: {
+                            display: false /* No mostrar líneas de grid en el eje X */
+                        }
+                    }
+                }
+            };
+            
+            const palette = {
+                l1: '#77DFF8', // Celeste Cielo (Acento Secundario)
+                l2: '#008CBA', // Un azul ligeramente más oscuro para distinción
+                l3: '#00B5E2', // Azul Claro/Cian Energético (Acento Primario)
+                nulos: '#FF4F4F', // Rojo de Alerta/Énfasis
+                blancos: '#FFD700' // Amarillo de Alerta/Énfasis
+            };
+
+            const listaLabels = [
+                wrapLabel('Momentum Estudiantil'),
+                'Hagamos FCF',
+                'FLUYE 🌊'
+            ];
+            const listaVotes = [202, 94, 336];
+            const listaColors = [palette.l1, palette.l2, palette.l3];
+
+            new Chart(document.getElementById('finalResultsChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: listaLabels,
+                    datasets: [{
+                        label: 'Votos Válidos',
+                        data: listaVotes,
+                        backgroundColor: listaColors,
+                        borderColor: '#0A2540', /* Borde del color del fondo principal */
+                        borderWidth: 4,
+                        hoverOffset: 15
+                    }]
+                },
+                options: { ...sharedChartOptions, cutout: '65%' }
+            });
+            
+            new Chart(document.getElementById('votesPerListChart'), {
+                type: 'bar',
+                data: {
+                    labels: listaLabels,
+                    datasets: [{
+                        label: 'Total Votos',
+                        data: listaVotes,
+                        backgroundColor: listaColors,
+                        borderRadius: 8,
+                        barThickness: 50
+                    }]
+                },
+                options: {
+                    ...sharedChartOptions,
+                    plugins: {
+                        ...sharedChartOptions.plugins,
+                        legend: { display: false }
+                    }
+                }
+            });
+            
+            new Chart(document.getElementById('votesPerMesaChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Mesa 1', 'Mesa 2', 'Mesa 3'],
+                    datasets: [
+                        {
+                            label: 'Momentum Estudiantil',
+                            data: [68, 64, 70],
+                            backgroundColor: palette.l1,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Hagamos FCF',
+                            data: [32, 36, 26],
+                            backgroundColor: palette.l2,
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'FLUYE 🌊',
+                            data: [104, 110, 122],
+                            backgroundColor: palette.l3,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: { ...sharedChartOptions }
+            });
+
+            new Chart(document.getElementById('invalidVotesChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Nulos', 'Blancos'],
+                    datasets: [{
+                        label: 'Votos Inválidos',
+                        data: [49, 27],
+                        backgroundColor: [palette.nulos, palette.blancos],
+                        borderColor: '#0A2540', /* Borde del color del fondo principal */
+                        borderWidth: 4,
+                        hoverOffset: 10
+                    }]
+                },
+                 options: {
+                    ...sharedChartOptions,
+                    plugins: {
+                        ...sharedChartOptions.plugins,
+                        legend: {
+                           display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
