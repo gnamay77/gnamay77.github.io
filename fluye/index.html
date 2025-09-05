@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Publicaciones - FLUYE STYLE</title>
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Theme Color for browsers -->
+    <meta name="theme-color" content="#0A2540"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- html2canvas library for exporting div as image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0A2540; /* Base/Fondo Principal */
+            color: #FFFFFF;
+        }
+        /* Custom styles for FLUID TECH */
+        .fluye-bg { background-color: #0A2540; }
+        .accent-text { color: #00B5E2; }
+        .secondary-accent-text { color: #77DFF8; }
+        .fluye-button {
+            background-color: #00B5E2;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 181, 226, 0.3);
+        }
+        .fluye-button:hover {
+            background-color: #77DFF8;
+            box-shadow: 0 0 25px rgba(119, 223, 248, 0.5);
+        }
+        .input-style {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+        }
+        .input-style:focus {
+            outline: none;
+            border-color: #00B5E2;
+            box-shadow: 0 0 10px rgba(0, 181, 226, 0.3);
+        }
+        .control-button {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .control-button.active {
+            background-color: #00B5E2;
+            border-color: #00B5E2;
+        }
+        .fluye-logo-text {
+             text-shadow: 0 0 8px rgba(0, 181, 226, 0.7), 0 0 20px rgba(0, 181, 226, 0.5);
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A2540; }
+        ::-webkit-scrollbar-thumb { background: #00B5E2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #77DFF8; }
+    </style>
+</head>
+<body class="min-h-screen w-full">
+
+    <div class="flex flex-col lg:flex-row lg:h-screen">
+
+        <!-- CONTROLS PANEL -->
+        <div class="w-full lg:w-1/3 p-6 space-y-6 lg:overflow-y-auto">
+            <header class="text-center lg:text-left">
+                <h1 class="text-3xl font-black accent-text">Generador de Posts</h1>
+                <p class="text-lg font-semibold secondary-accent-text">FLUYE STYLE</p>
+            </header>
+
+            <div>
+                <label for="title-input" class="font-bold">1. Título Principal</label>
+                <input id="title-input" type="text" placeholder="Escribe un título impactante..." class="w-full p-3 mt-2 input-style">
+            </div>
+
+            <div>
+                <label for="image-upload" class="font-bold">2. Imagen de Fondo</label>
+                <input id="image-upload" type="file" accept="image/*" class="w-full text-sm mt-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#00B5E2]/10 file:text-[#77DFF8] hover:file:bg-[#00B5E2]/20">
+            </div>
+
+            <div>
+                <label for="logo-upload" class="font-bold">3. Logo (Opcional)</label>
+                <input id="logo-upload" type="file" accept="image/png, image/svg+xml" class="w-full text-sm mt-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#00B5E2]/10 file:text-[#77DFF8] hover:file:bg-[#00B5E2]/20">
+            </div>
+
+            <div>
+                <label for="description-input" class="font-bold">4. Texto Explicativo</label>
+                <textarea id="description-input" rows="4" placeholder="Describe la noticia o el comunicado aquí." class="w-full p-3 mt-2 input-style resize-none"></textarea>
+            </div>
+
+            <div>
+                <label for="hashtags-input" class="font-bold">5. Hashtags</label>
+                <input id="hashtags-input" type="text" placeholder="#FLUYE #UNMSM #LogroEstudiantil" class="w-full p-3 mt-2 input-style">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="aspect-ratio-selector" class="font-bold">6. Formato</label>
+                    <select id="aspect-ratio-selector" class="w-full p-3 mt-2 input-style">
+                        <option value="9/16">Vertical (9:16)</option>
+                        <option value="1/1">Cuadrado (1:1)</option>
+                        <option value="4/5">Retrato (4:5)</option>
+                        <option value="4/3">Clásico (4:3)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="font-bold">7. Alineación</label>
+                    <div id="text-align-controls" class="flex items-center justify-between mt-2 space-x-2">
+                        <button data-align="left" class="align-btn active w-full p-3 rounded-lg control-button">L</button>
+                        <button data-align="center" class="align-btn w-full p-3 rounded-lg control-button">C</button>
+                        <button data-align="right" class="align-btn w-full p-3 rounded-lg control-button">R</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-4">
+                <button id="download-btn" class="w-full fluye-button text-white font-bold py-3 px-4 rounded-lg text-lg">
+                    Descargar Imagen (PNG)
+                </button>
+            </div>
+        </div>
+
+        <!-- PREVIEW PANEL -->
+        <div class="w-full lg:w-2/3 flex items-center justify-center p-6 bg-black/20">
+            <div id="preview-canvas" class="w-full bg-[#0A2540] shadow-2xl rounded-2xl overflow-hidden relative flex flex-col justify-between transition-all duration-300">
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 -left-1/4 w-72 h-72 bg-gradient-to-br from-[#00B5E2]/30 to-[#0A2540] rounded-full opacity-30 blur-3xl"></div>
+                <div class="absolute bottom-0 -right-1/4 w-72 h-72 bg-gradient-to-tl from-[#77DFF8]/30 to-[#0A2540] rounded-full opacity-30 blur-3xl"></div>
+                
+                <div id="image-preview" class="absolute inset-0 bg-cover bg-center transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white/30 text-center p-8">Sube una imagen para verla aquí</span>
+                </div>
+                
+                <div class="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-[#0A2540] via-[#0A2540]/80 to-transparent z-10"></div>
+                <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0A2540] via-[#0A2540]/90 to-transparent z-10"></div>
+
+                 <div class="relative z-20 p-5 flex items-center">
+                    <p id="logo-text" class="fluye-logo-text font-extrabold text-2xl tracking-widest text-white/90 drop-shadow-lg">FLUYE</p>
+                    <img id="logo-image" src="" class="h-10 hidden" alt="Logo Fluye">
+                </div>
+
+                <div id="text-content-container" class="relative z-20 p-6 space-y-4 text-left">
+                    <h2 id="title-preview" class="font-black text-4xl leading-tight text-white drop-shadow-md">Título de la Publicación</h2>
+                    <p id="description-preview" class="font-medium text-white/90 text-base">Aquí aparecerá el texto explicativo de tu publicación.</p>
+                    <p id="hashtags-preview" class="font-bold text-sm accent-text opacity-80">#Hashtags #Aquí</p>
+                    <p class="pt-4 font-semibold text-xs text-white/60 text-center">Tercio Estudiantil Mayoría FCF - Fluye</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // DOM element references
+        const titleInput = document.getElementById('title-input');
+        const imageUpload = document.getElementById('image-upload');
+        const logoUpload = document.getElementById('logo-upload');
+        const descriptionInput = document.getElementById('description-input');
+        const hashtagsInput = document.getElementById('hashtags-input');
+        const aspectRatioSelector = document.getElementById('aspect-ratio-selector');
+        const downloadBtn = document.getElementById('download-btn');
+        const textAlignControls = document.getElementById('text-align-controls');
+
+        const titlePreview = document.getElementById('title-preview');
+        const descriptionPreview = document.getElementById('description-preview');
+        const hashtagsPreview = document.getElementById('hashtags-preview');
+        const imagePreview = document.getElementById('image-preview');
+        const previewCanvas = document.getElementById('preview-canvas');
+        const logoText = document.getElementById('logo-text');
+        const logoImage = document.getElementById('logo-image');
+        const textContentContainer = document.getElementById('text-content-container');
+
+        // Real-time updates for text inputs
+        titleInput.addEventListener('input', () => { titlePreview.textContent = titleInput.value || 'Título de la Publicación'; });
+        descriptionInput.addEventListener('input', () => { descriptionPreview.textContent = descriptionInput.value || 'Aquí aparecerá el texto explicativo de tu publicación.'; });
+        hashtagsInput.addEventListener('input', () => { hashtagsPreview.textContent = hashtagsInput.value || '#Hashtags #Aquí'; });
+
+        // File upload handlers
+        const handleFileUpload = (event, callback) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => callback(e.target.result);
+                reader.readAsDataURL(file);
+            }
+        };
+
+        imageUpload.addEventListener('change', (e) => handleFileUpload(e, (result) => {
+            imagePreview.innerHTML = '';
+            imagePreview.style.backgroundImage = `url(${result})`;
+        }));
+
+        logoUpload.addEventListener('change', (e) => handleFileUpload(e, (result) => {
+            logoImage.src = result;
+            logoImage.classList.remove('hidden');
+            logoText.classList.add('hidden');
+        }));
+
+        // Aspect ratio handler
+        function updateAspectRatio() {
+            const selectedValue = aspectRatioSelector.value;
+            previewCanvas.style.aspectRatio = selectedValue;
+            const aspectRatios = { '9/16': '405px', '1/1': '600px', '4/5': '500px', '4/3': '700px' };
+            previewCanvas.style.maxWidth = aspectRatios[selectedValue] || '700px';
+        }
+        aspectRatioSelector.addEventListener('change', updateAspectRatio);
+        updateAspectRatio();
+
+        // Text alignment handler
+        textAlignControls.addEventListener('click', (e) => {
+            if (e.target.matches('.align-btn')) {
+                const alignment = e.target.dataset.align;
+                textContentContainer.style.textAlign = alignment;
+                document.querySelectorAll('.align-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+            }
+        });
+
+        // Download button handler
+        downloadBtn.addEventListener('click', () => {
+            const options = { scale: 3, useCORS: true, backgroundColor: '#0A2540' };
+            html2canvas(previewCanvas, options).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'publicacion-fluye.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+    </script>
+
+</body>
+</html>
