@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Costo-Beneficio Pachitea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .icon-lg {
+            font-size: 3rem;
+        }
+        .stat-card {
+            background-color: #fff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 100;
+        }
+        .scroll-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex flex-wrap justify-center sm:justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Análisis Costo-Beneficio</h1>
+            <div class="flex flex-wrap gap-2 sm:gap-4 text-sm sm:text-base">
+                <a href="#introduccion" class="text-gray-600 hover:text-blue-600 transition-colors">Introducción</a>
+                <a href="#costo-inaccion" class="text-gray-600 hover:text-blue-600 transition-colors">Costo de la Inacción</a>
+                <a href="#inversion-resiliencia" class="text-gray-600 hover:text-blue-600 transition-colors">Inversión en Resiliencia</a>
+                <a href="#balance" class="text-gray-600 hover:text-blue-600 transition-colors">Balance Estratégico</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 sm:p-8 space-y-12">
+        <!-- Introduction Section -->
+        <section id="introduccion" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-4 text-center text-blue-800">Análisis Costo-Beneficio de la Inversión en Resiliencia en Pachitea</h2>
+            <p class="text-lg text-gray-600 text-center max-w-2xl mx-auto">
+                Este análisis evalúa la viabilidad de invertir en el Plan de Prevención de Riesgos de la Provincia de Pachitea 2024-2030, comparando la inversión propuesta con las pérdidas potenciales en vidas, infraestructura y medios de vida que se materializarían sin acción.
+            </p>
+        </section>
+
+        <!-- Costo de la Inaccion Section -->
+        <section id="costo-inaccion" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-red-700">1. El Costo de la Inacción: Pérdidas Potenciales</h2>
+            <p class="text-center text-gray-600 mb-8">Cuantificar las pérdidas evitadas es la base para comprender el beneficio de la inversión.</p>
+
+            <!-- Población y Vivienda -->
+            <div class="bg-red-100 p-6 rounded-xl border border-red-200 mb-8">
+                <h3 class="text-2xl font-bold text-red-800 mb-4 flex items-center">
+                    <span class="icon-lg mr-2">👨‍👩‍👧‍👦</span> Impacto Directo sobre la Población y Vivienda
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+                    <div class="stat-card">
+                        <span class="text-5xl text-red-600 font-bold">48,807</span>
+                        <p class="text-lg text-gray-600">Personas en Riesgo Crítico (Alto y Muy Alto)</p>
+                        <p class="text-sm text-gray-500 mt-1">Distritos afectados: Chaglla, Molino, Panao, Umari</p>
+                    </div>
+                    <div class="stat-card">
+                        <span class="text-5xl text-red-600 font-bold">10,787</span>
+                        <p class="text-lg text-gray-600">Viviendas Vulnerables (Tapia y Adobe)</p>
+                        <p class="text-sm text-gray-500 mt-1">Alta probabilidad de colapso frente a desastres</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Servicios Esenciales -->
+            <div class="bg-yellow-100 p-6 rounded-xl border border-yellow-200 mb-8">
+                <h3 class="text-2xl font-bold text-yellow-800 mb-4 flex items-center">
+                    <span class="icon-lg mr-2">🏥</span> Riesgo sobre Servicios Esenciales
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="stat-card">
+                        <span class="text-4xl">🏫</span>
+                        <p class="text-xl font-bold text-yellow-700 mt-2">372</p>
+                        <p class="text-sm text-gray-600">Instituciones Educativas en riesgo</p>
+                        <p class="text-xs text-gray-500">(131 en riesgo Muy Alto, 241 en riesgo Alto)</p>
+                    </div>
+                    <div class="stat-card">
+                        <span class="text-4xl">🚑</span>
+                        <p class="text-xl font-bold text-yellow-700 mt-2">25</p>
+                        <p class="text-sm text-gray-600">Establecimientos de Salud en riesgo</p>
+                        <p class="text-xs text-gray-500">(8 en riesgo Muy Alto, 17 en riesgo Alto)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Economía y Medios de Vida -->
+            <div class="bg-green-100 p-6 rounded-xl border border-green-200">
+                <h3 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+                    <span class="icon-lg mr-2">💰</span> Amenazas a la Economía y Medios de Vida
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="stat-card">
+                        <span class="text-4xl">🌾</span>
+                        <p class="text-xl font-bold text-green-700 mt-2">74.07%</p>
+                        <p class="text-sm text-gray-600">De la PEA ocupada en la agricultura</p>
+                        <p class="text-xs text-gray-500 mt-1">Principal fuente de ingresos en riesgo por deslizamientos</p>
+                    </div>
+                    <div class="stat-card">
+                        <span class="text-4xl">🛣️</span>
+                        <p class="text-xl font-bold text-green-700 mt-2">PE-18B & PE-18D</p>
+                        <p class="text-sm text-gray-600">Infraestructura vial crítica en riesgo</p>
+                        <p class="text-xs text-gray-500 mt-1">Interrupción del comercio y la ayuda humanitaria</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Inversion en Resiliencia Section -->
+        <section id="inversion-resiliencia" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-blue-700">2. Inversión en Resiliencia: Costos de Mitigación</h2>
+            <p class="text-center text-gray-600 mb-8">Un desembolso proactivo y planificado para proteger a la provincia.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Medidas Estructurales -->
+                <div class="bg-blue-100 p-6 rounded-xl border border-blue-200">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-4 flex items-center">
+                        <span class="icon-lg mr-2">🏗️</span> Medidas Estructurales
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-4">Proyectos de ingeniería civil para protección física.</p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg">
+                            <thead>
+                                <tr class="bg-blue-200 text-blue-800 uppercase text-xs">
+                                    <th class="p-2 sm:p-4 text-left">Proyecto</th>
+                                    <th class="p-2 sm:p-4 text-left">Ubicación</th>
+                                    <th class="p-2 sm:p-4 text-left">Costo (S/.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-2 sm:p-4">Protección riberas (Molino)</td>
+                                    <td class="p-2 sm:p-4">Molino</td>
+                                    <td class="p-2 sm:p-4">3.1M</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-2 sm:p-4">Protección riberas (Puente)</td>
+                                    <td class="p-2 sm:p-4">Chaglla</td>
+                                    <td class="p-2 sm:p-4">1.5M</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-2 sm:p-4">Protección riberas (Manzano)</td>
+                                    <td class="p-2 sm:p-4">Molino</td>
+                                    <td class="p-2 sm:p-4">4.3M</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-2 sm:p-4">Protección riberas (Tirishuanca)</td>
+                                    <td class="p-2 sm:p-4">Panao</td>
+                                    <td class="p-2 sm:p-4">7.6M</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resumen de Costos -->
+                <div class="bg-indigo-100 p-6 rounded-xl border border-indigo-200">
+                    <h3 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center">
+                        <span class="icon-lg mr-2">📈</span> Resumen de la Inversión Total
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="stat-card">
+                            <span class="text-4xl text-indigo-700 font-bold">S/. 16,933,248.21</span>
+                            <p class="text-lg text-gray-600 mt-2">Costo Total de la Inversión Requerida</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="text-xl font-bold text-blue-700">Medidas Estructurales</p>
+                            <p class="text-2xl font-semibold text-gray-800 mt-1">S/. 16,436,248.21</p>
+                        </div>
+                        <div class="stat-card">
+                            <p class="text-xl font-bold text-sky-700">Medidas No Estructurales</p>
+                            <p class="text-2xl font-semibold text-gray-800 mt-1">S/. 497,000.00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Balance Estratégico Section -->
+        <section id="balance" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-purple-700">3. Balance Estratégico: Inversión vs. Inacción</h2>
+            <p class="text-center text-gray-600 mb-8">El cálculo estratégico es claro: una inversión finita y planificada frente a la certeza de pérdidas recurrentes e impredecibles.</p>
+
+            <div class="flex flex-col lg:flex-row justify-center items-stretch gap-8">
+                <!-- Beneficios -->
+                <div class="flex-1 bg-green-100 p-6 rounded-xl border border-green-200 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+                        <span class="icon-lg mr-2">✅</span> Beneficios Estratégicos (Pérdidas Evitadas)
+                    </h3>
+                    <ul class="list-none text-left space-y-3 text-gray-700 text-lg">
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-green-600">✔️</span> Protección de más de <strong class="text-green-800">48,807</strong> habitantes.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-green-600">✔️</span> Salvaguarda de <strong class="text-green-800">372</strong> escuelas y <strong class="text-green-800">25</strong> centros de salud.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-green-600">✔️</span> Resiliencia para la economía que sustenta al <strong class="text-green-800">74%</strong> de la población.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-green-600">✔️</span> Seguridad de la infraestructura vial crítica (PE-18B, PE-18D).
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Costos -->
+                <div class="flex-1 bg-red-100 p-6 rounded-xl border border-red-200 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold text-red-800 mb-4 flex items-center">
+                        <span class="icon-lg mr-2">❌</span> Costo de la Inacción (Pérdidas Recurrentes)
+                    </h3>
+                    <ul class="list-none text-left space-y-3 text-gray-700 text-lg">
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-red-600">❌</span> Costos impredecibles y recurrentes por desastres.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-red-600">❌</span> Costo de reconstrucción de escuelas y centros de salud.
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-red-600">❌</span> Daño a la principal fuente de ingresos (agricultura).
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-xl mr-2 text-red-600">❌</span> Interrupción del transporte y la ayuda humanitaria.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center max-w-2xl mx-auto">
+                <h3 class="text-2xl font-bold text-purple-800 mb-4">Conclusión: Inversión en Futuro vs. Gastos Recurrentes</h3>
+                <p class="text-lg text-gray-600">La inversión de <strong class="text-purple-700">S/. 16.9 millones</strong> es una decisión estratégica que protege miles de vidas, servicios esenciales y la economía, superando categóricamente el costo de la inacción. Actuar ahora es alinear la prudencia fiscal con el deber de proteger a los ciudadanos.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="scroll-to-top bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Show/hide scroll to top button
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
