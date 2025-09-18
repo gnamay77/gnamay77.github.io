@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Plan de Riesgos Pachitea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .icon-lg {
+            font-size: 2.5rem;
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .scroll-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex flex-wrap justify-center sm:justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Plan de Riesgos Pachitea</h1>
+            <div class="flex flex-wrap gap-2 sm:gap-4 text-sm sm:text-base">
+                <a href="#introduccion" class="text-gray-600 hover:text-blue-600 transition-colors">Introducción</a>
+                <a href="#peligros" class="text-gray-600 hover:text-blue-600 transition-colors">Peligros</a>
+                <a href="#vulnerabilidad" class="text-gray-600 hover:text-blue-600 transition-colors">Vulnerabilidad</a>
+                <a href="#riesgo" class="text-gray-600 hover:text-blue-600 transition-colors">Riesgo</a>
+                <a href="#mitigacion" class="text-gray-600 hover:text-blue-600 transition-colors">Mitigación</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 sm:p-8 space-y-12">
+        <!-- Introduction Section -->
+        <section id="introduccion" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-4 text-center text-blue-800">Análisis del Plan de Prevención de Riesgos de la Provincia de Pachitea</h2>
+            <p class="text-lg text-gray-600 text-center max-w-2xl mx-auto">
+                Este análisis evalúa el Plan 2024-2030, centrándose en la identificación de peligros, el análisis de vulnerabilidad, la estimación del riesgo y las medidas de mitigación propuestas para salvaguardar la vida y los medios de subsistencia en la provincia.
+            </p>
+        </section>
+
+        <!-- Peligros Section -->
+        <section id="peligros" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-red-700">1.0 Peligros y Amenazas Recurrentes</h2>
+            <p class="text-center text-gray-600 mb-8">El diagnóstico se basa en un inventario de amenazas hidrometeorológicas y geodinámicas.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <!-- Hazard Card 1: Lluvias Intensas -->
+                <div class="bg-blue-100 p-6 rounded-xl border border-blue-200 hover:bg-blue-200 transition-colors cursor-pointer">
+                    <span class="icon-lg">🌧️</span>
+                    <h3 class="text-2xl font-semibold mt-2 text-blue-800">Lluvias Intensas</h3>
+                    <p class="text-xl font-bold text-blue-700 mt-2">104 registros</p>
+                    <p class="text-sm text-blue-600">Fenómeno desencadenante más común</p>
+                </div>
+                <!-- Hazard Card 2: Incendios Forestales -->
+                <div class="bg-orange-100 p-6 rounded-xl border border-orange-200 hover:bg-orange-200 transition-colors cursor-pointer">
+                    <span class="icon-lg">🔥</span>
+                    <h3 class="text-2xl font-semibold mt-2 text-orange-800">Incendios Forestales</h3>
+                    <p class="text-xl font-bold text-orange-700 mt-2">54 ocurrencias</p>
+                    <p class="text-sm text-orange-600">Amenaza para la cobertura vegetal</p>
+                </div>
+                <!-- Hazard Card 3: Deslizamientos -->
+                <div class="bg-red-100 p-6 rounded-xl border border-red-200 hover:bg-red-200 transition-colors cursor-pointer">
+                    <span class="icon-lg">⛰️</span>
+                    <h3 class="text-2xl font-semibold mt-2 text-red-800">Deslizamientos</h3>
+                    <p class="text-xl font-bold text-red-700 mt-2">51 eventos</p>
+                    <p class="text-sm text-red-600">Alta recurrencia y potencial destructivo</p>
+                </div>
+                <!-- Hazard Card 4: Heladas / Bajas Temperaturas -->
+                <div class="bg-purple-100 p-6 rounded-xl border border-purple-200 hover:bg-purple-200 transition-colors cursor-pointer">
+                    <span class="icon-lg">🥶</span>
+                    <h3 class="text-2xl font-semibold mt-2 text-purple-800">Heladas y Bajas Temperaturas</h3>
+                    <p class="text-xl font-bold text-purple-700 mt-2">65 eventos</p>
+                    <p class="text-sm text-purple-600">Peligro para agricultura y salud</p>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h3 class="text-xl font-bold mb-4 text-center text-gray-700">Puntos Críticos por Entidad Técnica</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- INGEMMET -->
+                    <div class="bg-gray-100 p-6 rounded-xl border border-gray-200">
+                        <h4 class="text-lg font-semibold flex items-center mb-2">
+                            <span class="text-2xl mr-2">⛏️</span> INGEMMET (2003-2023)
+                        </h4>
+                        <p class="text-sm">Identificó <strong>49 puntos críticos</strong> por movimientos en masa. Principal peligro: <strong>deslizamientos (25)</strong>.</p>
+                        <ul class="list-disc list-inside mt-2 text-sm">
+                            <li><strong>Chaglla:</strong> 17 puntos</li>
+                            <li><strong>Umari:</strong> 15 puntos</li>
+                        </ul>
+                    </div>
+                    <!-- ANA -->
+                    <div class="bg-gray-100 p-6 rounded-xl border border-gray-200">
+                        <h4 class="text-lg font-semibold flex items-center mb-2">
+                            <span class="text-2xl mr-2">💧</span> Autoridad Nacional del Agua (2015-2023)
+                        </h4>
+                        <p class="text-sm">Identificó <strong>7 puntos críticos</strong> por inundación, flujos de detritos y erosión.</p>
+                        <ul class="list-disc list-inside mt-2 text-sm">
+                            <li><strong>Molino:</strong> Concentra 4 puntos críticos</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <h3 class="text-2xl font-bold text-gray-700 mb-2">Niveles de Peligro por Deslizamiento</h3>
+                    <p class="text-gray-600">Metodología CENEPRED integra factores condicionantes y desencadenantes.</p>
+                    <div class="flex flex-wrap justify-center gap-4 mt-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-red-600"></span>
+                            <span class="text-sm font-semibold">Muy Alto</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-orange-500"></span>
+                            <span class="text-sm font-semibold">Alto</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-yellow-400"></span>
+                            <span class="text-sm font-semibold">Medio</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-6 h-6 rounded-full bg-green-500"></span>
+                            <span class="text-sm font-semibold">Bajo</span>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-lg font-semibold text-gray-800">
+                        Los distritos de <strong class="text-red-600">Umari, Molino y Panao</strong> presentan niveles de peligro <strong class="text-red-600">Muy Alto y Alto</strong> en casi la totalidad de sus territorios.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vulnerabilidad Section -->
+        <section id="vulnerabilidad" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-emerald-700">2.0 Evaluación de la Vulnerabilidad Provincial</h2>
+            <p class="text-center text-gray-600 mb-8">Un análisis centrado en las personas, sus condiciones de vida y su capacidad para resistir y recuperarse de un desastre.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Social Dimension -->
+                <div class="bg-emerald-100 p-6 rounded-xl border border-emerald-200">
+                    <h3 class="text-2xl font-bold text-emerald-800 mb-4 flex items-center"><span class="text-3xl mr-2">👥</span> Dimensión Social</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-emerald-700">Población y Pobreza</h4>
+                            <p class="text-sm text-gray-600">Altos índices de pobreza en <strong>Panao (54.1%)</strong> y <strong>Chaglla (52.7%)</strong>. Limita el acceso a viviendas seguras y recursos.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-emerald-700">Grupos Etarios Vulnerables</h4>
+                            <p class="text-sm text-gray-600"><strong>5,294 niños</strong> menores de 5 años y <strong>3,118 adultos mayores</strong> de 65 años son intrínsecamente más frágiles.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-emerald-700">Falta de Seguros</h4>
+                            <p class="text-sm text-gray-600">Baja resiliencia económica por la ausencia de una red de seguridad formal.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Economic Dimension -->
+                <div class="bg-amber-100 p-6 rounded-xl border border-amber-200">
+                    <h3 class="text-2xl font-bold text-amber-800 mb-4 flex items-center"><span class="text-3xl mr-2">💰</span> Dimensión Económica</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-amber-700">Materiales de Vivienda</h4>
+                            <p class="text-sm text-gray-600">Predominio de <strong>tapia (8,225)</strong>, <strong>adobe (2,562)</strong> y pisos de <strong>tierra (10,721)</strong>. Alta fragilidad ante sismos y deslizamientos.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-amber-700">Servicios Básicos y Tenencia</h4>
+                            <p class="text-sm text-gray-600">Solo <strong>3,691 de 13,286 viviendas</strong> tienen agua potable de red pública. La falta de títulos de propiedad impide acceder a créditos para reconstrucción.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Riesgo Section -->
+        <section id="riesgo" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-purple-700">3.0 Determinación y Magnitud del Riesgo</h2>
+            <p class="text-center text-gray-600 mb-8">El riesgo es la síntesis final del peligro y la vulnerabilidad, permitiendo jerarquizar las áreas de intervención prioritaria.</p>
+            <div class="bg-purple-100 p-6 rounded-xl border border-purple-200">
+                <h3 class="text-2xl font-bold text-purple-800 mb-4 text-center">Elementos Expuestos a Riesgo Muy Alto y Alto</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                    <div class="p-4 bg-white rounded-lg">
+                        <span class="text-4xl">👨‍👩‍👧‍👦</span>
+                        <p class="text-xl font-bold mt-2 text-purple-700">48,807</p>
+                        <p class="text-sm text-gray-600">Personas</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg">
+                        <span class="text-4xl">🏘️</span>
+                        <p class="text-xl font-bold mt-2 text-purple-700">366</p>
+                        <p class="text-sm text-gray-600">Centros Poblados</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg">
+                        <span class="text-4xl">🏫</span>
+                        <p class="text-xl font-bold mt-2 text-purple-700">372</p>
+                        <p class="text-sm text-gray-600">Locales Educativos</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg">
+                        <span class="text-4xl">🏥</span>
+                        <p class="text-xl font-bold mt-2 text-purple-700">25</p>
+                        <p class="text-sm text-gray-600">Establecimientos de Salud</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mitigacion Section -->
+        <section id="mitigacion" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-6 text-center text-teal-700">4.0 Estrategias de Mitigación</h2>
+            <p class="text-center text-gray-600 mb-8">Acciones concretas para reducir los riesgos identificados, divididas en medidas estructurales y no estructurales.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Medidas Estructurales -->
+                <div class="bg-teal-100 p-6 rounded-xl border border-teal-200">
+                    <h3 class="text-2xl font-bold text-teal-800 mb-4 flex items-center"><span class="text-3xl mr-2">🏗️</span> Medidas Estructurales</h3>
+                    <p class="text-sm text-gray-600 mb-4">Proyectos de ingeniería civil enfocados en la protección de riberas de ríos, concentrados en los distritos de alto riesgo.</p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white rounded-lg">
+                            <thead>
+                                <tr class="bg-teal-200 text-teal-800 uppercase text-xs">
+                                    <th class="p-2 sm:p-4 text-left">Proyecto</th>
+                                    <th class="p-2 sm:p-4 text-left">Ubicación</th>
+                                    <th class="p-2 sm:p-4 text-left">Costo Estimado (S/.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-2 sm:p-4">Protección riberas (Manzano y Panao)</td>
+                                    <td class="p-2 sm:p-4">Molino</td>
+                                    <td class="p-2 sm:p-4">3,105,948.85</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-2 sm:p-4">Protección riberas (río Puente)</td>
+                                    <td class="p-2 sm:p-4">Chaglla</td>
+                                    <td class="p-2 sm:p-4">1,488,468.88</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-2 sm:p-4">Protección riberas (río Manzano)</td>
+                                    <td class="p-2 sm:p-4">Molino</td>
+                                    <td class="p-2 sm:p-4">4,281,488.25</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-2 sm:p-4">Protección riberas (C.P. Tirishuanca)</td>
+                                    <td class="p-2 sm:p-4">Panao</td>
+                                    <td class="p-2 sm:p-4">7,560,342.23</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Medidas No Estructurales -->
+                <div class="bg-sky-100 p-6 rounded-xl border border-sky-200">
+                    <h3 class="text-2xl font-bold text-sky-800 mb-4 flex items-center"><span class="text-3xl mr-2">🧠</span> Medidas No Estructurales</h3>
+                    <p class="text-sm text-gray-600 mb-4">Acciones de gestión, normativa y fortalecimiento de capacidades para crear un entorno resiliente.</p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-sky-700">Generación de Conocimiento</h4>
+                            <p class="text-sm text-gray-600">Elaboración de EVARs, escenarios de riesgo y evaluación de vulnerabilidad en infraestructura educativa.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-sky-700">Fortalecimiento Institucional</h4>
+                            <p class="text-sm text-gray-600">Actualización del ROF para transversalizar la GRD y creación de una subgerencia especializada.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-sky-700">Planificación Territorial</h4>
+                            <p class="text-sm text-gray-600">Actualización del catastro urbano y difusión de normativas que restrinjan la ocupación en zonas de riesgo.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-md">
+                            <h4 class="font-semibold text-sky-700">Educación y Capacitación</h4>
+                            <p class="text-sm text-gray-600">Programas de capacitación a juntas vecinales y comités de gestión adaptados a los riesgos locales.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Conclusion Section -->
+        <section id="conclusion" class="bg-white p-6 sm:p-8 rounded-lg card">
+            <h2 class="text-3xl font-bold mb-4 text-center text-blue-800">5.0 Conclusión: Síntesis Estratégica</h2>
+            <p class="text-lg text-gray-600 text-center max-w-2xl mx-auto">
+                El plan es una estrategia coherente que identifica un riesgo elevado en la provincia de Pachitea, principalmente por deslizamientos que amenazan a una población vulnerable. Las medidas estructurales y no estructurales propuestas atacan directamente las causas de inestabilidad y fragilidad. El éxito de su implementación dependerá del financiamiento y la rigurosa aplicación de las normativas.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="scroll-to-top bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Show/hide scroll to top button
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
