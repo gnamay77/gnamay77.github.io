@@ -1,39 +1,48 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-slate-950 text-slate-100">
+<html lang="es" class="h-full">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAEN - Sistema de Repaso COE & Guía de Campo COED La Molina</title>
-  
+  <title>COED La Molina | CAEN - Maestría en Gestión del Riesgo de Desastres</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js para visualización de métricas y evaluación -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Tone.js for subtle sound UI feedback -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
 
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
           colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0369a1',
-              700: '#075985',
-              800: '#0c4a6e',
-              900: '#082f49',
-              accent: '#f59e0b',
-              danger: '#ef4444',
-              success: '#10b981',
-              caen: '#800000', // Granate institucional CAEN
-              indeci: '#ff6600'
+            caen: {
+              red: '#8B0000',
+              crimson: '#A31D1D',
+              gold: '#D4AF37',
+              darkgold: '#AA820A',
+              navy: '#0B192C',
+              slate: '#1E293B',
+              accent: '#2563EB',
+            },
+            sinagerd: {
+              orange: '#EA580C',
+              blue: '#0284C7',
+              green: '#16A34A',
+              yellow: '#CA8A04',
             }
           },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
-            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+          animation: {
+            'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
           }
         }
       }
@@ -41,1153 +50,1559 @@
   </script>
 
   <style>
-    /* Estilos de barra de scroll y efectos visuales tácticos */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #090d16; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
-    
-    .glow-border {
-      box-shadow: 0 0 15px -3px rgba(2, 132, 199, 0.25);
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
     }
-    .grid-bg {
-      background-size: 30px 30px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-    @media print {
-      body { background: white !important; color: black !important; }
-      .no-print { display: none !important; }
-      .print-only { display: block !important; }
-      .print-card { border: 1px solid #ccc !important; page-break-inside: avoid; color: black !important; }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-preserve-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .card-flip-transition {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
   </style>
 </head>
 
-<body class="h-full flex flex-col font-sans antialiased bg-slate-950 text-slate-100 selection:bg-sky-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
 
-  <!-- ================= HEADER INSTITUCIONAL TÁCTICO ================= -->
-  <header class="no-print border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
+  <!-- Barra Superior Institucional CAEN -->
+  <header class="bg-gradient-to-r from-slate-900 via-slate-900 to-red-950 border-b border-amber-500/30 sticky top-0 z-50 shadow-2xl backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        
-        <!-- Logo & Titular -->
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900 via-red-800 to-amber-700 flex items-center justify-center font-bold text-white shadow-md border border-red-700/50">
-            <span>CAEN</span>
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo & Titular CAEN -->
+        <div class="flex items-center space-x-3.5">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-red-700 p-0.5 shadow-lg shadow-red-900/40 flex items-center justify-center">
+            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <i class="fa-solid fa-shield-halved text-amber-400 text-2xl"></i>
+            </div>
           </div>
           <div>
             <div class="flex items-center space-x-2">
-              <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
-                Centro de Operaciones de Emergencia (COE)
-                <span class="text-xs px-2 py-0.5 rounded-full bg-red-950 text-red-300 border border-red-800/60 font-mono">VIII Maestría GRD</span>
-              </h1>
+              <span class="text-xs font-bold uppercase tracking-widest text-amber-400 font-mono">CAEN - EPG</span>
+              <span class="text-[10px] bg-red-900/60 text-red-200 border border-red-700/50 px-2 py-0.5 rounded-full font-medium">VIII MGRD</span>
             </div>
-            <p class="text-xs text-slate-400">Docente: Mg. Carlos Alberto Quispe Tineo | <span class="text-sky-400 font-medium">Visita Técnica: COED La Molina</span></p>
+            <h1 class="text-base sm:text-lg font-extrabold text-white tracking-tight flex items-center gap-1.5">
+              COED La Molina <span class="text-xs font-normal text-slate-400 hidden md:inline">| Evaluación Operativa & Funcional</span>
+            </h1>
           </div>
         </div>
 
-        <!-- Indicador Operativo & Botón de Impresión -->
-        <div class="flex items-center space-x-3">
-          <div class="hidden md:flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-md border border-slate-700 text-xs font-mono">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span class="text-slate-300">ESTADO:</span>
-            <span class="text-emerald-400 font-semibold">ACTIVO / MONITOREO 24-7</span>
+        <!-- Metadata & Status -->
+        <div class="hidden lg:flex items-center space-x-4 text-xs">
+          <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center space-x-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="text-slate-300 font-medium">Docente: <strong class="text-amber-300">Mg. Carlos Alberto Quispe Tineo</strong></span>
           </div>
-
-          <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs rounded-md flex items-center gap-1.5 transition">
-            <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-            <span class="hidden sm:inline">Imprimir Ficha</span>
+          <div class="bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-users text-amber-400"></i> Grupo N° 01 (2026)
+          </div>
+          <button id="soundToggleBtn" onclick="toggleAudio()" class="text-slate-400 hover:text-amber-400 p-2 rounded-lg hover:bg-slate-800 transition" title="Alternar audio sutil de interacción">
+            <i id="soundIcon" class="fa-solid fa-volume-high"></i>
           </button>
         </div>
-
       </div>
-    </div>
 
-    <!-- Navegación por Pestañas Principales -->
-    <div class="border-t border-slate-800/80 bg-slate-900/60 px-4 sm:px-6 lg:px-8">
-      <nav class="flex space-x-1 sm:space-x-4 overflow-x-auto py-2" id="mainTabs">
-        <button onclick="switchTab('resumen')" class="tab-btn active px-3 py-2 text-xs sm:text-sm font-medium rounded-md transition text-sky-400 bg-sky-950/60 border border-sky-800/50 flex items-center gap-2 whitespace-nowrap" data-tab="resumen">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-          1. Repaso Integral del Curso
+      <!-- Barra de Navegación por Pestañas -->
+      <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto custom-scrollbar pb-2 text-xs sm:text-sm font-medium border-t border-slate-800/80 pt-2" id="navTabs">
+        <button onclick="switchTab('resumen')" id="tab-resumen" class="nav-btn active flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-amber-500 text-slate-950 font-bold transition">
+          <i class="fa-solid fa-book-open"></i> <span>Módulos de Estudio</span>
         </button>
-
-        <button onclick="switchTab('visita')" class="tab-btn px-3 py-2 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 flex items-center gap-2 whitespace-nowrap" data-tab="visita">
-          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          2. Instructivo COED La Molina (Ver / Hacer / Preguntar)
+        <button onclick="switchTab('matriz')" id="tab-matriz" class="nav-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          <i class="fa-solid fa-chart-simple"></i> <span>Matriz & Brechas</span>
         </button>
-
-        <button onclick="switchTab('evaluador')" class="tab-btn px-3 py-2 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 flex items-center gap-2 whitespace-nowrap" data-tab="evaluador">
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          3. Evaluador en Vivo (Ficha Técnica INDECI)
+        <button onclick="switchTab('simulador')" id="tab-simulador" class="nav-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition relative">
+          <i class="fa-solid fa-graduation-cap text-amber-400"></i> <span>Simulador CAEN (10 Preguntas)</span>
+          <span class="ml-1 px-1.5 py-0.2 bg-red-600 text-white text-[10px] rounded-full font-bold">Rúbrica</span>
         </button>
-
-        <button onclick="switchTab('simulador')" class="tab-btn px-3 py-2 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 flex items-center gap-2 whitespace-nowrap" data-tab="simulador">
-          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          4. Simulador de Niveles & Decisiones
+        <button onclick="switchTab('flashcards')" id="tab-flashcards" class="nav-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          <i class="fa-solid fa-layer-group"></i> <span>Flashcards Mnemotécnicas</span>
         </button>
-
-        <button onclick="switchTab('flashcards')" class="tab-btn px-3 py-2 text-xs sm:text-sm font-medium rounded-md transition text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 flex items-center gap-2 whitespace-nowrap" data-tab="flashcards">
-          <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-          5. Flashcards de Examen CAEN
+        <button onclick="switchTab('tactico')" id="tab-tactico" class="nav-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          <i class="fa-solid fa-map-location-dot"></i> <span>Simulador Táctico 24/7</span>
+        </button>
+        <button onclick="switchTab('glosario')" id="tab-glosario" class="nav-btn flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          <i class="fa-solid fa-scale-balanced"></i> <span>Normativa & Doctrina</span>
         </button>
       </nav>
     </div>
   </header>
 
-  <!-- ================= CONTENIDO PRINCIPAL ================= -->
-  <main class="flex-1 overflow-y-auto grid-bg p-4 sm:p-6 lg:p-8">
-    <div class="max-w-7xl mx-auto space-y-8">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-      <!-- ================= PESTAÑA 1: REPASO INTEGRAL DEL CURSO ================= -->
-      <section id="tab-resumen" class="space-y-6">
-        
-        <!-- Hero Banner del Repaso -->
-        <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-          <div class="absolute right-0 top-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="relative z-10">
-            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-sky-950/80 border border-sky-700/50 text-sky-300 text-xs font-mono uppercase mb-3">
-              <span>SÍNTESIS ACADÉMICA MAESTRÍA GRD</span>
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Arquitectura, Marco Normativo y Operatividad del COE</h2>
-            <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-4xl leading-relaxed">
-              Consolidado doctrinal de las <strong class="text-sky-300">Unidades I y II</strong>: Ley N° 29664 (SINAGERD), Marco de Sendai 2015-2030, Resolución Ministerial N° 258-2021-PCM, Red Nacional de Comunicaciones y Ficha de Capacidad Operativa INDECI.
-            </p>
+    <!-- Notificación emergente accesible (reemplazo estricto de alert) -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 border border-amber-500/50 text-white px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3">
+      <i id="toastIcon" class="fa-solid fa-circle-check text-amber-400 text-xl"></i>
+      <div>
+        <p id="toastTitle" class="text-xs font-bold text-amber-300 uppercase tracking-wider">Notificación</p>
+        <p id="toastMessage" class="text-sm text-slate-200">Mensaje de prueba</p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 1: MÓDULOS DE ESTUDIO (Sustentación Teórica y Hallazgos) -->
+    <div id="section-resumen" class="tab-content space-y-6">
+
+      <!-- Hero Banner del Estudio -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-red-950/70 to-slate-900 border border-red-900/40 p-6 sm:p-8 shadow-xl">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-400/10 text-amber-400 border border-amber-400/30">
+            <i class="fa-solid fa-award"></i> VIII Maestría en Gestión del Riesgo de Desastres - CAEN
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            Identificación y Medición de la Capacidad Operativa y Funcional del COED La Molina
+          </h2>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Evaluación integral basada en los cuatro componentes normativos de la <strong>R.M. N° 059-2015-PCM</strong> y la <strong>R.M. N° 258-2021-PCM</strong>, levantada tras la visita técnica <em class="text-amber-200">in situ</em> (agosto de 2026) y el análisis de la red interinstitucional del SINAGERD en Lima Este.
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2 text-xs">
+            <span class="bg-slate-800/90 text-slate-300 px-3 py-1 rounded-md border border-slate-700"><i class="fa-solid fa-user-tie text-amber-400 mr-1"></i> Docente: Mg. Carlos Alberto Quispe Tineo</span>
+            <span class="bg-slate-800/90 text-slate-300 px-3 py-1 rounded-md border border-slate-700"><i class="fa-solid fa-user-group text-sky-400 mr-1"></i> Grupo 01: 7 Oficiales y Maestrandos</span>
+            <span class="bg-emerald-950/60 text-emerald-300 px-3 py-1 rounded-md border border-emerald-800/40"><i class="fa-solid fa-chart-line mr-1"></i> Madurez: Alto-Medio</span>
           </div>
         </div>
-
-        <!-- Grid de 4 Pilares Fundamentales -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          
-          <!-- Pilar 1 -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 hover:border-sky-500/50 transition shadow-sm">
-            <div class="w-10 h-10 rounded-lg bg-sky-950 flex items-center justify-center text-sky-400 mb-3 border border-sky-800/40">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-            </div>
-            <h3 class="text-base font-bold text-white mb-1">1. Marco Normativo</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              <strong>RM N° 258-2021-PCM</strong> (Lineamientos COE), <strong>Ley 29664</strong> (SINAGERD), <strong>DS 048-2011-PCM</strong> y PNGRD 2050. Establecen el COE como órgano de enlace y coordinación permanente 24/7.
-            </p>
-          </div>
-
-          <!-- Pilar 2 -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 hover:border-amber-500/50 transition shadow-sm">
-            <div class="w-10 h-10 rounded-lg bg-amber-950 flex items-center justify-center text-amber-400 mb-3 border border-amber-800/40">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            </div>
-            <h3 class="text-base font-bold text-white mb-1">2. Tipología y Clasificación</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              <strong>COEN</strong> (Nacional), <strong>COES</strong> (Sectorial), <strong>COER</strong> (Regional), <strong>COEP</strong> (Provincial) y <strong>COEL/COED</strong> (Distrital). Categorías <strong>Tipo A, B y C</strong> según densidad demográfica y criticidad de riesgo.
-            </p>
-          </div>
-
-          <!-- Pilar 3 -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 hover:border-emerald-500/50 transition shadow-sm">
-            <div class="w-10 h-10 rounded-lg bg-emerald-950 flex items-center justify-center text-emerald-400 mb-3 border border-emerald-800/40">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
-            </div>
-            <h3 class="text-base font-bold text-white mb-1">3. Comunicaciones</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Red de redundancia obligatoria: <strong>HF (3-30 MHz)</strong> para enlace estratégico interprovincial/nacional, <strong>VHF (136-174 MHz)</strong> para primera respuesta local, telefonía satelital (Iridium/Inmarsat) e internet dedicado.
-            </p>
-          </div>
-
-          <!-- Pilar 4 -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 hover:border-indigo-500/50 transition shadow-sm">
-            <div class="w-10 h-10 rounded-lg bg-indigo-950 flex items-center justify-center text-indigo-400 mb-3 border border-indigo-800/40">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-            </div>
-            <h3 class="text-base font-bold text-white mb-1">4. Evaluación de Capacidad</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Ficha Técnica INDECI dividida en 4 Componentes: <strong>I. Institucionalización</strong>, <strong>II. Implementación</strong>, <strong>III. Operatividad y Funcionamiento</strong>, <strong>IV. Recursos Humanos</strong> con certificación EDAN/SINPAD.
-            </p>
-          </div>
-
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-amber-400 text-9xl pointer-events-none hidden md:block">
+          <i class="fa-solid fa-satellite-dish"></i>
         </div>
+      </div>
 
-        <!-- Módulos Funcionales del COE y Ciclo de la Información (Diagrama Interactivo) -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <div>
-              <span class="text-xs font-mono text-sky-400 uppercase tracking-wider">Estructura Organizacional según RM N° 258-2021-PCM</span>
-              <h3 class="text-xl font-bold text-white">Anatomía Funcional de los Módulos del COE</h3>
-            </div>
-            <div class="text-xs text-slate-400 bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700">
-              <span class="text-amber-400 font-bold">Importante:</span> El COE NO ejecuta acciones de campo; <span class="text-slate-200">coordina, procesa, administra y asesora la toma de decisiones</span>.
-            </div>
+      <!-- Selector interactivo de los 4 Componentes Normativos -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <button onclick="showComponentDetail('comp1')" id="btn-comp1" class="comp-btn p-4 rounded-xl border bg-slate-900 border-amber-500/40 text-left transition hover:border-amber-400 shadow-md">
+          <div class="flex items-center justify-between mb-2">
+            <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">I</span>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-bold">Nivel CA</span>
           </div>
+          <h3 class="font-bold text-sm text-white">Institucionalización</h3>
+          <p class="text-xs text-slate-400 mt-1 line-clamp-2">ROF municipal, jerarquía y brecha de formalización del POE.</p>
+        </button>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            
-            <!-- Coordinador -->
-            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-sky-500 transition">
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-sky-950 text-sky-300 border border-sky-800">Liderazgo</span>
-                <span class="text-xs text-slate-500 font-mono">MOD-01</span>
-              </div>
-              <h4 class="font-bold text-white text-sm">Coordinador del COE</h4>
-              <p class="text-xs text-slate-400 mt-1">
-                Responsable general del funcionamiento continuo. Asesora directamente a la máxima autoridad (Alcalde / Gobernador / Ministro) y al Grupo de Trabajo de GRD (GT-GRD).
-              </p>
-              <ul class="mt-2 text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-                <li>Valida y firma los reportes oficiales (SINPAD).</li>
-                <li>Articula con el nivel superior (COEM / COER / COEN).</li>
-              </ul>
-            </div>
-
-            <!-- Módulo Evaluador -->
-            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-500 transition">
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-amber-950 text-amber-300 border border-amber-800">Análisis y Datos</span>
-                <span class="text-xs text-slate-500 font-mono">MOD-02</span>
-              </div>
-              <h4 class="font-bold text-white text-sm">Módulo Evaluador</h4>
-              <p class="text-xs text-slate-400 mt-1">
-                Monitorea peligros, acopia, consolida, procesa y analiza la información cuantitativa y cualitativa de daños (EDAN) y necesidades.
-              </p>
-              <ul class="mt-2 text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-                <li>Genera: Reporte Preliminar, Complementario y de Situación.</li>
-                <li>Manejo experto del SINPAD y visualizadores SIGRID.</li>
-              </ul>
-            </div>
-
-            <!-- Módulo de Operaciones -->
-            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-red-500 transition">
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-red-950 text-red-300 border border-red-800">Primera Respuesta</span>
-                <span class="text-xs text-slate-500 font-mono">MOD-03</span>
-              </div>
-              <h4 class="font-bold text-white text-sm">Módulo de Operaciones</h4>
-              <p class="text-xs text-slate-400 mt-1">
-                Coordina las acciones de atención táctica con las entidades de primera respuesta: CGBVP, PNP, Fuerzas Armadas, SAMU/Salud y Serenazgo.
-              </p>
-              <ul class="mt-2 text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-                <li>Seguimiento al Sistema de Comando de Incidentes (SCI).</li>
-                <li>Monitoreo de rescate, evacuación y control del orden.</li>
-              </ul>
-            </div>
-
-            <!-- Módulo de Logística -->
-            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-emerald-500 transition">
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Recursos y BAH</span>
-                <span class="text-xs text-slate-500 font-mono">MOD-04</span>
-              </div>
-              <h4 class="font-bold text-white text-sm">Módulo de Logística</h4>
-              <p class="text-xs text-slate-400 mt-1">
-                Gestiona los Bienes de Ayuda Humanitaria (BAH) - techo, abrigo, alimentos, herramientas -, almacenes distritales, transporte y maquinaria pesada.
-              </p>
-              <ul class="mt-2 text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-                <li>Control de stock crítico de almacén de avanzada.</li>
-                <li>Registro de donaciones y requerimientos a niveles superiores.</li>
-              </ul>
-            </div>
-
-            <!-- Módulo de Comunicaciones -->
-            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-cyan-500 transition">
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Telecomunicaciones</span>
-                <span class="text-xs text-slate-500 font-mono">MOD-05</span>
-              </div>
-              <h4 class="font-bold text-white text-sm">Módulo de Comunicaciones</h4>
-              <p class="text-xs text-slate-400 mt-1">
-                Garantiza la operatividad ininterrumpida de los enlaces de radio, satelitales, redes de datos, telefonía IP y bitácoras de transmisión.
-              </p>
-              <ul class="mt-2 text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-                <li>Pruebas de enlace de radio HF (nacional) y VHF (local).</li>
-                <li>Mantenimiento preventivo de baterías, UPS y antenas.</li>
-              </ul>
-            </div>
-
-            <!-- Módulo de Prensa / RRPP e Intersectorial -->
-            <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-purple-500 transition">
-              <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-purple-950 text-purple-300 border border-purple-800">Vocería y Enlace</span>
-                <span class="text-xs text-slate-500 font-mono">MOD-06</span>
-              </div>
-              <h4 class="font-bold text-white text-sm">Módulo de Prensa / Enlace</h4>
-              <p class="text-xs text-slate-400 mt-1">
-                Canaliza la información oficial a la población y medios para evitar desinformación y pánico. Enlace con sectores (Salud, Educación, Vivienda).
-              </p>
-              <ul class="mt-2 text-[11px] text-slate-300 space-y-1 list-disc list-inside">
-                <li>Emisión de boletines y comunicados oficiales.</li>
-                <li>Monitoreo de redes sociales y combate a noticias falsas.</li>
-              </ul>
-            </div>
-
+        <button onclick="showComponentDetail('comp2')" id="btn-comp2" class="comp-btn p-4 rounded-xl border bg-slate-900/60 border-slate-800 text-left transition hover:border-slate-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm">II</span>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-bold">Nivel CA/CM</span>
           </div>
-        </div>
+          <h3 class="font-bold text-sm text-white">Implementación</h3>
+          <p class="text-xs text-slate-400 mt-1 line-clamp-2">Sede semicircular, 3 módulos, RPAS drones, flota y radios.</p>
+        </button>
 
-        <!-- Matriz de Niveles de Emergencia & Marco de Sendai -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
-          <!-- Niveles de Emergencia del SINAGERD -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2 mb-3">
-              <span class="w-3 h-3 rounded-full bg-red-500"></span>
-              Niveles de Emergencia y Capacidad de Respuesta
+        <button onclick="showComponentDetail('comp3')" id="btn-comp3" class="comp-btn p-4 rounded-xl border bg-slate-900/60 border-slate-800 text-left transition hover:border-slate-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm">III</span>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-bold">Nivel CA</span>
+          </div>
+          <h3 class="font-bold text-sm text-white">Operatividad 24/7</h3>
+          <p class="text-xs text-slate-400 mt-1 line-clamp-2">8 productos técnicos normados y articulación NODO 8.</p>
+        </button>
+
+        <button onclick="showComponentDetail('comp4')" id="btn-comp4" class="comp-btn p-4 rounded-xl border bg-slate-900/60 border-slate-800 text-left transition hover:border-slate-600">
+          <div class="flex items-center justify-between mb-2">
+            <span class="w-8 h-8 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center font-bold text-sm">IV</span>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-amber-900/60 text-amber-300 font-bold">Nivel CM (Alerta)</span>
+          </div>
+          <h3 class="font-bold text-sm text-white">Recursos Humanos</h3>
+          <p class="text-xs text-slate-400 mt-1 line-clamp-2">10 operadores, 2 turnos y riesgo de saturación en Mw ≥ 8.5.</p>
+        </button>
+      </div>
+
+      <!-- Detalle Dinámico de Componente Seleccionado -->
+      <div id="comp-detail-box" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl transition-all duration-300">
+        <!-- Renderizado dinámicamente vía Javascript por showComponentDetail() -->
+      </div>
+
+      <!-- Organigrama y Flujograma Doctrinal de Mando -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Estructura de Mando COED -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <i class="fa-solid fa-sitemap text-amber-400"></i> Cadena de Mando y Módulos Normados
             </h3>
-            <div class="space-y-2.5 text-xs">
-              <div class="p-2.5 rounded-lg bg-slate-950 border-l-4 border-emerald-500 flex justify-between items-center">
-                <div>
-                  <span class="font-bold text-emerald-400 font-mono">NIVEL 1: Distrital</span>
-                  <p class="text-slate-400">Afectación local, capacidad de respuesta del Gobierno Local (Distrito) suficiente.</p>
-                </div>
-                <span class="px-2 py-1 bg-emerald-950 text-emerald-300 rounded font-mono text-[10px]">COED La Molina</span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-slate-950 border-l-4 border-lime-500 flex justify-between items-center">
-                <div>
-                  <span class="font-bold text-lime-400 font-mono">NIVEL 2: Provincial</span>
-                  <p class="text-slate-400">Supera capacidad distrital o afecta varios distritos; interviene la Prov. (MML).</p>
-                </div>
-                <span class="px-2 py-1 bg-lime-950 text-lime-300 rounded font-mono text-[10px]">COEP / COEM</span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-slate-950 border-l-4 border-amber-500 flex justify-between items-center">
-                <div>
-                  <span class="font-bold text-amber-400 font-mono">NIVEL 3: Regional</span>
-                  <p class="text-slate-400">Supera capacidad provincial; interviene Gobierno Regional con sus almacenes y recursos.</p>
-                </div>
-                <span class="px-2 py-1 bg-amber-950 text-amber-300 rounded font-mono text-[10px]">COER</span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-slate-950 border-l-4 border-orange-500 flex justify-between items-center">
-                <div>
-                  <span class="font-bold text-orange-400 font-mono">NIVEL 4: Nacional (Intervención)</span>
-                  <p class="text-slate-400">Estado de Emergencia; INDECI asume coordinación y conducción del apoyo nacional.</p>
-                </div>
-                <span class="px-2 py-1 bg-orange-950 text-orange-300 rounded font-mono text-[10px]">INDECI / COEN</span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-slate-950 border-l-4 border-red-600 flex justify-between items-center">
-                <div>
-                  <span class="font-bold text-red-400 font-mono">NIVEL 5: Gran Magnitud (Catástrofe)</span>
-                  <p class="text-slate-400">Impacto crítico nacional; PCM / Presidencia de la República conduce; apoyo internacional.</p>
-                </div>
-                <span class="px-2 py-1 bg-red-950 text-red-300 rounded font-mono text-[10px]">PCM / COEN</span>
-              </div>
-            </div>
+            <span class="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded">R.M. N° 258-2021-PCM</span>
           </div>
-
-          <!-- Marco de Sendai y Fórmulas Clave -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
-            <div>
-              <h3 class="text-lg font-bold text-white flex items-center gap-2 mb-3">
-                <span class="w-3 h-3 rounded-full bg-sky-500"></span>
-                Marco de Sendai 2015-2030 & Enlace con el COE
-              </h3>
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
-                  <span class="text-sky-400 font-bold block mb-1">Prioridad 1:</span>
-                  <span class="text-slate-300">Comprender el riesgo de desastres (Mapeo de peligros en La Molina, EDAN).</span>
-                </div>
-                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
-                  <span class="text-sky-400 font-bold block mb-1">Prioridad 2:</span>
-                  <span class="text-slate-300">Fortalecer la gobernanza del riesgo (Institucionalización y ROF del COED).</span>
-                </div>
-                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
-                  <span class="text-sky-400 font-bold block mb-1">Prioridad 3:</span>
-                  <span class="text-slate-300">Invertir en resiliencia (Equipamiento de telecomunicaciones y redundancia energética).</span>
-                </div>
-                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800">
-                  <span class="text-sky-400 font-bold block mb-1">Prioridad 4:</span>
-                  <span class="text-slate-300">Aumentar la preparación para respuesta eficaz y reconstruir mejor (COE activo 24/7).</span>
-                </div>
-              </div>
+          
+          <div class="space-y-4 text-xs font-sans">
+            <!-- Nivel 1: Jefe -->
+            <div class="p-3 bg-red-950/60 border border-red-800/60 rounded-xl text-center">
+              <p class="text-[11px] font-bold tracking-wider uppercase text-amber-400">Jefe del COED (Nivel Estratégico)</p>
+              <p class="text-sm font-extrabold text-white">Alcalde de la Municipalidad de La Molina</p>
+              <p class="text-[11px] text-slate-300 mt-1">Preside el Grupo de Trabajo de la GRD (GTGRD) y la Plataforma de Defensa Civil.</p>
             </div>
 
-            <div class="mt-4 p-3 bg-slate-950/90 rounded-xl border border-sky-900/40 text-xs">
-              <span class="text-sky-300 font-mono font-bold block mb-1">Ecuación Fundamental del Riesgo:</span>
-              <div class="text-center font-mono py-1 text-slate-200 bg-slate-900 rounded border border-slate-800">
-                <span class="text-amber-400 font-bold">Riesgo (R)</span> = <span class="text-red-400">Peligro (P)</span> × <span class="text-orange-400">Vulnerabilidad (V)</span> / <span class="text-emerald-400">Capacidad (C)</span>
-              </div>
-              <p class="text-[11px] text-slate-400 mt-1">El COE es el corazón que amplifica la <span class="text-emerald-300">Capacidad (C)</span> reactiva y de toma de decisiones del distrito.</p>
+            <div class="flex justify-center text-slate-500"><i class="fa-solid fa-arrow-down text-base"></i></div>
+
+            <!-- Nivel 2: Coordinador -->
+            <div class="p-3 bg-slate-800/90 border border-slate-700 rounded-xl text-center">
+              <p class="text-[11px] font-bold tracking-wider uppercase text-sky-400">Coordinador Técnico</p>
+              <p class="text-sm font-bold text-white">Subgerente de Gestión del Riesgo de Desastres</p>
+              <p class="text-[11px] text-slate-400">Articula la toma de decisiones con el soporte técnico y el SINAGERD.</p>
             </div>
 
-          </div>
+            <div class="flex justify-center text-slate-500"><i class="fa-solid fa-arrow-down text-base"></i></div>
 
-        </div>
-
-      </section>
-
-      <!-- ================= PESTAÑA 2: INSTRUCTIVO VISITA TÉCNICA COED LA MOLINA ================= -->
-      <section id="tab-visita" class="hidden space-y-6">
-        
-        <!-- Header Visita -->
-        <div class="bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-800/40 rounded-2xl p-6 relative overflow-hidden">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-amber-950 text-amber-300 text-xs font-mono mb-2 border border-amber-700/60">
-                <span>MISIÓN TÉCNICA DE CAMPO</span>
+            <!-- Nivel 3: 3 Módulos Base -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+              <div class="p-3 bg-blue-950/40 border border-blue-800/40 rounded-xl text-center">
+                <i class="fa-solid fa-clipboard-check text-blue-400 text-lg mb-1"></i>
+                <h4 class="font-bold text-white text-xs">Módulo Evaluador</h4>
+                <p class="text-[10px] text-slate-300 mt-1">Análisis EDAN, validación cartográfica GIS y registro en plataforma SINPAD.</p>
               </div>
-              <h2 class="text-2xl font-bold text-white">Guía de Inspección Táctica: COED de La Molina</h2>
-              <p class="text-slate-300 text-xs sm:text-sm mt-1 max-w-3xl">
-                Distrito de Lima Este vulnerable a sismo severo (zona de amplificación y laderas), flujo de detritos / huaicos (quebradas Rinconada, Viña Alta, El Sol) e incendios forestales/urbanos con estrangulamiento vial (Cerro Centinela, Av. Javier Prado).
-              </p>
-            </div>
-            <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-xs font-mono space-y-1">
-              <div class="text-slate-400">Jurisdicción: <span class="text-white font-bold">La Molina (Lima)</span></div>
-              <div class="text-slate-400">Tipo COE: <span class="text-amber-400 font-bold">COED / COEL (Distrital)</span></div>
-              <div class="text-slate-400">Enlace Superior: <span class="text-sky-400 font-bold">COEM Lima / COEN</span></div>
+              <div class="p-3 bg-amber-950/40 border border-amber-800/40 rounded-xl text-center">
+                <i class="fa-solid fa-gears text-amber-400 text-lg mb-1"></i>
+                <h4 class="font-bold text-white text-xs">Módulo Operaciones</h4>
+                <p class="text-[10px] text-slate-300 mt-1">Seguimiento en campo, despacho de recursos logísticos y comando en escena.</p>
+              </div>
+              <div class="p-3 bg-emerald-950/40 border border-emerald-800/40 rounded-xl text-center">
+                <i class="fa-solid fa-walkie-talkie text-emerald-400 text-lg mb-1"></i>
+                <h4 class="font-bold text-white text-xs">Módulo Comunicaciones</h4>
+                <p class="text-[10px] text-slate-300 mt-1">Radios VHF/UHF Hytera/Excera, enlace NODO 8, Serenazgo, PNP, Bomberos y prensa.</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Las 3 Columnas Maestras: QUÉ VER, QUÉ HACER, QUÉ PREGUNTAR -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- 8 Productos Técnicos Oficiales del COED -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <i class="fa-solid fa-file-invoice text-emerald-400"></i> Cartera Oficial de los 8 Productos Técnicos
+            </h3>
+            <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800/50 px-2 py-0.5 rounded font-mono">Corte 2026</span>
+          </div>
 
-          <!-- Columna 1: QUÉ VER (Inspección Visual de Instalaciones) -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-              <div class="w-9 h-9 rounded-lg bg-sky-950 text-sky-400 flex items-center justify-center font-bold">
-                1
-              </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">01</span>
               <div>
-                <h3 class="font-bold text-white text-base">¿QUÉ OBSERVAR / VER?</h3>
-                <p class="text-xs text-slate-400">Infraestructura, hardware y ambientes</p>
+                <strong class="text-slate-200 block">Boletín Informativo de Peligros</strong>
+                <span class="text-slate-400 text-[11px]">Pronósticos SENAMHI, IGP y escenarios a corto/mediano plazo.</span>
               </div>
             </div>
-
-            <div class="space-y-3 text-xs">
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-sky-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                  A. Sala de Operaciones vs. Sala de Crisis
-                </span>
-                <p class="text-slate-300">
-                  Verificar si existe separación física entre la <strong>Sala de Operaciones</strong> (módulos técnicos procesando datos 24/7) y la <strong>Sala de Crisis</strong> (donde se reúne el Alcalde y el Grupo de Trabajo de GRD para tomar decisiones políticas).
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-amber-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
-                  B. Estación de Telecomunicaciones
-                </span>
-                <p class="text-slate-300">
-                  Observar el banco de radios: transceptor <strong>HF</strong> con sintonizador automático de antena (acoplador), radio base <strong>VHF/UHF</strong>, antenas dipolo/torre arriostrada, radio satelital y teléfonos satelitales.
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-emerald-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                  C. Continuidad de Energía (UPS & Grupo)
-                </span>
-                <p class="text-slate-300">
-                  Verificar tablero de transferencia automática (TTA), generador eléctrico a combustible y autonomía de baterías UPS ante corte masivo de fluido eléctrico.
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-purple-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                  D. Almacén de Bienes de Ayuda (BAH)
-                </span>
-                <p class="text-slate-300">
-                  Inspeccionar el almacén de avanzada: parihuelas, rotación de alimentos, kits de techo/calaminas, carpas, frazadas, palas/picos y registro en software.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Columna 2: QUÉ HACER (Dinámica y Verificación Activa) -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-              <div class="w-9 h-9 rounded-lg bg-amber-950 text-amber-400 flex items-center justify-center font-bold">
-                2
-              </div>
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">02</span>
               <div>
-                <h3 class="font-bold text-white text-base">¿QUÉ HACER / AUDITAR?</h3>
-                <p class="text-xs text-slate-400">Verificaciones prácticas en tiempo real</p>
+                <strong class="text-slate-200 block">Reporte de Monitoreo</strong>
+                <span class="text-slate-400 text-[11px]">Bitácora consolidada de novedades e incidentes urbanos.</span>
               </div>
             </div>
-
-            <div class="space-y-3 text-xs">
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-amber-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  Paso 1: Auditar Libro de Ocurrencias
-                </span>
-                <p class="text-slate-300">
-                  Solicitar la bitácora física o digital de guardia. Constatar si registran avisos meteorológicos (SENAMHI), reportes sísmicos (IGP) y novedades cada turno.
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-sky-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  Paso 2: Revisar Registro en SINPAD
-                </span>
-                <p class="text-slate-300">
-                  Pedir al evaluador que muestre el ingreso de una emergencia simulada o reciente en la plataforma SINPAD. Comprobar códigos de evento y tiempos de reporte.
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-emerald-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                  Paso 3: Probar Enlace Radial
-                </span>
-                <p class="text-slate-300">
-                  Pedir demostración de escucha en canal VHF de serenazgo/bomberos y verificar si mantienen frecuencia asignada de enlace con el COEM de Lima Metropolitana.
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-purple-300 flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                  Paso 4: Aplicar la Ficha Técnica
-                </span>
-                <p class="text-slate-300">
-                  Completar la Ficha Técnica de Seguimiento (Componentes I, II, III y IV) en la pestaña 3 de esta plataforma para calificar la capacidad del COED.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Columna 3: QUÉ PREGUNTAR (Cuestionario de Posgrado CAEN) -->
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
-              <div class="w-9 h-9 rounded-lg bg-red-950 text-red-400 flex items-center justify-center font-bold">
-                3
-              </div>
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">03</span>
               <div>
-                <h3 class="font-bold text-white text-base">¿QUÉ PREGUNTAR?</h3>
-                <p class="text-xs text-slate-400">Preguntas de rigor técnico y estratégico</p>
+                <strong class="text-slate-200 block">Reporte de Situación Diaria</strong>
+                <span class="text-slate-400 text-[11px]">Operatividad y registro diario de enlace radial con NODO 8 e INDECI.</span>
               </div>
             </div>
-
-            <div class="space-y-3 text-xs">
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-red-400">1. Institucionalización & ROF:</span>
-                <p class="text-slate-300">
-                  <em>"¿El COED cuenta con Ordenanza Municipal de creación y está incorporado formalmente en el ROF/Organigrama de la Municipalidad de La Molina o depende de Seguridad Ciudadana/Defensa Civil?"</em>
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-amber-400">2. Flujo de Información y Decisiones:</span>
-                <p class="text-slate-300">
-                  <em>"Ante un sismo Mw 8.8 en Lima o huaico en Rinconada, ¿cuál es el tiempo meta de emisión del Reporte Preliminar y quién activa la Sala de Crisis con el Alcalde?"</em>
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-sky-400">3. Redundancia de Telecomunicaciones:</span>
-                <p class="text-slate-300">
-                  <em>"Si colapsan las antenas de telefonía celular comercial en el distrito, ¿cuál es la frecuencia HF/VHF primaria y secundaria para enlazar con el COEM de Lima y el COEN?"</em>
-                </p>
-              </div>
-
-              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                <span class="font-bold text-emerald-400">4. Cuadrillas EDAN y Recursos Humanos:</span>
-                <p class="text-slate-300">
-                  <em>"¿Cuántos evaluadores acreditados en EDAN Perú tiene el distrito en nómina activa para levantamiento en campo en las zonas altas y quebradas?"</em>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Matriz de Vulnerabilidades Específicas de La Molina -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            Factores Críticos de Riesgo a Evaluar en La Molina
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-amber-300 mb-1">Quebradas & Flujo de Detritos (Huaicos)</h4>
-              <p class="text-slate-400 leading-relaxed">
-                Cuencas de Rinconada del Lago, Viña Alta, El Sol y Musa. Evaluar si el COE dispone de Sistema de Alerta Temprana (SAT) comunal y sensores de nivel pluviométrico.
-              </p>
-            </div>
-            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-red-300 mb-1">Cuellos de Botella Vial & Aislamiento</h4>
-              <p class="text-slate-400 leading-relaxed">
-                Vías de acceso limitadas (Av. Javier Prado, Cerro Centinela, Av. Raúl Ferrero). Si colapsan por deslizamientos, ¿cómo abastece el COE los BAH y evacúa heridos?
-              </p>
-            </div>
-            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-sky-300 mb-1">Sismo Severo y Laderas Inestables</h4>
-              <p class="text-slate-400 leading-relaxed">
-                Asentamientos en pendientes pronunciadas (Viña Alta, Manchay limítrofe). Evaluar tiempo de respuesta de los equipos de rescate del módulo de operaciones.
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- ================= PESTAÑA 3: EVALUADOR EN VIVO (FICHA TÉCNICA INDECI) ================= -->
-      <section id="tab-evaluador" class="hidden space-y-6">
-        
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-            <div>
-              <span class="text-xs font-mono text-emerald-400 uppercase">HERRAMIENTA DE AUDITORÍA EN CAMPO</span>
-              <h2 class="text-2xl font-bold text-white">Ficha de Evaluación de Capacidad Operativa (COED)</h2>
-              <p class="text-xs text-slate-400 mt-1">Basada en la metodología INDECI - COEN / RM N° 258-2021-PCM.</p>
-            </div>
-
-            <!-- Score Summary Card -->
-            <div class="flex items-center gap-4 bg-slate-950 px-4 py-2.5 rounded-xl border border-slate-800">
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">04</span>
               <div>
-                <div class="text-[10px] text-slate-400 uppercase font-mono">Puntaje Total</div>
-                <div class="text-2xl font-black text-emerald-400 font-mono" id="scoreDisplay">0 / 100</div>
+                <strong class="text-slate-200 block">Alertas, Alarmas y Notas</strong>
+                <span class="text-slate-400 text-[11px]">Avisos preventivos inmediatos dirigidos a la población y medios.</span>
               </div>
-              <div class="h-8 w-px bg-slate-800"></div>
+            </div>
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">05</span>
               <div>
-                <div class="text-[10px] text-slate-400 uppercase font-mono">Calificación</div>
-                <div class="text-sm font-bold text-white" id="ratingDisplay">NO EVALUADO</div>
+                <strong class="text-slate-200 block">Directorio Miembros SINAGERD</strong>
+                <span class="text-slate-400 text-[11px]">Autoridades, GTGRD, Plataforma de Defensa Civil y primera respuesta.</span>
               </div>
             </div>
-          </div>
-
-          <!-- Formulario de 4 Componentes -->
-          <form id="evaluationForm" class="mt-6 space-y-6" onchange="calculateScore()">
-            
-            <!-- Componente I: Institucionalización -->
-            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between">
-                <h3 class="font-bold text-sm text-sky-400 flex items-center gap-2">
-                  <span class="w-6 h-6 rounded bg-sky-950 text-sky-300 flex items-center justify-center text-xs">I</span>
-                  Componente I: Institucionalización (Peso: 25%)
-                </h3>
-                <span class="text-xs font-mono text-slate-400" id="comp1Score">0 / 25 pts</span>
-              </div>
-
-              <div class="space-y-2 text-xs">
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c1_1" value="10" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-sky-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">1.1 Norma de Creación e Inclusión en ROF</span>
-                    <p class="text-slate-400">¿El COED está formalmente institucionalizado mediante Ordenanza/Resolución y figura en el Reglamento de Organización y Funciones (ROF)?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c1_2" value="8" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-sky-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">1.2 Manual de Organización y Funcionamiento (MOF / Manual COE)</span>
-                    <p class="text-slate-400">¿Cuenta con documento técnico-normativo vigente aprobado que regule procedimientos y protocolos de activación?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c1_3" value="7" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-sky-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">1.3 Presupuesto Asignado (PP 0068)</span>
-                    <p class="text-slate-400">¿El COE ejecuta fondos asignados en el Programa Presupuestal 0068 (Reducción de la Vulnerabilidad y Atención de Emergencias)?</p>
-                  </div>
-                </label>
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">06</span>
+              <div>
+                <strong class="text-slate-200 block">Seguimiento en SINPAD</strong>
+                <span class="text-slate-400 text-[11px]">Fichas oficiales de daños y necesidades subidas al sistema nacional.</span>
               </div>
             </div>
-
-            <!-- Componente II: Implementación -->
-            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between">
-                <h3 class="font-bold text-sm text-amber-400 flex items-center gap-2">
-                  <span class="w-6 h-6 rounded bg-amber-950 text-amber-300 flex items-center justify-center text-xs">II</span>
-                  Componente II: Implementación de Infraestructura & Equipos (Peso: 25%)
-                </h3>
-                <span class="text-xs font-mono text-slate-400" id="comp2Score">0 / 25 pts</span>
-              </div>
-
-              <div class="space-y-2 text-xs">
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c2_1" value="7" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-amber-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">2.1 Ambientes Físicos (Sala de Operaciones & Sala de Crisis)</span>
-                    <p class="text-slate-400">¿Dispone de ambientes adecuados, climatizados, mobiliario ergonómico y espacio de toma de decisiones?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c2_2" value="7" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-amber-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">2.2 Hardware, Videowall / Monitores & Cómputo</span>
-                    <p class="text-slate-400">¿Cuenta con computadoras para cada módulo, pantallas de visualización de mapas/cámaras y plotter/impresoras?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c2_3" value="6" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-amber-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">2.3 Respaldo Eléctrico Autónomo (UPS + Generador)</span>
-                    <p class="text-slate-400">¿Dispone de Grupo Electrógeno con combustible garantizado y sistema UPS que impida caída de sistemas?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c2_4" value="5" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-amber-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">2.4 Almacén de Bienes de Ayuda Humanitaria (BAH)</span>
-                    <p class="text-slate-400">¿Almacén de avanzada con stock activo de abrigo, techo, alimentos y herramientas según directivas INDECI?</p>
-                  </div>
-                </label>
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">07</span>
+              <div>
+                <strong class="text-slate-200 block">Inventario de BAH y Recursos</strong>
+                <span class="text-slate-400 text-[11px]">Bienes de Ayuda Humanitaria y stock en almacén de vanguardia.</span>
               </div>
             </div>
-
-            <!-- Componente III: Operatividad y Funcionamiento -->
-            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between">
-                <h3 class="font-bold text-sm text-emerald-400 flex items-center gap-2">
-                  <span class="w-6 h-6 rounded bg-emerald-950 text-emerald-300 flex items-center justify-center text-xs">III</span>
-                  Componente III: Operatividad y Funcionamiento (Peso: 25%)
-                </h3>
-                <span class="text-xs font-mono text-slate-400" id="comp3Score">0 / 25 pts</span>
-              </div>
-
-              <div class="space-y-2 text-xs">
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c3_1" value="8" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-emerald-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">3.1 Monitoreo Continuo 24/7 & Libro de Ocurrencias</span>
-                    <p class="text-slate-400">¿Mantiene guardia permanente con relevos documentados en bitácora y monitoreo de avisos SENAMHI/IGP?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c3_2" value="9" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-emerald-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">3.2 Manejo del SINPAD y Emisión de Reportes</span>
-                    <p class="text-slate-400">¿Uso activo y fluido de la plataforma SINPAD, generando Reportes Preliminares y Complementarios a tiempo?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c3_3" value="8" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-emerald-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">3.3 Red de Radio HF / VHF / Satelital Operativa</span>
-                    <p class="text-slate-400">¿Equipos de radiocomunicación HF/VHF encendidos y con pruebas de enlace periódicas con COEM y COEN?</p>
-                  </div>
-                </label>
+            <div class="p-2.5 bg-slate-800/60 border border-slate-700/70 rounded-lg flex items-start gap-2.5">
+              <span class="font-bold text-amber-400 text-sm">08</span>
+              <div>
+                <strong class="text-slate-200 block">Reporte Mensual de Actividades</strong>
+                <span class="text-slate-400 text-[11px]">Estadística consolidada para toma de decisiones de la Gerencia Municipal.</span>
               </div>
             </div>
-
-            <!-- Componente IV: Recursos Humanos -->
-            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between">
-                <h3 class="font-bold text-sm text-indigo-400 flex items-center gap-2">
-                  <span class="w-6 h-6 rounded bg-indigo-950 text-indigo-300 flex items-center justify-center text-xs">IV</span>
-                  Componente IV: Recursos Humanos & Capacitación (Peso: 25%)
-                </h3>
-                <span class="text-xs font-mono text-slate-400" id="comp4Score">0 / 25 pts</span>
-              </div>
-
-              <div class="space-y-2 text-xs">
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c4_1" value="9" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">4.1 Personal Evaluador Acreditado en EDAN Perú</span>
-                    <p class="text-slate-400">¿El personal del COE y brigadistas distritales cuentan con curso y acreditación oficial EDAN emitida por INDECI?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c4_2" value="8" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">4.2 Capacitación en SINPAD, SCI y Gestión Reactiva</span>
-                    <p class="text-slate-400">¿El equipo ha recibido capacitaciones en Sistema de Comando de Incidentes, SIGRID y Gestión Reactiva?</p>
-                  </div>
-                </label>
-
-                <label class="flex items-start gap-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 cursor-pointer">
-                  <input type="checkbox" name="c4_3" value="8" class="mt-0.5 rounded bg-slate-800 border-slate-700 text-indigo-600 focus:ring-0">
-                  <div>
-                    <span class="font-bold text-white">4.3 Participación en Simulacros y Briefings del COEN</span>
-                    <p class="text-slate-400">¿El personal participa en los simulacros nacionales y asiste a las asistencias técnicas programadas por INDECI?</p>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-          </form>
-
-          <!-- Diagnóstico Táctico Generado -->
-          <div class="mt-6 p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-2" id="diagnosticBox">
-            <span class="font-bold text-slate-300 font-mono">DIAGNÓSTICO TÉCNICO Y RECOMENDACIÓN:</span>
-            <p class="text-slate-400" id="diagnosticText">
-              Marque los ítems verificados durante la visita para emitir el dictamen técnico de capacidad operativa del COED La Molina.
-            </p>
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ================= PESTAÑA 4: SIMULADOR DE NIVELES & DECISIONES ================= -->
-      <section id="tab-simulador" class="hidden space-y-6">
-        
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <div class="border-b border-slate-800 pb-4 mb-6">
-            <span class="text-xs font-mono text-indigo-400 uppercase">SIMULADOR DE TOMA DE DECISIONES TÁCTICAS</span>
-            <h2 class="text-2xl font-bold text-white">Ejercicio de Escalamiento Operativo: Crisis en La Molina</h2>
-            <p class="text-xs text-slate-400 mt-1">
-              Ponga a prueba su criterio como Coordinador de COE ante eventos críticos en el distrito.
-            </p>
-          </div>
-
-          <!-- Selector de Escenario -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <button onclick="loadScenario('huaico')" class="scenario-btn p-4 rounded-xl bg-slate-950 border border-sky-800/80 hover:border-sky-500 text-left transition" id="scen-huaico">
-              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-950 text-amber-300 border border-amber-800">ESCENARIO A</span>
-              <h3 class="font-bold text-white text-sm mt-2">Huaico de Gran Magnitud en Quebrada Rinconada del Lago</h3>
-              <p class="text-xs text-slate-400 mt-1">Lluvias extraordinarias activan la quebrada, afectando 150 viviendas y bloqueando la Av. Raúl Ferrero.</p>
-            </button>
-
-            <button onclick="loadScenario('sismo')" class="scenario-btn p-4 rounded-xl bg-slate-950 border border-slate-800 hover:border-red-500 text-left transition" id="scen-sismo">
-              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-red-950 text-red-300 border border-red-800">ESCENARIO B</span>
-              <h3 class="font-bold text-white text-sm mt-2">Sismo Magnitud 8.8 Mw frente a la Costa de Lima</h3>
-              <p class="text-xs text-slate-400 mt-1">Colapso del Cerro Centinela, corte total de energía y telefonía móvil, derrumbes en laderas de Musa y Viña Alta.</p>
-            </button>
-          </div>
-
-          <!-- Caja de Desarrollo del Escenario -->
-          <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4" id="scenarioPlayground">
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-white text-base" id="scenarioTitle">Cargando escenario...</h4>
-              <span class="px-2 py-1 rounded bg-slate-900 border border-slate-700 text-slate-300 font-mono text-xs" id="scenarioLevelBadge">Nivel 1</span>
-            </div>
-
-            <p class="text-xs text-slate-300 leading-relaxed" id="scenarioDesc">
-              Seleccione un escenario superior para iniciar la simulación.
-            </p>
-
-            <!-- Opciones Interactivas -->
-            <div class="space-y-3 pt-2" id="scenarioQuestions">
-              <!-- Renderizado dinámico vía JS -->
-            </div>
-
-            <!-- Feedback de Respuesta -->
-            <div class="hidden p-3 rounded-lg text-xs" id="scenarioFeedback"></div>
           </div>
         </div>
+      </div>
 
-      </section>
-
-      <!-- ================= PESTAÑA 5: FLASHCARDS DE EXAMEN CAEN ================= -->
-      <section id="tab-flashcards" class="hidden space-y-6">
-        
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-6">
-            <div>
-              <span class="text-xs font-mono text-pink-400 uppercase">BANCO MNEMOTÉCNICO DE POSGRADO</span>
-              <h2 class="text-2xl font-bold text-white">Flashcards de Repaso Rápido: Examen de Maestría</h2>
-              <p class="text-xs text-slate-400 mt-1">Haga clic sobre cualquier tarjeta para voltearla y ver la respuesta doctrinal exacta.</p>
-            </div>
-            <div class="text-xs text-slate-400 font-mono">
-              Total tarjetas: <span class="text-pink-400 font-bold">6 conceptos clave</span>
-            </div>
+      <!-- Recomendaciones Estratégicas por Plazos (Aporte del Grupo 01) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <h3 class="font-bold text-base text-white mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-amber-400"></i> Recomendaciones Estratégicas Priorizadas del Grupo N° 01
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="bg-slate-800/70 border-l-4 border-amber-500 p-4 rounded-r-xl space-y-2">
+            <span class="font-extrabold text-amber-400 tracking-wider uppercase text-[10px]">Corto Plazo (1 a 3 meses)</span>
+            <h4 class="font-bold text-white text-sm">Formalización y Respaldo Eléctrico</h4>
+            <ul class="text-slate-300 space-y-1.5 list-disc list-inside">
+              <li>Aprobar mediante <strong>Resolución de Alcaldía</strong> el Manual de POE y Reglamento Interno, y publicarlos en el portal.</li>
+              <li>Realizar auditoría técnica al sistema de respaldo eléctrico (Grupo electrógeno + ATS) para garantizar <strong>72 horas ininterrumpidas</strong>.</li>
+            </ul>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="flashcardsGrid">
-            
-            <!-- Card 1 -->
-            <div class="flashcard cursor-pointer h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-pink-500/60 transition group relative overflow-hidden" onclick="flipCard(this)">
-              <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>CONCEPTO 01</span>
-                <span class="text-pink-400 group-hover:underline">Click para voltear ↻</span>
-              </div>
-              <div class="card-front text-sm font-bold text-white">
-                ¿Qué norma legal aprueba los lineamientos para la organización y funcionamiento de los COE en el Perú?
-              </div>
-              <div class="card-back hidden text-xs text-sky-300 bg-sky-950/80 p-3 rounded-lg border border-sky-800">
-                <strong>Resolución Ministerial N° 258-2021-PCM</strong>. Derogó la anterior RM 059-2015-PCM y actualizó la tipología y funciones de los COE.
-              </div>
-              <div class="text-[10px] text-slate-500 font-mono">Marco Normativo</div>
-            </div>
+          <div class="bg-slate-800/70 border-l-4 border-sky-500 p-4 rounded-r-xl space-y-2">
+            <span class="font-extrabold text-sky-400 tracking-wider uppercase text-[10px]">Mediano Plazo (3 a 6 meses)</span>
+            <h4 class="font-bold text-white text-sm">Retén de Personal y Videovigilancia</h4>
+            <ul class="text-slate-300 space-y-1.5 list-disc list-inside">
+              <li>Conformar la <strong>Bolsa de Personal de Reserva / Retén</strong> con servidores municipales capacitados en EDAN y SINPAD.</li>
+              <li>Instalar consolas de interconexión directa con las cámaras de la Central de Serenazgo de La Molina en el Módulo Operaciones.</li>
+            </ul>
+          </div>
 
-            <!-- Card 2 -->
-            <div class="flashcard cursor-pointer h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-pink-500/60 transition group relative overflow-hidden" onclick="flipCard(this)">
-              <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>CONCEPTO 02</span>
-                <span class="text-pink-400 group-hover:underline">Click para voltear ↻</span>
-              </div>
-              <div class="card-front text-sm font-bold text-white">
-                ¿Cuál es la diferencia fundamental entre el COE y el Grupo de Trabajo de GRD (GT-GRD)?
-              </div>
-              <div class="card-back hidden text-xs text-amber-300 bg-amber-950/80 p-3 rounded-lg border border-amber-800">
-                El <strong>GT-GRD</strong> toma las decisiones político-estratégicas (Alcalde + Gerentes). El <strong>COE</strong> es un instrumento técnico-operativo de monitoreo, procesamiento y soporte de información 24/7.
-              </div>
-              <div class="text-[10px] text-slate-500 font-mono">Doctrina SINAGERD</div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="flashcard cursor-pointer h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-pink-500/60 transition group relative overflow-hidden" onclick="flipCard(this)">
-              <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>CONCEPTO 03</span>
-                <span class="text-pink-400 group-hover:underline">Click para voltear ↻</span>
-              </div>
-              <div class="card-front text-sm font-bold text-white">
-                ¿Por qué es obligatoria la banda HF (3 a 30 MHz) en la Red de Comunicaciones de Emergencia?
-              </div>
-              <div class="card-back hidden text-xs text-emerald-300 bg-emerald-950/80 p-3 rounded-lg border border-emerald-800">
-                Por su capacidad de propagación por onda ionosférica (rebote en la atmósfera), permitiendo enlaces interregionales y nacionales sin depender de satélites ni antenas repetidoras comerciales.
-              </div>
-              <div class="text-[10px] text-slate-500 font-mono">Comunicaciones</div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="flashcard cursor-pointer h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-pink-500/60 transition group relative overflow-hidden" onclick="flipCard(this)">
-              <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>CONCEPTO 04</span>
-                <span class="text-pink-400 group-hover:underline">Click para voltear ↻</span>
-              </div>
-              <div class="card-front text-sm font-bold text-white">
-                ¿Cuáles son los 3 reportes secuenciales del COE en el SINPAD ante una emergencia?
-              </div>
-              <div class="card-back hidden text-xs text-indigo-300 bg-indigo-950/80 p-3 rounded-lg border border-indigo-800">
-                1) <strong>Reporte Preliminar</strong> (primeras horas, datos iniciales aproximados).<br>
-                2) <strong>Reporte Complementario</strong> (actualización con EDAN validado).<br>
-                3) <strong>Reporte de Situación / Cierre</strong> (consolidado final).
-              </div>
-              <div class="text-[10px] text-slate-500 font-mono">Operatividad SINPAD</div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="flashcard cursor-pointer h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-pink-500/60 transition group relative overflow-hidden" onclick="flipCard(this)">
-              <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>CONCEPTO 05</span>
-                <span class="text-pink-400 group-hover:underline">Click para voltear ↻</span>
-              </div>
-              <div class="card-front text-sm font-bold text-white">
-                ¿Cuáles son los 4 Componentes de la Ficha Técnica de Seguimiento a la Capacidad Operativa?
-              </div>
-              <div class="card-back hidden text-xs text-purple-300 bg-purple-950/80 p-3 rounded-lg border border-purple-800">
-                <strong>Componente I:</strong> Institucionalización.<br>
-                <strong>Componente II:</strong> Implementación.<br>
-                <strong>Componente III:</strong> Operatividad y Funcionamiento.<br>
-                <strong>Componente IV:</strong> Recursos Humanos.
-              </div>
-              <div class="text-[10px] text-slate-500 font-mono">Evaluación INDECI</div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="flashcard cursor-pointer h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-pink-500/60 transition group relative overflow-hidden" onclick="flipCard(this)">
-              <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
-                <span>CONCEPTO 06</span>
-                <span class="text-pink-400 group-hover:underline">Click para voltear ↻</span>
-              </div>
-              <div class="card-front text-sm font-bold text-white">
-                ¿En qué Niveles de Emergencia el INDECI coordina o interviene directamente?
-              </div>
-              <div class="card-back hidden text-xs text-red-300 bg-red-950/80 p-3 rounded-lg border border-red-800">
-                En el <strong>Nivel 4</strong> (Intervención nacional y conducción del apoyo por INDECI) y en el <strong>Nivel 5</strong> (Gran Magnitud / Catástrofe, donde coordina la respuesta bajo dirección de la PCM).
-              </div>
-              <div class="text-[10px] text-slate-500 font-mono">Niveles de Emergencia</div>
-            </div>
-
+          <div class="bg-slate-800/70 border-l-4 border-emerald-500 p-4 rounded-r-xl space-y-2">
+            <span class="font-extrabold text-emerald-400 tracking-wider uppercase text-[10px]">Largo Plazo (6 a 12 meses)</span>
+            <h4 class="font-bold text-white text-sm">COED Móvil y Pasantías COEN</h4>
+            <ul class="text-slate-300 space-y-1.5 list-disc list-inside">
+              <li>Adquirir una <strong>Unidad Móvil de Comando (COED Móvil)</strong> con internet satelital para despliegue in situ en quebradas.</li>
+              <li>Institucionalizar pasantías técnicas recíprocas en las salas operativas del <strong>COEN</strong> y el <strong>COER Lima Metropolitana</strong>.</li>
+            </ul>
           </div>
         </div>
-
-      </section>
+      </div>
 
     </div>
+
+    <!-- SECCIÓN 2: MATRIZ DE EVALUACIÓN Y BRECHAS -->
+    <div id="section-matriz" class="tab-content hidden space-y-6">
+
+      <!-- Encabezado y Filtros de la Matriz -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-table-cells text-amber-400"></i> Matriz de Evaluación de Capacidad Operativa y Funcional
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Criterios técnicos contrastados según R.M. N° 059-2015-PCM e inspección de campo.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-medium">Filtrar por nivel:</span>
+          <button onclick="filterMatrix('TODOS')" id="flt-TODOS" class="matrix-flt-btn px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold">Todos (9)</button>
+          <button onclick="filterMatrix('CA')" id="flt-CA" class="matrix-flt-btn px-3 py-1.5 rounded-lg bg-slate-800 text-emerald-400 border border-emerald-700/50 hover:bg-slate-700">Cumplimiento Alto (5)</button>
+          <button onclick="filterMatrix('CM')" id="flt-CM" class="matrix-flt-btn px-3 py-1.5 rounded-lg bg-slate-800 text-amber-400 border border-amber-700/50 hover:bg-slate-700">Cumplimiento Medio (4)</button>
+        </div>
+      </div>
+
+      <!-- Resumen Cuantitativo de Madurez -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block">Madurez Operativa Global</span>
+          <span class="text-2xl font-black text-amber-400">ALTO-MEDIO</span>
+          <span class="text-[11px] text-slate-400 block mt-1">Superior a la media regional de Lima</span>
+        </div>
+        <div class="bg-slate-900/90 border border-emerald-900/40 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block">Cumplimiento Alto (CA)</span>
+          <span class="text-2xl font-black text-emerald-400">55.5%</span>
+          <span class="text-[11px] text-emerald-300/80 block mt-1">5 de 9 indicadores normativos</span>
+        </div>
+        <div class="bg-slate-900/90 border border-amber-900/40 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block">Cumplimiento Medio (CM)</span>
+          <span class="text-2xl font-black text-amber-400">44.5%</span>
+          <span class="text-[11px] text-amber-300/80 block mt-1">4 con brechas a optimizar</span>
+        </div>
+        <div class="bg-slate-900/90 border border-red-900/40 p-4 rounded-xl">
+          <span class="text-xs text-slate-400 block">Emergencias Anuales (Histórico)</span>
+          <span class="text-2xl font-black text-sky-400">1,632+</span>
+          <span class="text-[11px] text-slate-400 block mt-1">Incidentes urbanos canalizados</span>
+        </div>
+      </div>
+
+      <!-- Tabla Interactiva -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 uppercase font-mono tracking-wider border-b border-slate-800">
+              <tr>
+                <th class="p-3.5">Componente</th>
+                <th class="p-3.5">Criterio</th>
+                <th class="p-3.5">Situación Encontrada</th>
+                <th class="p-3.5 text-center">Nivel</th>
+                <th class="p-3.5">Evidencia</th>
+                <th class="p-3.5">Impacto Operativo</th>
+                <th class="p-3.5">Recomendación del Grupo</th>
+              </tr>
+            </thead>
+            <tbody id="matrixTableBody" class="divide-y divide-slate-800">
+              <!-- Renderizado dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Discusión Crítica de Brechas Estructurales -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-5 bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl">
+          <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center mb-3">
+            <i class="fa-solid fa-file-circle-exclamation text-lg"></i>
+          </div>
+          <h4 class="font-bold text-white text-sm mb-1">Brecha 1: Formalización Documental</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Aunque los procedimientos se aplican en la práctica con base en directivas del INDECI, <strong>no figura la Resolución de Alcaldía aprobatoria del POE distrital</strong> en el portal de transparencia municipal. Esto vulnera el principio de legalidad y exigibilidad normativa ante auditorías de la Contraloría.
+          </p>
+        </div>
+
+        <div class="p-5 bg-gradient-to-b from-slate-900 to-slate-950 border border-sky-500/30 rounded-2xl">
+          <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center mb-3">
+            <i class="fa-solid fa-bolt text-lg"></i>
+          </div>
+          <h4 class="font-bold text-white text-sm mb-1">Brecha 2: Respaldo Energético</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Se evidencia UPS en consolas, pero la documentación pública no precisa la <strong>potencia nominal en kVA ni la autonomía auditada del grupo electrógeno con sistema ATS</strong> para sostener 72 horas críticas de corte general de fluido comercial.
+          </p>
+        </div>
+
+        <div class="p-5 bg-gradient-to-b from-slate-900 to-slate-950 border border-red-500/30 rounded-2xl">
+          <div class="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center mb-3">
+            <i class="fa-solid fa-users-slash text-lg"></i>
+          </div>
+          <h4 class="font-bold text-white text-sm mb-1">Brecha 3: Ratio de RRHH en Catástrofe</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Un contingente de <strong>10 operadores (5 por turno)</strong> es altamente eficiente para el día a día. No obstante, ante un <strong>sismo Mw ≥ 8.5 en Lima</strong> con miles de llamadas y cientos de fichas EDAN en simultáneo, el equipo sufrirá saturación cognitiva y física inmediata.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN 3: SIMULADOR DE EXAMEN / SUSTENTACIÓN ANTE EL DOCENTE DEL CAEN -->
+    <div id="section-simulador" class="tab-content hidden space-y-6">
+
+      <!-- Header del Simulador -->
+      <div class="bg-gradient-to-r from-red-950/80 via-slate-900 to-slate-900 border border-amber-500/40 rounded-2xl p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-500/20 text-red-300 border border-red-500/30 mb-2">
+              <i class="fa-solid fa-graduation-cap"></i> Banco Doctrinal de Sustentación Oral
+            </div>
+            <h2 class="text-2xl font-black text-white">
+              Simulador de Preguntas del Docente del CAEN
+            </h2>
+            <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+              10 preguntas rigurosas que el <strong>Mg. Carlos Alberto Quispe Tineo</strong> formulará a su grupo, con respuestas doctrinales completas, fundamentación jurídica y palabras clave indispensables para obtener la máxima calificación.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="expandAllQuestions(true)" class="px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-semibold border border-slate-700 transition">
+              <i class="fa-solid fa-eye mr-1 text-amber-400"></i> Revelar Todas
+            </button>
+            <button onclick="expandAllQuestions(false)" class="px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-semibold border border-slate-700 transition">
+              <i class="fa-solid fa-eye-slash mr-1 text-slate-400"></i> Ocultar Respuestas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtro temático de preguntas -->
+      <div class="flex flex-wrap gap-2 text-xs">
+        <span class="text-slate-400 font-medium py-1">Filtrar por eje:</span>
+        <button onclick="filterQuestions('all')" class="q-filter-btn px-3 py-1 rounded-md bg-amber-500 text-slate-950 font-bold">Todas (10)</button>
+        <button onclick="filterQuestions('normativo')" class="q-filter-btn px-3 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Marco Legal & Jerarquía</button>
+        <button onclick="filterQuestions('modulos')" class="q-filter-btn px-3 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Módulos & Operatividad</button>
+        <button onclick="filterQuestions('critico')" class="q-filter-btn px-3 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Brechas Críticas & Sismo 8.5</button>
+      </div>
+
+      <!-- Lista de Preguntas Interactivas Acordeón -->
+      <div id="questionsContainer" class="space-y-4">
+        <!-- Renderizado dinámicamente vía populateQuestions() -->
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN 4: FLASHCARDS MNEMOTÉCNICAS PARA ESTUDIO RÁPIDO -->
+    <div id="section-flashcards" class="tab-content hidden space-y-6">
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-amber-400"></i> Tarjetas Mnemotécnicas de Repaso Rápido
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Haz clic en la tarjeta o en el botón para voltearla y poner a prueba tu memoria antes del examen.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="flashcardCounter" class="text-xs font-mono bg-slate-800 px-3 py-1.5 rounded-lg text-amber-300 border border-slate-700">Tarjeta 1 de 12</span>
+          <button onclick="shuffleFlashcards()" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold hover:bg-slate-700 transition" title="Barajar tarjetas">
+            <i class="fa-solid fa-shuffle mr-1 text-amber-400"></i> Barajar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tarjeta Interactiva con Efecto 3D -->
+      <div class="max-w-xl mx-auto">
+        <div id="flashcardElement" onclick="flipCurrentCard()" class="perspective-1000 cursor-pointer min-h-[300px] w-full">
+          <div id="cardInner" class="relative w-full h-full min-h-[320px] rounded-2xl border border-slate-700 card-flip-transition transform-style-preserve-3d bg-gradient-to-br from-slate-900 to-slate-950 p-8 shadow-2xl flex flex-col justify-between">
+            
+            <!-- Cara Frontal (Pregunta / Concepto) -->
+            <div id="cardFront" class="w-full h-full backface-hidden flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <span id="cardCategory" class="text-xs font-bold uppercase tracking-wider text-amber-400 font-mono">Componente I: Institucionalización</span>
+                  <span class="text-xs text-slate-500"><i class="fa-solid fa-hand-pointer text-amber-400/70 mr-1"></i> Clic para voltear</span>
+                </div>
+                <h3 id="cardQuestion" class="text-xl sm:text-2xl font-extrabold text-white leading-snug mt-6">
+                  ¿Quién ejerce por ley la jefatura máxima del COED La Molina y quién asume la Secretaría Técnica?
+                </h3>
+              </div>
+              <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span>Presiona ESPACIO o clic para revelar respuesta</span>
+                <i class="fa-solid fa-rotate text-amber-400"></i>
+              </div>
+            </div>
+
+            <!-- Cara Trasera (Respuesta Doctrinal) -->
+            <div id="cardBack" class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 p-8 rounded-2xl bg-gradient-to-br from-red-950/40 via-slate-900 to-slate-950 border border-amber-500/40 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono"><i class="fa-solid fa-circle-check mr-1"></i> Respuesta Doctrinal</span>
+                  <span class="text-xs text-amber-400/80 font-mono">Rúbrica CAEN</span>
+                </div>
+                <div id="cardAnswer" class="text-sm sm:text-base text-slate-200 leading-relaxed space-y-2 mt-2">
+                  <!-- Renderizado dinámicamente -->
+                </div>
+              </div>
+              <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+                <span id="cardReference" class="font-mono text-[11px] text-amber-300/80">Base: Ley 29664 Art. 14 / DS 048-2011-PCM</span>
+                <span class="text-slate-400"><i class="fa-solid fa-rotate mr-1"></i> Clic para volver a la pregunta</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Controles de Navegación de Flashcards -->
+        <div class="flex items-center justify-between mt-6 px-2">
+          <button onclick="prevCard()" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-400 text-white font-semibold text-xs flex items-center gap-2 transition shadow">
+            <i class="fa-solid fa-chevron-left"></i> Anterior
+          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="flipCurrentCard()" class="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center gap-2 hover:bg-amber-400 transition shadow-lg shadow-amber-500/20">
+              <i class="fa-solid fa-arrows-rotate"></i> Voltear
+            </button>
+          </div>
+          <button onclick="nextCard()" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-400 text-white font-semibold text-xs flex items-center gap-2 transition shadow">
+            Siguiente <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN 5: SIMULADOR TÁCTICO Y ANÁLISIS ESPACIAL DE COBERTURA -->
+    <div id="section-tactico" class="tab-content hidden space-y-6">
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <h2 class="text-xl font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-compass-drafting text-amber-400"></i> Emplazamiento Territorial y Análisis de Capacidad Operativa
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">
+          Análisis espacial de anillos concéntricos de proximidad (2 km, 4 km y 6 km) y prueba de estrés operativo del personal frente a dos escenarios: Rutinario vs Sismo Catastrófico Mw ≥ 8.5.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Panel Izquierdo: Simulación Interactiva del Mapa de Anillos de Proximidad -->
+        <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-bullseye text-red-500"></i> Modelo de Anillos Concéntricos (QGIS 2026)
+            </h3>
+            <span class="text-xs bg-slate-800 px-2 py-0.5 rounded text-amber-300 font-mono">Figura 4 del Informe</span>
+          </div>
+
+          <!-- Gráfico SVG Interactivo del Emplazamiento de La Molina -->
+          <div class="relative w-full aspect-square max-h-[380px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center p-4">
+            <svg viewBox="0 0 400 400" class="w-full h-full select-none">
+              <!-- Grid de fondo -->
+              <defs>
+                <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+                </pattern>
+                <radialGradient id="ring3Grad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.05"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="400" fill="url(#gridPattern)" />
+
+              <!-- Anillo 3: 6 Km (Interconexión NODO 8, Ate, Pachacámac, Surco) -->
+              <circle cx="200" cy="200" r="170" fill="url(#ring3Grad)" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="4 3" class="opacity-80"/>
+              <text x="200" y="45" fill="#f43f5e" font-size="10" font-family="monospace" text-anchor="middle" font-weight="bold">ANILLO 3: DE 4 A 6 KM (LÍMITES / NODO 8)</text>
+
+              <!-- Anillo 2: 4 Km (Sectores residenciales medios, cerros y quebradas) -->
+              <circle cx="200" cy="200" r="115" fill="#eab308" fill-opacity="0.15" stroke="#eab308" stroke-width="1.5" stroke-dasharray="3 2"/>
+              <text x="200" y="100" fill="#eab308" font-size="10" font-family="monospace" text-anchor="middle" font-weight="bold">ANILLO 2: DE 2 A 4 KM</text>
+
+              <!-- Anillo 1: 2 Km (Respuesta inmediata < 5 minutos) -->
+              <circle cx="200" cy="200" r="60" fill="#38bdf8" fill-opacity="0.2" stroke="#38bdf8" stroke-width="1.8"/>
+              <text x="200" y="155" fill="#38bdf8" font-size="10" font-family="monospace" text-anchor="middle" font-weight="bold">HASTA 2 KM</text>
+
+              <!-- Contorno simplificado del Distrito de La Molina -->
+              <path d="M 120 180 Q 150 130 220 135 T 320 140 Q 340 180 330 220 T 260 270 Q 200 275 160 250 Z" 
+                    fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-90"/>
+
+              <!-- Vía principal estructurante -->
+              <line x1="60" y1="200" x2="340" y2="200" stroke="#64748b" stroke-width="2" stroke-dasharray="6 4" />
+              <text x="330" y="195" fill="#94a3b8" font-size="8" font-family="monospace">Vía Principal</text>
+
+              <!-- Centro del COED -->
+              <circle cx="200" cy="200" r="8" fill="#ef4444" class="animate-ping opacity-75"/>
+              <circle cx="200" cy="200" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+              <text x="200" y="222" fill="#ffffff" font-size="11" font-weight="bold" font-family="sans-serif" text-anchor="middle">COED LA MOLINA</text>
+            </svg>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-[11px] text-center mt-3 pt-3 border-t border-slate-800">
+            <div class="p-2 rounded bg-sky-950/40 border border-sky-800/40">
+              <span class="text-sky-300 font-bold block">Hasta 2 Km</span>
+              <span class="text-slate-400">Tiempo de respuesta: 3-5 min</span>
+            </div>
+            <div class="p-2 rounded bg-amber-950/40 border border-amber-800/40">
+              <span class="text-amber-300 font-bold block">De 2 a 4 Km</span>
+              <span class="text-slate-400">Quebradas críticas: 7-12 min</span>
+            </div>
+            <div class="p-2 rounded bg-red-950/40 border border-red-800/40">
+              <span class="text-red-300 font-bold block">De 4 a 6 Km</span>
+              <span class="text-slate-400">Articulación con NODO 8</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Derecho: Simulador de Estrés Operativo (Rutinario vs Mw 8.5) -->
+        <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-sm text-white mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-gauge-high text-amber-400"></i> Prueba de Estrés de Recursos Humanos
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">
+              Comprueba el impacto de la dotación fija de <strong>10 operadores totales (5 por turno)</strong> frente a la demanda operativa.
+            </p>
+
+            <!-- Selector de Escenario -->
+            <div class="grid grid-cols-2 gap-2 mb-4">
+              <button onclick="setScenario('rutina')" id="btn-scen-rutina" class="p-3 rounded-xl border bg-amber-500 text-slate-950 font-bold text-xs transition">
+                <i class="fa-solid fa-bell mr-1"></i> Operación Rutinaria (Día a Día)
+              </button>
+              <button onclick="setScenario('terremoto')" id="btn-scen-terremoto" class="p-3 rounded-xl border bg-slate-800 text-slate-300 border-slate-700 font-bold text-xs hover:border-red-500 transition">
+                <i class="fa-solid fa-triangle-exclamation mr-1 text-red-400"></i> Sismo Severo Mw ≥ 8.5
+              </button>
+            </div>
+
+            <!-- Indicadores dinámicos del Escenario -->
+            <div class="space-y-3 text-xs" id="stressMetricsBox">
+              <!-- Renderizado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Conclusión Doctrinal del Escenario -->
+          <div id="scenarioConclusionBox" class="mt-4 p-3.5 rounded-xl text-xs bg-slate-800/70 border border-slate-700">
+            <!-- Renderizado dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN 6: MARCO NORMATIVO Y DOCTRINA CAEN -->
+    <div id="section-glosario" class="tab-content hidden space-y-6">
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <h2 class="text-xl font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-scale-balanced text-amber-400"></i> Base Normativa y Doctrina del SINAGERD
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">
+          Citas y extractos reglamentarios que respaldan cada acápite de la investigación del Grupo N° 01.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-sm">Ley N° 29664</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Congreso / 2011</span>
+          </div>
+          <p class="text-slate-200 font-semibold">Ley del Sistema Nacional de Gestión del Riesgo de Desastres (SINAGERD)</p>
+          <p class="text-slate-400 leading-relaxed">
+            Establece que los Gobiernos Locales son los ejecutores directos de los procesos de preparación, respuesta y rehabilitación en su jurisdicción. Su Artículo 14 designa al Alcalde como la máxima autoridad del sistema en el distrito.
+          </p>
+        </div>
+
+        <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-sm">D.S. N° 048-2011-PCM</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Presidencia Consejo Ministros</span>
+          </div>
+          <p class="text-slate-200 font-semibold">Reglamento de la Ley del SINAGERD</p>
+          <p class="text-slate-400 leading-relaxed">
+            Regula la creación, organización y obligatoriedad de los Centros de Operaciones de Emergencia (COE) como órganos técnicos de monitoreo 24/7 y apoyo al Grupo de Trabajo para la GRD.
+          </p>
+        </div>
+
+        <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-sm">R.M. N° 059-2015-PCM</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Lineamientos COE</span>
+          </div>
+          <p class="text-slate-200 font-semibold">Lineamientos para Organización y Funcionamiento de los COE</p>
+          <p class="text-slate-400 leading-relaxed">
+            Estructura los cuatro componentes de evaluación técnica: Institucionalización, Implementación, Operatividad y Recursos Humanos. Establece los módulos funcionales mínimos obligatorios.
+          </p>
+        </div>
+
+        <div class="p-5 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400 text-sm">R.M. N° 258-2021-PCM</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">Actualización Normativa</span>
+          </div>
+          <p class="text-slate-200 font-semibold">Actualización de Lineamientos Técnicos de los COE</p>
+          <p class="text-slate-400 leading-relaxed">
+            Define la operatividad de los 3 módulos base para Centros de Operaciones de Emergencia Distritales (Evaluador, Operaciones y Comunicaciones), admitiendo el principio de multifuncionalidad en el personal.
+          </p>
+        </div>
+      </div>
+
+      <!-- Cuadro de Acrónimos y Siglas de Inteligencia de GRD -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+        <h3 class="font-bold text-sm text-white mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-spell-check text-sky-400"></i> Acrónimos y Términos Clave de Dominio Obligatorio en el CAEN
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">EDAN-Perú</strong>
+            <span class="text-slate-300 text-[11px]">Evaluación de Daños y Análisis de Necesidades.</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">SINPAD</strong>
+            <span class="text-slate-300 text-[11px]">Sistema de Información Nacional para la Respuesta y Rehabilitación.</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">NODO 8</strong>
+            <span class="text-slate-300 text-[11px]">Red de telecomunicaciones y coordinación de distritos de Lima Este.</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">BAH</strong>
+            <span class="text-slate-300 text-[11px]">Bienes de Ayuda Humanitaria (alimentos, carpas, abrigo).</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">RPAS</strong>
+            <span class="text-slate-300 text-[11px]">Remotely Piloted Aircraft System (drones de reconocimiento táctico).</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">GTGRD</strong>
+            <span class="text-slate-300 text-[11px]">Grupo de Trabajo de la Gestión del Riesgo de Desastres.</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">ATS</strong>
+            <span class="text-slate-300 text-[11px]">Automatic Transfer Switch (transferencia automática de energía).</span>
+          </div>
+          <div class="p-2.5 bg-slate-800/50 rounded-lg">
+            <strong class="text-amber-400 block font-mono">POE</strong>
+            <span class="text-slate-300 text-[11px]">Procedimientos Operativos Estandarizados (manual de procesos).</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </main>
 
-  <!-- ================= PIE DE PÁGINA ================= -->
-  <footer class="no-print border-t border-slate-800 bg-slate-900/80 py-4 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
-    <p>Centro de Altos Estudios Nacionales (CAEN) - Escuela de Posgrado | Maestría en Gestión del Riesgo de Desastres</p>
-    <p class="mt-1 text-[11px] text-slate-600">Herramienta de estudio y auditoría táctica de campo | Visita COED La Molina</p>
+  <!-- Pie de Página Institucional del Grupo 01 -->
+  <footer class="bg-slate-950 border-t border-slate-800 text-slate-400 py-6 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+        <span>Centro de Altos Estudios Nacionales (CAEN) - Escuela de Post Grado | 2026</span>
+      </div>
+      <div class="text-center sm:text-right text-[11px] text-slate-500">
+        Integrantes G1: Giovana Ruiz Diaz (JG), Leonardo Echevarria, Felix Risco, Gustavo Namay, Jose Asenjo, Italo Villarreal, Lening Huancas.
+      </div>
+    </div>
   </footer>
 
-  <!-- ================= JAVASCRIPT PRINCIPAL ================= -->
   <script>
-    // Sistema de navegación por pestañas
-    function switchTab(tabId) {
-      document.querySelectorAll('#mainTabs .tab-btn').forEach(btn => {
-        if (btn.dataset.tab === tabId) {
-          btn.classList.add('active', 'text-sky-400', 'bg-sky-950/60', 'border', 'border-sky-800/50');
-          btn.classList.remove('text-slate-400');
-        } else {
-          btn.classList.remove('active', 'text-sky-400', 'bg-sky-950/60', 'border', 'border-sky-800/50');
-          btn.classList.add('text-slate-400');
-        }
-      });
+    // --- ESTADO GLOBAL Y AUDIO ---
+    let soundEnabled = true;
+    let synth = null;
 
-      // Mostrar sección correspondiente
-      const sections = ['resumen', 'visita', 'evaluador', 'simulador', 'flashcards'];
-      sections.forEach(s => {
-        const el = document.getElementById(`tab-${s}`);
-        if (el) {
-          if (s === tabId) {
-            el.classList.remove('hidden');
-          } else {
-            el.classList.add('hidden');
-          }
+    function initAudio() {
+      if (!synth && window.Tone) {
+        try {
+          synth = new Tone.Synth({
+            oscillator: { type: "sine" },
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0, release: 0.1 }
+          }).toDestination();
+          synth.volume.value = -18;
+        } catch (e) {
+          console.log("Audio init bypassed");
         }
-      });
+      }
     }
 
-    // Cálculo dinámico de la Ficha Técnica de Evaluación
-    function calculateScore() {
-      const form = document.getElementById('evaluationForm');
-      if (!form) return;
+    function playBeep(note = "C5") {
+      if (!soundEnabled || !synth) return;
+      try {
+        if (Tone.context.state !== 'running') {
+          Tone.start();
+        }
+        synth.triggerAttackRelease(note, "32n");
+      } catch (err) {}
+    }
 
-      let c1 = 0, c2 = 0, c3 = 0, c4 = 0;
-
-      // Componente 1
-      form.querySelectorAll('input[name^="c1_"]:checked').forEach(input => c1 += parseInt(input.value));
-      // Componente 2
-      form.querySelectorAll('input[name^="c2_"]:checked').forEach(input => c2 += parseInt(input.value));
-      // Componente 3
-      form.querySelectorAll('input[name^="c3_"]:checked').forEach(input => c3 += parseInt(input.value));
-      // Componente 4
-      form.querySelectorAll('input[name^="c4_"]:checked').forEach(input => c4 += parseInt(input.value));
-
-      document.getElementById('comp1Score').innerText = `${c1} / 25 pts`;
-      document.getElementById('comp2Score').innerText = `${c2} / 25 pts`;
-      document.getElementById('comp3Score').innerText = `${c3} / 25 pts`;
-      document.getElementById('comp4Score').innerText = `${c4} / 25 pts`;
-
-      const total = c1 + c2 + c3 + c4;
-      document.getElementById('scoreDisplay').innerText = `${total} / 100`;
-
-      const ratingDisplay = document.getElementById('ratingDisplay');
-      const diagnosticText = document.getElementById('diagnosticText');
-
-      if (total >= 85) {
-        ratingDisplay.innerText = 'ÓPTIMA / DESTACADA';
-        ratingDisplay.className = 'text-sm font-bold text-emerald-400';
-        diagnosticText.innerHTML = `<span class="text-emerald-400 font-bold">Capacidad Operativa Óptima (${total}/100 pts):</span> El COED La Molina cumple con los estándares exigidos por la RM N° 258-2021-PCM e INDECI. Mantiene institucionalización sólida, redundancia técnica y personal acreditado para liderar la respuesta distrital ante sismo o huaicos.`;
-      } else if (total >= 60) {
-        ratingDisplay.innerText = 'REGULAR / EN PROCESO';
-        ratingDisplay.className = 'text-sm font-bold text-amber-400';
-        diagnosticText.innerHTML = `<span class="text-amber-400 font-bold">Capacidad Operativa Regular (${total}/100 pts):</span> El COED cuenta con operatividad básica, pero presenta brechas (p. ej. en sistemas de redundancia radial HF/VHF, actualización de acreditaciones EDAN o formalización en el ROF). Se recomienda plan de mejora urgente.`;
-      } else if (total > 0) {
-        ratingDisplay.innerText = 'CRÍTICA / DEFICIENTE';
-        ratingDisplay.className = 'text-sm font-bold text-red-400';
-        diagnosticText.innerHTML = `<span class="text-red-400 font-bold">Capacidad Operativa Crítica (${total}/100 pts):</span> Alto riesgo de inoperatividad ante desastres de gran magnitud. Requiere intervención inmediata del Grupo de Trabajo de GRD y asistencia técnica urgente de INDECI.`;
+    function toggleAudio() {
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('soundIcon');
+      if (soundEnabled) {
+        icon.className = "fa-solid fa-volume-high";
+        showToast("Audio Activado", "Efectos sonoros de navegación activados.", "success");
+        initAudio();
+        playBeep("G5");
       } else {
-        ratingDisplay.innerText = 'NO EVALUADO';
-        ratingDisplay.className = 'text-sm font-bold text-slate-400';
-        diagnosticText.innerText = 'Marque los ítems verificados durante la visita para emitir el dictamen técnico de capacidad operativa del COED La Molina.';
+        icon.className = "fa-solid fa-volume-xmark";
+        showToast("Audio Silenciado", "Modo silencioso activado.", "info");
       }
     }
 
-    // Flashcards Flip Interactivo
-    function flipCard(cardEl) {
-      const front = cardEl.querySelector('.card-front');
-      const back = cardEl.querySelector('.card-back');
-      if (front && back) {
-        front.classList.toggle('hidden');
-        back.classList.toggle('hidden');
+    // Notificación Toast sin uso de alert()
+    function showToast(title, message, type = "info") {
+      const toast = document.getElementById('toastNotification');
+      const tTitle = document.getElementById('toastTitle');
+      const tMsg = document.getElementById('toastMessage');
+      const tIcon = document.getElementById('toastIcon');
+
+      tTitle.textContent = title;
+      tMsg.textContent = message;
+
+      if (type === "success") {
+        tIcon.className = "fa-solid fa-circle-check text-emerald-400 text-xl";
+      } else if (type === "warning") {
+        tIcon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-xl";
+      } else {
+        tIcon.className = "fa-solid fa-circle-info text-sky-400 text-xl";
+      }
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    // --- CAMBIO DE PESTAÑAS PRINCIPALES ---
+    function switchTab(tabId) {
+      initAudio();
+      playBeep("E5");
+
+      // Actualizar botones del nav
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-amber-500', 'text-slate-950', 'font-bold');
+        btn.classList.add('text-slate-300');
+      });
+
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-amber-500', 'text-slate-950', 'font-bold');
+        activeBtn.classList.remove('text-slate-300');
+      }
+
+      // Ocultar todas las secciones
+      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+
+      // Mostrar la seleccionada
+      const targetSec = document.getElementById(`section-${tabId}`);
+      if (targetSec) {
+        targetSec.classList.remove('hidden');
       }
     }
 
-    // Simulador de Decisiones Tácticas
-    const scenariosData = {
-      huaico: {
-        title: "Huaico de Gran Magnitud en Quebrada Rinconada del Lago",
-        badge: "Nivel 1 a Nivel 2",
-        badgeClass: "text-amber-400 border-amber-800",
-        desc: "Las lluvias torrenciales en las cuencas altas activan el flujo de detritos. El lodo alcanza viviendas, tapona drenajes y corta el tránsito en la Av. La Molina y Av. El Sol. 25 familias reportan viviendas inundadas.",
-        steps: [
+    const componentsData = {
+      comp1: {
+        id: 'comp1',
+        title: 'Componente I: Institucionalización',
+        level: 'Cumplimiento Alto (CA) con Observación',
+        color: 'amber',
+        desc: 'Evalúa la formalización jurídica y organizativa del COED dentro de la estructura institucional del Gobierno Local.',
+        points: [
           {
-            q: "1. ¿Cuál es la primera acción técnica que debe realizar el Módulo Evaluador del COED?",
-            options: [
-              { text: "Esperar a que termine la lluvia para salir a campo al día siguiente.", correct: false, reason: "Inaceptable: se debe levantar información preliminar de inmediato." },
-              { text: "Acopiar datos iniciales y emitir el Reporte Preliminar en el SINPAD dentro de las 2 primeras horas.", correct: true, reason: "¡Correcto! El Reporte Preliminar activa la visibilidad del evento a nivel Lima y COEN." },
-              { text: "Llamar a los medios de televisión para dar entrevistas personales.", correct: false, reason: "La comunicación externa corresponde al Módulo de Prensa bajo autorización del Coordinador." }
-            ]
+            title: 'Sustento Legal y Dependencia Jerárquica',
+            detail: 'Opera formalmente bajo la jerarquía de la Subgerencia de Gestión del Riesgo de Desastres en el ROF municipal. Conforme a la Ley N° 29664 (Art. 14) y D.S. N° 048-2011-PCM, el Alcalde preside el COE Distrital y la Subgerencia ejerce la Secretaría Técnica del Grupo de Trabajo (GTGRD).'
           },
           {
-            q: "2. Si el almacén distrital de La Molina agota sus 50 carpas y herramientas, ¿a qué nivel se escala la solicitud de BAH?",
-            options: [
-              { text: "Se solicita apoyo al COEM / Municipalidad Metropolitana de Lima (Nivel 2).", correct: true, reason: "¡Correcto! Si el distrito (Nivel 1) es superado en recursos, interviene el nivel Provincial (MML - Nivel 2) mediante SINPAD." },
-              { text: "Se solicita intervención inmediata de las Naciones Unidas.", correct: false, reason: "La ayuda internacional se gestiona exclusivamente en Nivel 5 por el Gobierno Nacional." }
-            ]
+            title: 'Instrumentos Técnico-Normativos y Manuales',
+            detail: 'Se rige en el terreno por la Guía del Evaluador y la Directiva de Funcionamiento del SINPAD emitida por INDECI. Sin embargo, no se identificó el número de Resolución de Alcaldía específica que apruebe formalmente el Manual de Procedimientos Operativos Estandarizados (POE) en el portal de transparencia.'
+          },
+          {
+            title: 'Sala de Crisis / Exposiciones Dedicada',
+            detail: 'Dispone de un ambiente contiguo con mesa directiva en forma de U/herradura acondicionado para la toma de decisiones al más alto nivel político y técnico.'
           }
-        ]
+        ],
+        auditTip: 'Si el docente pregunta: ¿Está institucionalizado el COED? Responder: Sí en la estructura orgánica (ROF y Ley 29664), pero tiene una brecha formal en la publicación de la Resolución de Alcaldía del POE.'
       },
-      sismo: {
-        title: "Sismo Severo 8.8 Mw con Epicentro frente a la Costa Central",
-        badge: "Nivel 4 / 5 Catástrofe",
-        badgeClass: "text-red-400 border-red-800",
-        desc: "Sismo de 2 minutos de duración con máxima intensidad en Lima. En La Molina: colapso de vías en Cerro Centinela, derrumbe de pircas en laderas, colapso de red eléctrica e internet.",
-        steps: [
+      comp2: {
+        id: 'comp2',
+        title: 'Componente II: Implementación',
+        level: 'Cumplimiento Alto-Medio (CA/CM)',
+        color: 'sky',
+        desc: 'Condiciones de infraestructura física, plataformas tecnológicas, radiocomunicación, respaldo y logística.',
+        points: [
           {
-            q: "1. Con la telefonía celular e internet caídos, ¿cómo establece enlace el COED con el COEN e INDECI?",
-            options: [
-              { text: "Esperar a que la empresa telefónica privada restablezca la fibra óptica.", correct: false, reason: "El COE debe ser autónomo e independiente de servicios públicos comerciales caídos." },
-              { text: "Activar la estación de Radio HF en frecuencia nacional de emergencia y teléfono satelital.", correct: true, reason: "¡Excelente! La red HF y telefonía satelital son el medio primario de supervivencia operativa." },
-              { text: "Enviar un mensajero en bicicleta a través del Cerro Centinela bloqueado.", correct: false, reason: "Vía terrestre interrumpida e ineficiente." }
-            ]
+            title: 'Infraestructura Física Dedicada',
+            detail: 'Edificación moderna de material noble con diseño arquitectónico semicircular, superando la condición precaria histórica de contenedores o talleres adaptados. Cuenta con Sala de Monitoreo ergonómica, climatizada y con cableado estructurado.'
           },
           {
-            q: "2. ¿Quién preside la Sala de Crisis que se instala en el COED de La Molina?",
-            options: [
-              { text: "El Alcalde Distrital, en su calidad de Presidente del Grupo de Trabajo de GRD.", correct: true, reason: "¡Doctrinalmente exacto! La máxima autoridad política conduce las decisiones con el asesoramiento del Coordinador del COE." },
-              { text: "El técnico especialista en radio HF.", correct: false, reason: "El radioperador opera el módulo de comunicaciones, no conduce la crisis política." }
-            ]
+            title: '3 Módulos Base Normados (R.M. 258-2021-PCM)',
+            detail: '1. Módulo Evaluador (cómputo, cartografía GIS, enlace SINPAD). 2. Módulo de Operaciones (comando y control, seguimiento logístico en campo). 3. Módulo de Comunicaciones (consola central radial, enlace interinstitucional).'
+          },
+          {
+            title: 'Tecnología, Videowall y Drones RPAS',
+            detail: 'Estaciones de cómputo bi-pantalla para cada operador, videowall multiseñal para monitoreo en vivo y drones RPAS profesionales de ala rotatoria para reconocimiento aéreo inmediato en quebradas y laderas inestables.'
+          },
+          {
+            title: 'Flota Operativa y Redes de Radio',
+            detail: '01 Pickup Toyota Hilux 4x4 (año 2024) acondicionada, 01 Unidad de rescate multipropósito, 02 Motocicletas lineales. Radios Hytera/Excera VHF/UHF analógicas/digitales enlazadas con Serenazgo, Bomberos, PNP y NODO 8.'
+          },
+          {
+            title: 'Respaldo Energético (Brecha CM)',
+            detail: 'Posee UPS para consolas críticas, pero falta certificar mediante auditoría técnica la autonomía ininterrumpida mínima de 72 horas del grupo electrógeno con sistema ATS.'
           }
-        ]
+        ],
+        auditTip: 'Destacar la presencia de los RPAS para laderas y quebradas de La Molina, y la camioneta 4x4 Hilux 2024 exclusiva para operaciones de campo.'
+      },
+      comp3: {
+        id: 'comp3',
+        title: 'Componente III: Operatividad y Funcionamiento',
+        level: 'Cumplimiento Alto (CA)',
+        color: 'indigo',
+        desc: 'Dinámica de trabajo continuo, monitoreo prospectivo/reactivo y generación estandarizada de información oficial.',
+        points: [
+          {
+            title: 'Régimen Ininterrumpido 24/7',
+            detail: 'Opera las 24 horas del día, los 7 días de la semana, estructurado en dos (2) turnos rotativos para evitar la discontinuidad en la vigilancia distrital.'
+          },
+          {
+            title: 'Monitoreo Bimodal de Amenazas',
+            detail: 'Natural/Ambiental: Sismos (IGP), Tsunamis (DHN), Clima/Temperatura (SENAMHI), Fenómeno El Niño (FEN). Antrópico: Incendios, derrames de MATPEL, fugas de gas, accidentes vehiculares y emergencias en cerros/laderas.'
+          },
+          {
+            title: '8 Productos Técnicos Normados',
+            detail: 'Boletín de Peligros, Reporte de Monitoreo, Reporte de Situación Diaria, Alertas/Alarmas, Directorio SINAGERD, Seguimiento SINPAD, Inventario de Bienes de Ayuda Humanitaria (BAH) y Reporte Mensual.'
+          },
+          {
+            title: 'Articulación Interinstitucional Vertical y Horizontal',
+            detail: 'Enlace radial diario con el NODO 8 de Lima Este, reporte continuo al COER Lima Metropolitana y COEN-INDECI. A nivel local coordina despacho con CGBVP, PNP, SAMU y la Brigada de Primera Respuesta (BPR).'
+          }
+        ],
+        auditTip: 'Mencionar que el COED registró formalmente más de 1,632 emergencias atendidas, demostrando alta operatividad rutinaria.'
+      },
+      comp4: {
+        id: 'comp4',
+        title: 'Componente IV: Recursos Humanos',
+        level: 'Cumplimiento Medio (CM) - Brecha Crítica',
+        color: 'red',
+        desc: 'Dotación cuantitativa, perfiles técnicos, multifuncionalidad y capacidad de respuesta ante sismos severos.',
+        points: [
+          {
+            title: 'Dotación Cuantitativa y Turnos',
+            detail: 'Cuenta con diez (10) operadores de emergencias distribuidos equitativamente en dos (2) turnos de guardia (5 operadores por turno), cubriendo simultáneamente las consolas de Evaluador, Operaciones y Comunicaciones.'
+          },
+          {
+            title: 'Multifuncionalidad Normada',
+            detail: 'El operador de Operaciones asume logística; el de Comunicaciones monitorea medios y prensa; el de Evaluador está certificado en metodología EDAN-Perú y plataforma SINPAD.'
+          },
+          {
+            title: 'Identificación y Capacitación Continua',
+            detail: 'Personal uniformado con indumentaria oficial normada por INDECI (chalecos naranja reflectivos, botines tácticos, radios portátiles). Reciben formación técnica por el CAEN e INDECI.'
+          },
+          {
+            title: 'Brecha Crítica en Desastre de Gran Magnitud (Mw ≥ 8.5)',
+            detail: 'Un turno de 5 operadores es insuficiente ante el colapso masivo de la ciudad. El aluvión de llamadas de auxilio y el registro sincrónico de cientos de fichas EDAN colapsarán la sala. Se exige crear una Bolsa de Personal de Reserva / Retén.'
+          }
+        ],
+        auditTip: '¡Esta es la pregunta fija del docente! Saber fundamentar matemáticamente y operativamente por qué 5 operadores por turno no resisten un sismo de 8.5 Mw.'
       }
     };
 
-    function loadScenario(type) {
-      document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('border-sky-500', 'border-red-500'));
-      const activeBtn = document.getElementById(`scen-${type}`);
-      if (activeBtn) activeBtn.classList.add(type === 'huaico' ? 'border-sky-500' : 'border-red-500');
+    function showComponentDetail(compId) {
+      initAudio();
+      playBeep("D5");
 
-      const scen = scenariosData[type];
-      document.getElementById('scenarioTitle').innerText = scen.title;
-      document.getElementById('scenarioLevelBadge').innerText = scen.badge;
-      document.getElementById('scenarioDesc').innerText = scen.desc;
+      const comp = componentsData[compId];
+      if (!comp) return;
 
-      const qContainer = document.getElementById('scenarioQuestions');
-      qContainer.innerHTML = '';
-
-      scen.steps.forEach((step, idx) => {
-        const stepDiv = document.createElement('div');
-        stepDiv.className = 'p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-2';
-        
-        let optionsHtml = '';
-        step.options.forEach((opt, optIdx) => {
-          optionsHtml += `
-            <button onclick="checkAnswer(${opt.correct}, '${encodeURIComponent(opt.reason)}', this)" class="w-full text-left p-2.5 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-xs text-slate-300 transition flex items-start gap-2">
-              <span class="font-mono text-slate-500">${String.fromCharCode(65 + optIdx)})</span>
-              <span>${opt.text}</span>
-            </button>
-          `;
-        });
-
-        stepDiv.innerHTML = `
-          <div class="font-bold text-white text-xs">${step.q}</div>
-          <div class="space-y-1.5 mt-2">${optionsHtml}</div>
-        `;
-        qContainer.appendChild(stepDiv);
+      // Actualizar estilo botones
+      document.querySelectorAll('.comp-btn').forEach(btn => {
+        btn.classList.remove('border-amber-500/80', 'bg-slate-900');
+        btn.classList.add('bg-slate-900/60', 'border-slate-800');
       });
+      const activeBtn = document.getElementById(`btn-${compId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('border-amber-500/80', 'bg-slate-900');
+        activeBtn.classList.remove('bg-slate-900/60', 'border-slate-800');
+      }
 
-      const feedback = document.getElementById('scenarioFeedback');
-      feedback.classList.add('hidden');
+      const box = document.getElementById('comp-detail-box');
+      box.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-2">
+          <div>
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">${comp.level}</span>
+            <h3 class="text-xl sm:text-2xl font-black text-white mt-0.5">${comp.title}</h3>
+            <p class="text-xs text-slate-400 mt-1">${comp.desc}</p>
+          </div>
+          <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 self-start sm:self-auto font-mono">
+            R.M. N° 059-2015-PCM
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          ${comp.points.map((pt, idx) => `
+            <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-700/60 hover:border-slate-500 transition">
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-bold font-mono">${idx + 1}</span>
+                <h4 class="font-bold text-slate-100 text-sm">${pt.title}</h4>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed pl-7">${pt.detail}</p>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="mt-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+          <i class="fa-solid fa-lightbulb text-amber-400 text-lg mt-0.5"></i>
+          <div>
+            <h5 class="text-xs font-bold text-amber-300 uppercase tracking-wider">Clave de Sustentación ante el Docente</h5>
+            <p class="text-xs text-slate-200 mt-0.5">${comp.auditTip}</p>
+          </div>
+        </div>
+      `;
     }
 
-    function checkAnswer(isCorrect, encodedReason, btnEl) {
-      const reason = decodeURIComponent(encodedReason);
-      const feedback = document.getElementById('scenarioFeedback');
-      feedback.classList.remove('hidden');
+    const matrixRows = [
+      { comp: 'Institucional', crit: 'Incorporación en estructura orgánica', sit: 'COED integrado a la Subgerencia de GRD en el ROF', nivel: 'CA', evid: 'ROF Municipal y Ley 29664', imp: 'Otorga respaldo legal e institucional para la coordinación', rec: 'Mantener y fortalecer la jerarquía' },
+      { comp: 'Institucional', crit: 'Manuales POE y directivas', sit: 'Aplica Guía del Evaluador y SINPAD sin RA formal de POE', nivel: 'CM', evid: 'Portal de Transparencia', imp: 'Vulnerabilidad ante auditorías administrativas', rec: 'Aprobar POE específico mediante Resolución de Alcaldía' },
+      { comp: 'Implementación', crit: 'Infraestructura física', sit: 'Sede moderna semicircular dedicada en material noble', nivel: 'CA', evid: 'Inspección in situ (Ago 2026)', imp: 'Garantiza operatividad segura y ergonómica', rec: 'Mantenimiento preventivo periódico' },
+      { comp: 'Implementación', crit: 'Módulos funcionales de trabajo', sit: '3 módulos activos (Evaluador, Operaciones, Comunicaciones)', nivel: 'CA', evid: 'Consolas bi-pantalla y videowall', imp: 'Cumple división tripartita normada por PCM', rec: 'Integrar videoseñal con Central de Serenazgo' },
+      { comp: 'Implementación', crit: 'Respaldo energético continuo', sit: 'Cuenta con UPS pero falta auditar Grupo Electrógeno y ATS', nivel: 'CM', evid: 'Documento oficial COED', imp: 'Riesgo de apagón y desconexión en catástrofe', rec: 'Auditoría técnica que certifique 72h de autonomía' },
+      { comp: 'Operatividad', crit: 'Generación de productos técnicos', sit: 'Emisión continua de 8 productos normativos y SINPAD', nivel: 'CA', evid: 'Registros SINPAD y boletines', imp: 'Disponibilidad de información técnica oportuna', rec: 'Automatizar difusión digital de alertas' },
+      { comp: 'Operatividad', crit: 'Articulación con el SINAGERD', sit: 'Enlace radial continuo con NODO 8, COER Lima y COEN', nivel: 'CA', evid: 'Reportes de enlace diario', imp: 'Coordinación multisectorial fluida', rec: 'Ejecutar simulacros de enlace en sombra' },
+      { comp: 'Recursos Humanos', crit: 'Cantidad y turnos de personal', sit: '10 operadores totales (5 por turno) en régimen 24/7', nivel: 'CM', evid: 'Nómina oficial del COED', imp: 'Adecuado para rutina, pero satura en sismo 8.5 Mw', rec: 'Crear Bolsa de Reserva/Retén con personal municipal' },
+      { comp: 'Recursos Humanos', crit: 'Capacitación y especialización', sit: 'Personal capacitado en EDAN y SINPAD por INDECI/CAEN', nivel: 'CM', evid: 'Certificaciones operativas', imp: 'Competencia técnica adecuada para despacho', rec: 'Programar pasantías técnicas directas en el COEN' }
+    ];
 
-      if (isCorrect) {
-        feedback.className = 'p-3 rounded-lg text-xs bg-emerald-950/80 border border-emerald-800 text-emerald-300';
-        feedback.innerHTML = `<strong>¡Respuesta Correcta!</strong> ${reason}`;
-        btnEl.classList.add('border-emerald-500', 'bg-emerald-950/40');
+    function renderMatrix(filter = 'TODOS') {
+      const tbody = document.getElementById('matrixTableBody');
+      const filtered = filter === 'TODOS' ? matrixRows : matrixRows.filter(r => r.nivel === filter);
+
+      tbody.innerHTML = filtered.map(row => {
+        const badgeClass = row.nivel === 'CA' 
+          ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800' 
+          : 'bg-amber-950/80 text-amber-300 border-amber-800';
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="p-3.5 font-bold text-white whitespace-nowrap">${row.comp}</td>
+            <td class="p-3.5 text-slate-300 font-medium">${row.crit}</td>
+            <td class="p-3.5 text-slate-400">${row.sit}</td>
+            <td class="p-3.5 text-center">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold border ${badgeClass} font-mono">
+                ${row.nivel}
+              </span>
+            </td>
+            <td class="p-3.5 text-slate-400 text-[11px]">${row.evid}</td>
+            <td class="p-3.5 text-slate-300 text-[11px]">${row.imp}</td>
+            <td class="p-3.5 text-amber-300/90 font-medium text-[11px]">${row.rec}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterMatrix(level) {
+      initAudio();
+      playBeep("C5");
+
+      document.querySelectorAll('.matrix-flt-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+
+      const active = document.getElementById(`flt-${level}`);
+      if (active) {
+        active.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+        active.classList.remove('bg-slate-800', 'text-slate-300');
+      }
+
+      renderMatrix(level);
+    }
+
+    const caenQuestions = [
+      {
+        id: 1,
+        cat: 'normativo',
+        q: '1. ¿Cuál es el sustento normativo exacto que faculta al Alcalde de La Molina a actuar como Jefe del COED y qué rol formal asume la Subgerencia de GRD?',
+        answer: 'De conformidad con el <strong>Artículo 14 de la Ley N° 29664 (Ley del SINAGERD)</strong> y los Artículos 29 y 30 de su Reglamento (<strong>D.S. N° 048-2011-PCM</strong>), los alcaldes distritales son las máximas autoridades responsables de la conducción del SINAGERD en su jurisdicción y presiden obligatoriamente el Centro de Operaciones de Emergencia Distrital (COED). Por su parte, la <strong>Subgerencia de Gestión del Riesgo de Desastres</strong> actúa orgánicamente como la <em>Secretaría Técnica</em> tanto del Grupo de Trabajo de la GRD (GTGRD) como del propio COED, encargándose de la articulación ejecutiva, operativa y del enlace institucional.',
+        keyPoints: ['Ley 29664 Art. 14', 'D.S. 048-2011-PCM', 'Alcalde = Jefe del COED', 'Subgerencia = Secretaría Técnica'],
+        difficulty: 'Fundamental'
+      },
+      {
+        id: 2,
+        cat: 'modulos',
+        q: '2. En base a la R.M. N° 258-2021-PCM, ¿por qué el COED La Molina opera únicamente con 3 módulos y no con los 5 u 8 que presentan niveles superiores como el COER o el COEN?',
+        answer: 'La normativa técnica del SINAGERD (<strong>R.M. N° 059-2015-PCM</strong> y su actualización <strong>R.M. N° 258-2021-PCM</strong>) establece que los COE se dimensionan según su nivel de gobierno. Para un Gobierno Local Distrital se exige como núcleo mínimo indispensable tres (3) módulos funcionales: <strong>Módulo Evaluador</strong>, <strong>Módulo de Operaciones</strong> y <strong>Módulo de Comunicaciones</strong>. Los módulos adicionales (como Logística, Prensa, Enlace Sectorial o Coordinación Interinstitucional) son absorbidos mediante el <em>principio de multifuncionalidad</em> por los tres operadores de turno, a fin de evitar burocratización innecesaria y adecuarse a la escala presupuestal distrital.',
+        keyPoints: ['R.M. 258-2021-PCM', '3 Módulos Base obligatorios', 'Principio de Multifuncionalidad', 'Dimensionamiento según escala distrital'],
+        difficulty: 'Doctrinal'
+      },
+      {
+        id: 3,
+        cat: 'critico',
+        q: '3. Si el informe resalta que el COED atiende con solvencia más de 1,600 emergencias al año con 10 operadores, ¿por qué su grupo concluye que existe una brecha crítica de recursos humanos?',
+        answer: 'Porque las 1,600 intervenciones corresponden a <em>emergencias rutinarias y dispersas en el tiempo</em> (accidentes, amagos menores, fugas de gas aisladas). En contraste, ante un <strong>sismo de magnitud Mw ≥ 8.5 en la costa central</strong>, se producirá un impacto catastrófico concentrado en minutos: colapso de vías, cientos de derrumbes en laderas, saturación de redes telefónicas y miles de llamadas de auxilio. Un turno de guardia cuenta únicamente con <strong>5 personas en sala</strong>. Este personal deberá atender simultáneamente la consola de radio, procesar cientos de fichas EDAN preliminares, subir registros al SINPAD y alimentar la toma de decisiones del GTGRD, provocando una <em>saturación cognitiva y operativa inmediata</em>. De ahí la recomendación de constituir una Bolsa de Reserva municipal.',
+        keyPoints: ['Demanda difusa vs Choque súbito concentrado', '5 operadores por turno colapsan en Mw ≥ 8.5', 'Flujo masivo de llamadas y EDAN', 'Exigencia de Bolsa de Personal de Reserva'],
+        difficulty: 'Crítica Estratégica'
+      },
+      {
+        id: 4,
+        cat: 'modulos',
+        q: '4. ¿Qué representa el NODO 8 en la estructura del SINAGERD y por qué es vital para la interoperabilidad del COED La Molina?',
+        answer: 'El <strong>NODO 8 de Lima Este</strong> es un esquema de articulación territorial y red de comunicaciones interconectada que agrupa a los distritos colindantes de la cuenca este (La Molina, Ate, Santa Anita, Cieneguilla, Chaclacayo, San Juan de Lurigancho, etc.). Permite la ayuda mutua horizontal entre comunas sin depender burocráticamente de la escala metropolitana inmediata. El COED La Molina mantiene enlace radial diario en banda VHF/UHF con el NODO 8, lo que asegura que ante el aislamiento de quebradas o el cierre de vías troncales (como Javier Prado o la Carretera Central), se activen protocolos de socorro y relevo de recursos de manera coordinada.',
+        keyPoints: ['Articulación horizontal Lima Este', 'Red radial interdistrital', 'Ayuda mutua expedita', 'Resiliencia ante corte de vías troncales'],
+        difficulty: 'Operativo'
+      },
+      {
+        id: 5,
+        cat: 'normativo',
+        q: '5. ¿Cuál es el hallazgo documental más débil identificado por su grupo en el Componente de Institucionalización y cuál es su implicancia jurídica?',
+        answer: 'El hallazgo más vulnerable es la <strong>falta de publicación y acreditación de la Resolución de Alcaldía específica que aprueba el Manual de Procedimientos Operativos Estandarizados (POE) y el Reglamento Interno del COED</strong> en el Portal de Transparencia Institucional. Si bien el personal opera con base en directivas del INDECI y la Guía del Evaluador, formalmente el COED carece de un instrumento de gestión interno formalizado a nivel distrital. Ante una acción de control o auditoría de la Contraloría General de la República o un litigio derivado de la toma de decisiones en un desastre, la falta de este instrumento normado expone a los funcionarios a responsabilidades administrativas y penales.',
+        keyPoints: ['Omisión de R.A. que apruebe el POE', 'Vulnerabilidad ante Contraloría', 'Principio de legalidad administrativa', 'Recomendación a corto plazo'],
+        difficulty: 'Jurídico-Administrativo'
+      },
+      {
+        id: 6,
+        cat: 'modulos',
+        q: '6. ¿Cuál es la diferencia sustancial entre los 8 productos técnicos del COED y por qué es indispensable el registro en el SINPAD dentro de las primeras horas?',
+        answer: 'Los 8 productos cubren distintas temporalidades: unos son prospectivos (Boletín de Peligros), otros de difusión ciudadana (Alertas y Notas) y otros de gestión logística (Inventario de BAH). No obstante, el <strong>Reporte de Emergencias en el SINPAD</strong> es el único instrumento oficial reconocido por el INDECI para la validación del impacto territorial. El ingreso de las fichas EDAN en el SINPAD dentro de los plazos reglamentarios es la <em>condición legal sine qua non</em> para que el nivel distrital pueda solicitar apoyo de Nivel 4 (Regional - COER) o Nivel 5 (Nacional - COEN/INDECI) y para viabilizar Decretos Supremos de Estado de Emergencia y asignación de fondos de contingencia.',
+        keyPoints: ['SINPAD como validador legal', 'Sustento para Nivel 4 y Nivel 5', 'Acceso a BAH nacional y fondos', 'Plazos reglamentarios de ingreso'],
+        difficulty: 'Doctrinal'
+      },
+      {
+        id: 7,
+        cat: 'modulos',
+        q: '7. ¿Qué valor táctico aportan los drones RPAS y la camioneta 4x4 Hilux 2024 en la topografía específica del distrito de La Molina?',
+        answer: 'La Molina posee una geomorfología caracterizada por laderas de alta pendiente ocupadas por asentamientos humanos en quebradas ciegas (ej. cerros colindantes con Ate y Pachacámac) propensas a caídas de rocas y deslizamientos. Los <strong>drones RPAS de ala rotatoria</strong> permiten un <em>reconocimiento aéreo inmediato en tiempo real</em> sobre crestas inestables sin arriesgar la vida de brigadistas. Por su parte, la <strong>camioneta 4x4 Toyota Hilux 2024</strong> acondicionada con radios y estrobos reglamentarios actúa como puesto de comando móvil preliminar, capaz de penetrar vías en pendiente pronunciada y transportar equipos de extricación y soporte logístico.',
+        keyPoints: ['Geomorfología de laderas y pendientes', 'Reconocimiento RPAS sin riesgo humano', 'Hilux 4x4 como enlace y comando móvil', 'Acceso a quebradas no pavimentadas'],
+        difficulty: 'Táctico-Operativo'
+      },
+      {
+        id: 8,
+        cat: 'critico',
+        q: '8. En relación al Componente de Implementación, ¿por qué el estándar de oro en GRD exige una autonomía energética mínima de 72 horas ininterrumpidas?',
+        answer: 'La doctrina internacional de respuesta a desastres y los lineamientos del INDECI estipulan la regla de las <strong>72 horas de autosuficiencia</strong> porque tras un evento catastrófico mayor, la reposición del Sistema Eléctrico Interconectado Nacional (SEIN) tarda en promedio de 48 a 72 horas debido al colapso de subestaciones y líneas de alta tensión. Un COE que se apaga a las 4 o 12 horas pierde la capacidad de dirigir la respuesta cuando la población más lo necesita. Por ello, el COED La Molina requiere auditar su grupo electrógeno y conmutador ATS con capacidad de combustible en sitio para 72 horas continuas.',
+        keyPoints: ['Regla internacional de 72h', 'Colapso prolongado del SEIN', 'Sostenibilidad de telecomunicaciones', 'Grupo Electrógeno con ATS certificado'],
+        difficulty: 'Ingeniería & Continuidad'
+      },
+      {
+        id: 9,
+        cat: 'normativo',
+        q: '9. ¿Cómo se articula el COED con el Grupo de Trabajo de la GRD (GTGRD) y la Plataforma de Defensa Civil en el momento en que se activa la Sala de Crisis?',
+        answer: 'El COED es un <strong>órgano técnico de monitoreo y asesoramiento</strong>, mientras que el GTGRD es el <strong>órgano de decisión política y estratégica</strong> conformado por el Alcalde y sus gerentes de línea. Al ocurrir un desastre, la Sala de Crisis se activa: el COED sintetiza la situación (daños, heridos, vías bloqueadas) y emite el Reporte de Situación. Con esa información técnica, el Alcalde y el GTGRD toman decisiones estratégicas (reorientación presupuestal, evacuaciones masivas). Simultáneamente, la <strong>Plataforma de Defensa Civil</strong> (que integra a la sociedad civil, empresas privadas y brigadas comunitarias) es convocada para coordinar la movilización de recursos y ayuda humanitaria en el territorio.',
+        keyPoints: ['COED = Órgano Técnico Asesor', 'GTGRD = Órgano Decisor Estratégico', 'Plataforma = Espacio de Articulación Civil', 'Sala de Crisis en mesa en U'],
+        difficulty: 'Doctrinal'
+      },
+      {
+        id: 10,
+        cat: 'critico',
+        q: '10. Si tuviera que defender el aporte de valor de su investigación ante las autoridades de la Municipalidad de La Molina, ¿cuál sería su propuesta más innovadora y viable?',
+        answer: 'Nuestra propuesta más innovadora y de costo marginal casi cero es la <strong>Institucionalización del Sistema de Retén / Bolsa de Relevo Municipal en GRD</strong>. En lugar de contratar costosos operadores fijos que en tiempos de paz subutilizan su tiempo, se capacita y certifica en EDAN y SINPAD al personal administrativo clave de las gerencias de Desarrollo Urbano, Seguridad Ciudadana y Fiscalización. Mediante una directiva formal, este personal queda asignado como "operadores de retén" con llamamiento obligatorio bajo código de contingencia para asumir de inmediato un tercer y cuarto turno rotativo en el COED ante sismos severos, cerrando la brecha crítica detectada.',
+        keyPoints: ['Bolsa de Retén Municipal certificada', 'Costo marginal cercano a cero', 'Personal capacitado en EDAN y SINPAD', 'Duplicación inmediata de turnos operativos'],
+        difficulty: 'Propuesta Estratégica'
+      }
+    ];
+
+    function populateQuestions(filter = 'all') {
+      const container = document.getElementById('questionsContainer');
+      const filtered = filter === 'all' ? caenQuestions : caenQuestions.filter(q => q.cat === filter);
+
+      container.innerHTML = filtered.map((item, idx) => `
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden transition shadow-lg hover:border-slate-700">
+          <div class="p-4 sm:p-5 flex items-start justify-between cursor-pointer select-none" onclick="toggleQuestion(${item.id})">
+            <div class="space-y-1.5 pr-4">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800/50 font-bold">
+                  ${item.difficulty}
+                </span>
+                <span class="text-xs text-slate-400 font-mono">Pregunta #${item.id}</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-bold text-white leading-snug">${item.q}</h3>
+            </div>
+            <button id="q-icon-${item.id}" class="w-8 h-8 rounded-lg bg-slate-800 text-amber-400 flex items-center justify-center flex-shrink-0 transition-transform duration-300">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Respuesta Ocultable -->
+          <div id="q-ans-${item.id}" class="hidden px-5 pb-5 pt-1 border-t border-slate-800/80 bg-slate-950/60">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-amber-500/30 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-3">
+              <div>
+                <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider block font-mono mb-1">
+                  <i class="fa-solid fa-graduation-cap mr-1"></i> Respuesta Doctrinal Esperada en el CAEN:
+                </span>
+                <p>${item.answer}</p>
+              </div>
+
+              <div class="pt-3 border-t border-slate-800 flex flex-wrap items-center gap-1.5">
+                <span class="text-[11px] text-slate-400 font-semibold mr-1">Términos Clave a Mencionar:</span>
+                ${item.keyPoints.map(kp => `
+                  <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-300 text-[10px] font-mono border border-slate-700">
+                    <i class="fa-solid fa-check text-[9px] text-emerald-400 mr-1"></i>${kp}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleQuestion(id) {
+      initAudio();
+      playBeep("F5");
+
+      const ans = document.getElementById(`q-ans-${id}`);
+      const icon = document.getElementById(`q-icon-${id}`);
+
+      if (ans.classList.contains('hidden')) {
+        ans.classList.remove('hidden');
+        icon.classList.add('rotate-180', 'bg-amber-500', 'text-slate-950');
       } else {
-        feedback.className = 'p-3 rounded-lg text-xs bg-red-950/80 border border-red-800 text-red-300';
-        feedback.innerHTML = `<strong>Respuesta Incorrecta:</strong> ${reason}`;
-        btnEl.classList.add('border-red-500', 'bg-red-950/40');
+        ans.classList.add('hidden');
+        icon.classList.remove('rotate-180', 'bg-amber-500', 'text-slate-950');
       }
     }
 
-    // Inicialización al cargar la ventana
+    function expandAllQuestions(open) {
+      initAudio();
+      playBeep(open ? "G5" : "C5");
+
+      caenQuestions.forEach(item => {
+        const ans = document.getElementById(`q-ans-${item.id}`);
+        const icon = document.getElementById(`q-icon-${item.id}`);
+        if (!ans || !icon) return;
+
+        if (open) {
+          ans.classList.remove('hidden');
+          icon.classList.add('rotate-180', 'bg-amber-500', 'text-slate-950');
+        } else {
+          ans.classList.add('hidden');
+          icon.classList.remove('rotate-180', 'bg-amber-500', 'text-slate-950');
+        }
+      });
+
+      showToast(
+        open ? "Todas Reveladas" : "Respuestas Ocultas",
+        open ? "Se desplegaron las 10 respuestas doctrinales." : "Se colapsaron las respuestas para autoevaluación.",
+        "info"
+      );
+    }
+
+    function filterQuestions(category) {
+      initAudio();
+      playBeep("A4");
+
+      document.querySelectorAll('.q-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      event.target.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+      event.target.classList.remove('bg-slate-800', 'text-slate-300');
+
+      populateQuestions(category);
+    }
+
+    const flashcardsData = [
+      {
+        cat: 'Componente I: Institucionalización',
+        q: '¿Quién ejerce por mandato legal la jefatura del COED y cuál es el rol de la Subgerencia de GRD?',
+        a: 'El <strong>Alcalde de La Molina</strong> es el Jefe del COED (Ley 29664 Art. 14 y D.S. 048-2011-PCM). La <strong>Subgerencia de GRD</strong> ejerce la <em>Secretaría Técnica</em> del COED y del Grupo de Trabajo (GTGRD).',
+        ref: 'Ley N° 29664 Art. 14 / D.S. N° 048-2011-PCM'
+      },
+      {
+        cat: 'Componente I: Brecha Documental',
+        q: '¿Cuál es la observación crítica sobre los POE en el portal de transparencia de La Molina?',
+        a: 'No se encontró formalizada la <strong>Resolución de Alcaldía</strong> que aprueba los Procedimientos Operativos Estandarizados (POE) específicos, aunque se aplican en la práctica las directivas de INDECI.',
+        ref: 'Portal de Transparencia Municipal / Anexo Tabla 2'
+      },
+      {
+        cat: 'Componente II: Módulos Mínimos',
+        q: '¿Cuáles son los 3 módulos base obligatorios que opera el COED La Molina?',
+        a: '1. <strong>Módulo Evaluador</strong> (EDAN, GIS, SINPAD)<br>2. <strong>Módulo de Operaciones</strong> (Comando, control y campo)<br>3. <strong>Módulo de Comunicaciones</strong> (Radios, NODO 8, alertas).',
+        ref: 'R.M. N° 258-2021-PCM / R.M. N° 059-2015-PCM'
+      },
+      {
+        cat: 'Componente II: Reconocimiento Táctico',
+        q: '¿Qué tecnología aérea dispone el COED y para qué zonas del distrito es crítica?',
+        a: 'Drones <strong>RPAS profesionales de ala rotatoria</strong>. Son indispensables para el monitoreo visual inmediato en laderas inestables, asentamientos humanos y quebradas de alto riesgo.',
+        ref: 'Inspección técnica in situ / Subgerencia GRD'
+      },
+      {
+        cat: 'Componente II: Telecomunicaciones',
+        q: '¿Qué equipos radiales y qué redes electromagnéticas integran el Módulo de Comunicaciones?',
+        a: 'Radios transceptores portátiles y bases móviles <strong>Hytera y Excera en bandas VHF/UHF</strong> digitales/analógicas, enlazadas con Serenazgo, Bomberos (CGBVP), PNP y NODO 8 de Lima Este.',
+        ref: 'Documento Oficial COED Ago 2026'
+      },
+      {
+        cat: 'Componente III: Régimen Operativo',
+        q: '¿Cómo está estructurado el horario y la continuidad del servicio del COED?',
+        a: 'Régimen ininterrumpido <strong>24/7</strong> (24 horas al día, 7 días a la semana), organizado formalmente en <strong>dos (2) turnos rotativos</strong> de guardia.',
+        ref: 'Informe COED 2026 / Turnos de Guardia'
+      },
+      {
+        cat: 'Componente III: Productos Oficiales',
+        q: '¿Cuántos productos técnicos normativos emite oficialmente el COED La Molina según su cartera 2026?',
+        a: 'Emite <strong>ocho (8) productos técnicos normativos</strong> (Boletines, Reporte de Monitoreo, Reporte Diario, Alertas, Directorio SINAGERD, Registro SINPAD, Inventario BAH y Reporte Mensual).',
+        ref: 'Catálogo de Productos COED La Molina 2026'
+      },
+      {
+        cat: 'Componente III: Articulación Territorial',
+        q: '¿A qué red de distritos pertenece La Molina para ayuda mutua en Lima Este?',
+        a: 'Al <strong>NODO 8 de Lima Este</strong>, coordinando diariamente enlaces radiales y reporte continuo vertical al COER Lima Metropolitana y al COEN-INDECI.',
+        ref: 'Red NODO 8 / SINAGERD'
+      },
+      {
+        cat: 'Componente IV: Dotación de Personal',
+        q: '¿Cuántos operadores de emergencias integran formalmente la plantilla del COED La Molina?',
+        a: 'Cuenta con <strong>diez (10) operadores</strong> en total, asignando un promedio de <strong>cinco (5) personas por turno</strong> para cubrir las 3 consolas y labores de apoyo.',
+        ref: 'Cuadro de Asignación de Personal COED'
+      },
+      {
+        cat: 'Componente IV: Riesgo de Saturación',
+        q: '¿Por qué la dotación de 10 operadores entra en crisis ante un sismo de magnitud Mw ≥ 8.5?',
+        a: 'Porque 5 operadores por turno no pueden atender simultáneamente el colapso masivo de llamadas, la recepción de cientos de fichas EDAN y la actualización en tiempo real en SINPAD.',
+        ref: 'Análisis de Brechas Críticas del Grupo 01'
+      },
+      {
+        cat: 'Recomendaciones Estratégicas',
+        q: '¿Cuál es la recomendación prioritaria a corto plazo (1 a 3 meses) formulada por el Grupo 01?',
+        a: 'Aprobar y publicar mediante <strong>Resolución de Alcaldía</strong> el Manual de POE, y realizar una <strong>auditoría técnica al sistema de respaldo eléctrico</strong> para certificar 72h continuas.',
+        ref: 'Recomendaciones a Corto Plazo / CAEN 2026'
+      },
+      {
+        cat: 'Doctrina de Continuidad',
+        q: '¿Qué es el conmutador ATS y por qué es indispensable en el COED?',
+        a: 'Es el <strong>Automatic Transfer Switch</strong>, que enciende y conmuta automáticamente el grupo electrógeno al detectar corte del fluido eléctrico comercial sin perder enlace en consolas.',
+        ref: 'Estándares de Respaldo Energético INDECI'
+      }
+    ];
+
+    let currentCardIndex = 0;
+    let isFlipped = false;
+
+    function renderFlashcard() {
+      const card = flashcardsData[currentCardIndex];
+      const cardInner = document.getElementById('cardInner');
+      
+      // Reset flip
+      isFlipped = false;
+      cardInner.classList.remove('rotate-y-180');
+
+      document.getElementById('cardCategory').textContent = card.cat;
+      document.getElementById('cardQuestion').textContent = card.q;
+      document.getElementById('cardAnswer').innerHTML = card.a;
+      document.getElementById('cardReference').textContent = `Base: ${card.ref}`;
+      document.getElementById('flashcardCounter').textContent = `Tarjeta ${currentCardIndex + 1} de ${flashcardsData.length}`;
+    }
+
+    function flipCurrentCard() {
+      initAudio();
+      playBeep(isFlipped ? "D5" : "B5");
+
+      const cardInner = document.getElementById('cardInner');
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        cardInner.classList.add('rotate-y-180');
+      } else {
+        cardInner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function nextCard() {
+      initAudio();
+      playBeep("F5");
+      currentCardIndex = (currentCardIndex + 1) % flashcardsData.length;
+      renderFlashcard();
+    }
+
+    function prevCard() {
+      initAudio();
+      playBeep("D5");
+      currentCardIndex = (currentCardIndex - 1 + flashcardsData.length) % flashcardsData.length;
+      renderFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      initAudio();
+      playBeep("G5");
+      for (let i = flashcardsData.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [flashcardsData[i], flashcardsData[j]] = [flashcardsData[j], flashcardsData[i]];
+      }
+      currentCardIndex = 0;
+      renderFlashcard();
+      showToast("Tarjetas Barajadas", "Orden aleatorio generado para repaso interactivo.", "info");
+    }
+
+    function setScenario(type) {
+      initAudio();
+      playBeep(type === 'terremoto' ? "C4" : "E5");
+
+      const btnRutina = document.getElementById('btn-scen-rutina');
+      const btnTerremoto = document.getElementById('btn-scen-terremoto');
+      const metricsBox = document.getElementById('stressMetricsBox');
+      const conclBox = document.getElementById('scenarioConclusionBox');
+
+      if (type === 'rutina') {
+        btnRutina.className = "p-3 rounded-xl border bg-amber-500 text-slate-950 font-bold text-xs transition";
+        btnTerremoto.className = "p-3 rounded-xl border bg-slate-800 text-slate-300 border-slate-700 font-bold text-xs hover:border-red-500 transition";
+
+        metricsBox.innerHTML = `
+          <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-700 space-y-1">
+            <div class="flex justify-between font-bold text-slate-200">
+              <span>Carga Operativa Promedio:</span>
+              <span class="text-emerald-400 font-mono">35% (Óptimo)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2">
+              <div class="bg-emerald-500 h-2 rounded-full" style="width: 35%"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div class="p-2.5 bg-slate-800/40 rounded-lg">
+              <span class="text-slate-400 block">Incidentes/día:</span>
+              <strong class="text-white text-sm">4 a 6 eventos</strong>
+            </div>
+            <div class="p-2.5 bg-slate-800/40 rounded-lg">
+              <span class="text-slate-400 block">Operadores en sala:</span>
+              <strong class="text-emerald-400 text-sm">5 (100% holgura)</strong>
+            </div>
+            <div class="p-2.5 bg-slate-800/40 rounded-lg">
+              <span class="text-slate-400 block">Fichas EDAN a ingresar:</span>
+              <strong class="text-white text-sm">1 o 2 por semana</strong>
+            </div>
+            <div class="p-2.5 bg-slate-800/40 rounded-lg">
+              <span class="text-slate-400 block">Consolas ocupadas:</span>
+              <strong class="text-white text-sm">3 de 3 módulos</strong>
+            </div>
+          </div>
+        `;
+
+        conclBox.innerHTML = `
+          <div class="flex items-start gap-2 text-emerald-300">
+            <i class="fa-solid fa-circle-check text-sm mt-0.5"></i>
+            <div>
+              <strong class="block text-white">Estado: Operatividad Rutinaria Sostenible</strong>
+              <span>El equipo de 5 operadores por turno atiende con holgura los 1,632 incidentes anuales urbanos sin desgaste crítico del personal.</span>
+            </div>
+          </div>
+        `;
+      } else {
+        btnTerremoto.className = "p-3 rounded-xl border bg-red-600 text-white font-bold text-xs transition shadow-lg shadow-red-900/50";
+        btnRutina.className = "p-3 rounded-xl border bg-slate-800 text-slate-300 border-slate-700 font-bold text-xs hover:border-amber-500 transition";
+
+        metricsBox.innerHTML = `
+          <div class="p-3 bg-red-950/40 rounded-xl border border-red-800/60 space-y-1">
+            <div class="flex justify-between font-bold text-slate-200">
+              <span class="text-red-300">Sobrecarga y Saturación Operativa:</span>
+              <span class="text-red-400 font-mono font-black">280% (COLAPSO)</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2">
+              <div class="bg-red-500 h-2 rounded-full animate-pulse" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div class="p-2.5 bg-red-950/30 border border-red-900/40 rounded-lg">
+              <span class="text-red-300 block">Llamadas e incidentes:</span>
+              <strong class="text-white text-sm">500+ en 2 horas</strong>
+            </div>
+            <div class="p-2.5 bg-red-950/30 border border-red-900/40 rounded-lg">
+              <span class="text-red-300 block">Operadores requeridos:</span>
+              <strong class="text-amber-400 text-sm">15 a 20 operadores</strong>
+            </div>
+            <div class="p-2.5 bg-red-950/30 border border-red-900/40 rounded-lg">
+              <span class="text-red-300 block">Fichas EDAN simultáneas:</span>
+              <strong class="text-white text-sm">80 a 120 fichas</strong>
+            </div>
+            <div class="p-2.5 bg-red-950/30 border border-red-900/40 rounded-lg">
+              <span class="text-red-300 block">Turno en guardia:</span>
+              <strong class="text-red-400 text-sm">Solo 5 personas</strong>
+            </div>
+          </div>
+        `;
+
+        conclBox.innerHTML = `
+          <div class="flex items-start gap-2 text-red-200">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm mt-0.5"></i>
+            <div>
+              <strong class="block text-amber-300">Alerta Estratégica: Justificación de la Bolsa de Reserva</strong>
+              <span>Esta simulación demuestra la tesis del Grupo 01: la dotación actual de 5 personas colapsa en un terremoto 8.5 Mw. Es imperativo activar de inmediato personal de retén municipal capacitado en EDAN y SINPAD.</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Atajos de teclado para estudiar con flashcards
+    document.addEventListener('keydown', (e) => {
+      const flashcardsTab = document.getElementById('section-flashcards');
+      if (flashcardsTab && !flashcardsTab.classList.contains('hidden')) {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          flipCurrentCard();
+        } else if (e.code === 'ArrowRight') {
+          e.preventDefault();
+          nextCard();
+        } else if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          prevCard();
+        }
+      }
+    });
+
     window.onload = function() {
-      loadScenario('huaico');
+      // Iniciar en Componente 1
+      showComponentDetail('comp1');
+      // Renderizar Matriz completa
+      renderMatrix('TODOS');
+      // Poblar Preguntas del CAEN
+      populateQuestions('all');
+      // Cargar primera Flashcard
+      renderFlashcard();
+      // Inicializar simulación de estrés
+      setScenario('rutina');
+
+      console.log("Plataforma de Estudio COED La Molina (CAEN - Grupo 01) cargada con éxito.");
     };
   </script>
 </body>
